@@ -75,7 +75,7 @@ def VGG():
 def ConvolutionalNetwork():
     model = Sequential()
 
-    model.add(Convolution2D(1, 7, 7, border_mode='same'))
+    model.add(Convolution2D(1, 7, 7, border_mode='same', input_shape=(3, 120, 240)))
     model.add(BatchNormalization(axis=1))
     model.add(Activation('relu'))
     model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2)))
