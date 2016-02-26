@@ -71,3 +71,28 @@ def VGG():
 
     model.compile(loss='mae', optimizer=Adam())
     return model
+
+def ConvolutionalNetwork():
+    model = Sequential()
+
+    model.add(Convolution2D(1, 7, 7, border_mode='same'))
+    model.add(BatchNormalization(axis=1))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2)))
+
+    model.add(Convolution2D(4, 5, 5, border_mode='same'))
+    model.add(BatchNormalization(axis=1))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2)))
+
+    model.add(Convolution2D(8, 3, 3, border_mode='same'))
+    model.add(BatchNormalization(axis=1))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2,2),strides=(2,2)))
+
+    model.add(Flatten())
+    model.add(Dense(512))
+    model.add(Dense(8))
+
+    model.compile(loss='mae', optimizer=Adam())
+    return model
