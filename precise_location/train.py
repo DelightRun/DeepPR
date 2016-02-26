@@ -16,4 +16,4 @@ print "compile model",
 model = models.ConvolutionalNetwork()
 
 checkpoint = ModelCheckpoint(filepath=os.path.join(basepath, 'checkpoint.hdf5'), verbose=1, save_best_only=True)
-model.fit(X_train, y_train, batch_size=100, nb_epoch=20, verbose=1, validation_data=(X_test, y_test), callbacks=[checkpoint])
+model.fit(X_train, y_train, batch_size=100, nb_epoch=30, verbose=1, validation_data=(X_test, y_test), callbacks=[checkpoint])
