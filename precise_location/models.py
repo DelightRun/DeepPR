@@ -36,7 +36,7 @@ def ResidualNetwork():
 def VGG():
     model = Sequential()
 
-    model.add(Convolution2D(64, 3, 3, border_mode='same', input_shape=(3,240,480)))
+    model.add(Convolution2D(64, 3, 3, border_mode='same', input_shape=(3,120,240)))
     model.add(BatchNormalization(axis=1))
     model.add(Activation('relu'))
     model.add(Convolution2D(64, 3, 3, border_mode='same'))
@@ -50,23 +50,22 @@ def VGG():
         model.add(Activation('relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    for _ in range(4):
+    for _ in range(2):
         model.add(Convolution2D(256, 3, 3, border_mode='same'))
         model.add(BatchNormalization(axis=1))
         model.add(Activation('relu'))
     model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2)))
 
-    for __ in range(2):
-        for _ in range(4):
-            model.add(Convolution2D(512, 3, 3, border_mode='same'))
-            model.add(BatchNormalization(axis=1))
-            model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2)))
+    for _ in range(2):
+        model.add(Convolution2D(512, 3, 3, border_mode='same'))
+        model.add(BatchNormalization(axis=1))
+        model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2)))
 
     model.add(Flatten())
-    model.add(Dense(4096, activation='relu'))
+    model.add(Dense(1024, activation='relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(4096, activation='relu'))
+    model.add(Dense(512, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(8))
 

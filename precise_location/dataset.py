@@ -16,10 +16,11 @@ def _load_image(line):
     keypoints = numpy.asarray(zip(keypoints[::2], keypoints[1::2]), dtype="int32")
 
     width, height = image.shape[1], image.shape[0]
+    targetWidth, targetHeight = 240, 120
 
-    keypoints[:,0] = keypoints[:,0] * 480 / width
-    keypoints[:,1] = keypoints[:,1] * 240 / height
-    image = cv2.resize(image, (480,240))
+    keypoints[:,0] = keypoints[:,0] * targetWidth / width
+    keypoints[:,1] = keypoints[:,1] * targetHeight / height
+    image = cv2.resize(image, (targetWidth,targetHeight))
     image = image.astype("float32")
     image /= 255.0
     image = image - image.mean(axis=(0,1))
