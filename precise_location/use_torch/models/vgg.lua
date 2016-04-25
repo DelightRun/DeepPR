@@ -1,50 +1,44 @@
 require 'nn'
+local nninit = require 'nninit'
 
-local conv_net_bn = nn.Sequential()
+local cfg = {32, 'M', 64, 'M', 128, 128, 'M', 256, 256, 'M'}
 
-local function ConvBNReLU(nInputePlane, nOutputPlane, nFilterSize)
-    conv_net_bn:add(nn.SpatialConvolution(nInputePlane, nOutputPlane, nFilterSize, nFilterSize, 1, 1, (nFilterSize-1)/2, (nFilterSize-1)/2))
-    conv_net_bn:add(nn.SpatialBatchNormalization(nOutputPlane, 1e-3))
-    conv_net_bn:add(nn.ReLU(true))
-    return conv_net_bn
-end
+local features = nn.Sequential()
 
-ConvBNReLU(3, 8, 7):add(nn.Dropout(0.3))
-ConvBNReLU(8, 8, 7):add(nn.SpatialMaxPooling(2, 2, 2, 2):ceil())
+local nInputPlanes = 3
 
-ConvBNReLU(8, 16, 5):add(nn.Dropout(0.4))
-ConvBNReLU(16, 16, 5):add(nn.SpatialMaxPooling(2, 2, 2, 2):ceil())
+local width = 224
+local height = 112
 
-ConvBNReLU(16, 32, 3):add(nn.Dropout(0.4))
-ConvBNReLU(32, 32, 3):add(nn.SpatialMaxPooling(2, 2, 2, 2):ceil())
-
-conv_net_bn:add(nn.View(32*30*15))
-conv_net_bn:add(nn.Linear(32*30*15, 16*30*15))
-conv_net_bn:add(nn.BatchNormalization(16*30*15))
-conv_net_bn:add(nn.ReLU(true))
-conv_net_bn:add(nn.Linear(16*30*15, 4*30*15))
-conv_net_bn:add(nn.BatchNormalization(4*30*15))
-conv_net_bn:add(nn.ReLU(true))
-conv_net_bn:add(nn.Linear(4*30*15, 30*15))
-conv_net_bn:add(nn.BatchNormalization(30*15))
-conv_net_bn:add(nn.ReLU(true))
-conv_net_bn:add(nn.Linear(30*15, 8))
-
-local function MSRinit(net)
-    local function init(name)
-        for k, v in pairs(net:findModules(name)) do
-            local n = v.kW * v.kH * v.nOutputPlane
-            v.weight:normal(0, math.sqrt(2/n))
-            v.bias:zero()
+do
+    for k, v in ipairs(cfg) do
+        if v == 'M' then
+            features:add(nn.SpatialMaxPooling(2,2,2,2))
+            width = width / 2
+            height = height / 2
+        else
+            local nOutputPlanes = v
+            features:add(nn.SpatialConvolution(nInputPlanes, nOutputPlanes, 3, 3, 1, 1, 1, 1):init('weight', nninit.kaiming))
+            features:add(nn.SpatialBatchNormalization(nOutputPlanes))
+            features:add(nn.PReLU())
+            nInputPlanes = nOutputPlanes
         end
     end
-    init'nn.SpatialConvolution'
 end
 
-MSRinit(conv_net_bn)
+local regressor = nn.Sequential()
+regressor:add(nn.View(nInputPlanes*width*height))
+while nInputPlanes ~= 1 do
+    local nOutputPlanes = nInputPlanes / 4
+    regressor:add(nn.Linear(nInputPlanes*width*height, nOutputPlanes*width*height))
+    regressor:add(nn.BatchNormalization(nOutputPlanes*width*height))
+    regressor:add(nn.PReLU())
+    nInputPlanes = nOutputPlanes
+end
+regressor:add(nn.Linear(nInputPlanes*width*height, 8))
+regressor:add(nn.PReLU())
 
--- check that we can propagate forward without errors
--- should get 16x8 tensor
-print(#conv_net_bn:forward(torch.Tensor(16, 3, 240, 120)))
+local model = nn.Sequential()
+model:add(features):add(regressor)
 
-return conv_net_bn
+return model

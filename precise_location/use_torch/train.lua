@@ -11,14 +11,14 @@ opt = lapp[[
     -r,--learningRate       (default 0.001)             learning rate
     --epoch_step            (default 25)                epoch step
     --model                 (default conv_net_bn)       model name
-    --max_epoch             (default 150)               maximum number of iterations
-    --backend               (default cudnn)                backend
+    --max_epoch             (default 30)                maximum number of iterations
+    --backend               (default cudnn)             backend
 ]]
 
 print(opt)
 
 print(c.blue '==>' ..' configuring model')
-local model = dofile('models/'..opt.model..'.lua'):cuda
+local model = dofile('models/'..opt.model..'.lua'):cuda()
 
 if opt.backend == 'cudnn' then
     require 'cudnn'
@@ -28,18 +28,20 @@ end
 print(model)
 
 print(c.blue '==>' ..' loading data')
+-- provider = torch.load('provider.t7')
 provider = Provider()
-provider.trainData.X = provider.trainData.X:float()
-provider.trainData.y = provider.trainData.y:float()
-provider.testData.X = provider.testData.X:float()
-provider.testData.y = provider.testData.y:float()
+-- provider:normalize()
+provider:detectEdge()
+provider.trainData.X = provider.trainData.X:cuda()
+provider.trainData.y = provider.trainData.y:cuda()
+provider.testData.X = provider.testData.X:cuda()
+provider.testData.y = provider.testData.y:cuda()
 
-
-print('Will save at' ..opt.save)
+print('Will save at ' ..opt.save)
 paths.mkdir(opt.save)
 testLogger = optim.Logger(paths.concat(opt.save, 'test.log'))
-testLogger:setNames{'% mean regression accuracy (train set)', '% mean class accuracy (test set)' }
-testLogger.showPlot(false)
+testLogger:setNames{'test average error: %', 'test maximum error: %' }
+testLogger.showPlot = false
 
 parameters, gradParameters = model:getParameters()
 
@@ -63,11 +65,12 @@ function train()
 
     print(c.blue '==>'.." online epoch # " .. epoch .. " [batchSize = " .. opt.batchSize .. ']')
 
-    local targets = torch.CudaTensor(opt.batchSize)
+    local targets = torch.CudaTensor(opt.batchSize, 8)
     local indices = torch.randperm(provider.trainData.X:size(1)):long():split(opt.batchSize)
     -- Don't need to remove last element because all the batches have equal size
     -- indices[#indices] = nil
 
+    local current_loss = 0
     local tic = torch.tic()
     for t, v in ipairs(indices) do
         xlua.progress(t, #indices)
@@ -82,15 +85,17 @@ function train()
             local outputs = model:forward(inputs)
             local f= criterion:forward(outputs, targets)    -- loss
             local df_do = criterion:backward(outputs, targets)
-            model.backward(inputs, dloss_do)
+            model:backward(inputs, df_do)
 
             return f, gradParameters
         end
 
         _, fs = optim.adam(feval, parameters, optimState)
 
-        print(fs)
+        current_loss = current_loss + fs[1]
     end
+
+    print(('Train loss: '..c.cyan'%.3f'..'\t time: %.2f s'):format(current_loss, torch.toc(tic)))
 
     epoch = epoch + 1
 end
@@ -100,19 +105,38 @@ function test()
     model:evaluate()
     print(c.blue '==>'.." testing")
 
-    local outputs = model:forward(provider.testData.X)
+    local outputs = torch.Tensor(provider.testData.y:size()):cuda()
+    for i = 1, provider.testData.X:size(1), opt.batchSize do
+        outputs:narrow(1, i, opt.batchSize):copy(model:forward(provider.testData.X:narrow(1, i, opt.batchSize)))
+    end
+    local error = provider.testData.y - outputs
 
-    print('Test loss: ', 0)
+    local avg_error = error:abs():max(2):mean()
+    local max_error, index = error:abs():max(2):max(1)
+    max_error = max_error[1][1]
+    index = index[1][1]
+
+    print(('Test average error: '..c.cyan'%.3f'):format(avg_error))
+    print(('Test maximum error: '..c.cyan'%.3f'):format(max_error))
+
+    print(('Index: '..c.cyan'%d'):format(index))
+
+    print(('filename: '..c.cyan'%s'):format(provider.testData.filenames[index]))
+    print(('keypoints: '..c.cyan'%s'):format(provider.testData.keypoints[index]))
+    print('Expected output: ')
+    print(provider.testData.y[index])
+    print('Actual output: ')
+    print(outputs[index])
 
     if testLogger then
         paths.mkdir(opt.save)
-        testLogger:add(train_loss, test_loss)
-        testLogger:stype('-', '-')
+        testLogger:add{avg_error, max_error}
+        testLogger:style{'-', '-'}
         testLogger:plot()
     end
 end
 
 for i = 1, opt.max_epoch do
     train()
-    -- test()
+    test()
 end

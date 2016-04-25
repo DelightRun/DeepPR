@@ -6,8 +6,8 @@ import os
 import numpy
 from keras.callbacks import ModelCheckpoint
 
-import dataset
 import models
+from precise_location.use_keras import dataset
 
 basepath = os.path.dirname(os.path.abspath(__file__))
 
@@ -26,3 +26,6 @@ error = numpy.abs(y - y_pred).mean(axis=1)
 print '全部平均误差: %.3f' % error.mean()
 print '测试平均误差: %.3f' % error[-200:].mean()
 print '最大误差: %.3f, 位于%d' % (error.max(), error.argmax())
+print '最大误差样本数据结果对比: '
+print '-- 实际值' + str(y[error.argmax()])
+print '-- 预测值' + str(y[error.argmax()])

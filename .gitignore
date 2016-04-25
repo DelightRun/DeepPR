@@ -111,3 +111,4 @@ crashlytics-build.properties
 
 # 数据文件不上传
 data/
+labels.txt
