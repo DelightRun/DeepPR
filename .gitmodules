@@ -1,0 +1,3 @@
+[submodule "characters_segmentation/erfilter_train"]
+	path = characters_segmentation/erfilter_train
+	url = /Users/Changxu/Projects/erfilter_train
