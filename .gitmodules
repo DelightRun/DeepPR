@@ -1,3 +1,0 @@
-[submodule "characters_segmentation/erfilter_train"]
-	path = characters_segmentation/erfilter_train
-	url = git@github.com:DelightRun/erfilter_train.git
