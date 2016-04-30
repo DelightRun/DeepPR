@@ -1,0 +1,3 @@
+[submodule "characters_detection/erfilter_train"]
+	path = characters_detection/erfilter_train
+	url = git@github.com:DelightRun/erfilter_train.git
