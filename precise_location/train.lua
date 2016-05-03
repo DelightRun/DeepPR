@@ -2,6 +2,7 @@ require 'xlua'
 require 'optim'
 require 'cunn'
 require 'cudnn'
+require 'cutorch'
 require 'provider'
 
 local c = require 'trepl.colorize'
@@ -19,9 +20,9 @@ opt = lapp[[
 print(opt)
 
 print(c.blue '==>' ..' configuring model')
-local model = torch.load(paths.concat('.', 'models', 'resnet-'..opt.depth..'.t7'))
+model = torch.load(paths.concat('.', 'models', 'resnet-'..opt.depth..'.t7'))
 if opt.nGPU > 1 then
-    assert(nGPU <= cutorch.getDeviceCount(), 'number of GPUs less than nGPU specified')
+    assert(opt.nGPU <= cutorch.getDeviceCount(), 'number of GPUs less than nGPU specified')
     local model_single = model
     model = nn.DataParallelTable(1)
     for i=1, opt.nGPU do
