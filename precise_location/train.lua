@@ -10,7 +10,7 @@ opt = lapp[[
     -b,--batchSize          (default 50)                batch size
     -r,--learningRate       (default 0.001)             learning rate
     --epoch_step            (default 25)                epoch step
-    --model                 (default conv_net_bn)       model name
+    --depth                 (default 200)               model depth
     --max_epoch             (default 30)                maximum number of iterations
     --backend               (default cudnn)             backend
 ]]
@@ -18,7 +18,7 @@ opt = lapp[[
 print(opt)
 
 print(c.blue '==>' ..' configuring model')
-local model = dofile('models/'..opt.model..'.lua'):cuda()
+local model = torch.load('models/resnet-'..opt.depth..'.t7'):cuda()
 
 if opt.backend == 'cudnn' then
     require 'cudnn'
@@ -28,9 +28,8 @@ end
 print(model)
 
 print(c.blue '==>' ..' loading data')
--- provider = torch.load('provider.t7')
 provider = Provider()
--- provider:normalize()
+provider:normalize()
 provider:detectEdge()
 provider.trainData.X = provider.trainData.X:cuda()
 provider.trainData.y = provider.trainData.y:cuda()
