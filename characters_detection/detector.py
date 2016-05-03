@@ -82,7 +82,6 @@ def detect_chars(image, minProb1=0.5, minProb2=0.75):
     if len(rects) < 6:
         return rects
 
-    # TODO: calculate province character position
     # get mean center delta in two directions
     center_delta_mean = np.mean([center_delta(rects[i], rects[i-1]) for i in range(2,6)], axis=0)
     center_delta_mean[0] *= 1.0   # scale in horizon
