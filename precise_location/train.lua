@@ -10,6 +10,7 @@ opt = lapp[[
     -s,--save               (default "logs")            subdirectory to save logs
     -b,--batchSize          (default 25)                batch size
     -r,--learningRate       (default 0.001)             learning rate
+    -n,--nGPU               (default 1)                 number of GPUs
     --epoch_step            (default 10)                epoch step
     --depth                 (default 152)               model depth
     --max_epoch             (default 30)                maximum number of iterations
@@ -20,6 +21,10 @@ print(opt)
 print(c.blue '==>' ..' configuring model')
 local model = torch.load(paths.concat('.', 'models', 'resnet-'..opt.depth..'.t7')):cuda()
 cudnn.convert(model, cudnn)
+
+if opt.nGPU > 1 then
+    model = makeDataParallel(model, opt.nGPU)
+end
 
 print(model)
 
