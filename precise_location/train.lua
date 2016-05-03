@@ -1,6 +1,7 @@
 require 'xlua'
 require 'optim'
 require 'cunn'
+require 'cudnn'
 require 'provider'
 
 local c = require 'trepl.colorize'
@@ -12,18 +13,13 @@ opt = lapp[[
     --epoch_step            (default 25)                epoch step
     --depth                 (default 152)               model depth
     --max_epoch             (default 30)                maximum number of iterations
-    --backend               (default cudnn)             backend
 ]]
 
 print(opt)
 
 print(c.blue '==>' ..' configuring model')
 local model = torch.load(paths.concat('.', 'models', 'resnet-'..opt.depth..'.t7')):cuda()
-
-if opt.backend == 'cudnn' then
-    require 'cudnn'
-    cudnn.convert(model, cudnn)
-end
+cudnn.convert(model, cudnn)
 
 print(model)
 
