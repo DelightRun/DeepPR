@@ -10,7 +10,7 @@ opt = lapp[[
     -b,--batchSize          (default 50)                batch size
     -r,--learningRate       (default 0.001)             learning rate
     --epoch_step            (default 25)                epoch step
-    --depth                 (default 200)               model depth
+    --depth                 (default 152)               model depth
     --max_epoch             (default 30)                maximum number of iterations
     --backend               (default cudnn)             backend
 ]]
