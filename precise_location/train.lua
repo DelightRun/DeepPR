@@ -19,12 +19,17 @@ opt = lapp[[
 print(opt)
 
 print(c.blue '==>' ..' configuring model')
-local model = torch.load(paths.concat('.', 'models', 'resnet-'..opt.depth..'.t7')):cuda()
-cudnn.convert(model, cudnn)
-
+local model = torch.load(paths.concat('.', 'models', 'resnet-'..opt.depth..'.t7'))
 if opt.nGPU > 1 then
-    model = makeDataParallel(model, opt.nGPU)
+    assert(nGPU <= cutorch.getDeviceCount(), 'number of GPUs less than nGPU specified')
+    local model_single = model
+    model = nn.DataParallelTable(1)
+    for i=1, opt.nGPU do
+        cutorch.setDevice(i)
+        model:add(model_single:clone():cuda(), i)
+    end
 end
+cudnn.convert(model, cudnn)
 
 print(model)
 
