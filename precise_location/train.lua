@@ -8,9 +8,9 @@ local c = require 'trepl.colorize'
 
 opt = lapp[[
     -s,--save               (default "logs")            subdirectory to save logs
-    -b,--batchSize          (default 50)                batch size
+    -b,--batchSize          (default 25)                batch size
     -r,--learningRate       (default 0.001)             learning rate
-    --epoch_step            (default 25)                epoch step
+    --epoch_step            (default 10)                epoch step
     --depth                 (default 152)               model depth
     --max_epoch             (default 30)                maximum number of iterations
 ]]
