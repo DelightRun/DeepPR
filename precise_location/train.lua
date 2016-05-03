@@ -18,7 +18,7 @@ opt = lapp[[
 print(opt)
 
 print(c.blue '==>' ..' configuring model')
-local model = torch.load('models/resnet-'..opt.depth..'.t7'):cuda()
+local model = torch.load(paths.concat('.', 'models', 'resnet-'..opt.depth..'.t7')):cuda()
 
 if opt.backend == 'cudnn' then
     require 'cudnn'
@@ -30,7 +30,6 @@ print(model)
 print(c.blue '==>' ..' loading data')
 provider = Provider()
 provider:normalize()
-provider:detectEdge()
 provider.trainData.X = provider.trainData.X:cuda()
 provider.trainData.y = provider.trainData.y:cuda()
 provider.testData.X = provider.testData.X:cuda()

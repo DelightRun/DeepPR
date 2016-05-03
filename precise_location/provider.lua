@@ -68,7 +68,7 @@ function Provider:__init()
 end
 
 function Provider:normalize()
-    file = torch.DiskFile('meanstd.txt', 'w')
+    file = io.open(paths.concat('.', 'meanstd.txt'), 'w')
     for i = 1, 3 do
         local mean = self.trainData.X:select(2,i):mean()
         local std = self.trainData.X:select(2,i):std()
@@ -79,10 +79,7 @@ function Provider:normalize()
         self.testData.X:select(2,i):add(-mean)
         self.testData.X:select(2,i):div(std)
 
-        file:writeFloat(mean)
-        file:writeFloat(std)
-        file:writeChar('\n')
+        file:write(mean, ' ', std, '\n')
     end
-
-    file:close()
+    io.close(file)
 end
