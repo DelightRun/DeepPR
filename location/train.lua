@@ -68,7 +68,6 @@ function train()
     cutorch.synchronize()
 
     model:training()
-    epoch = epoch or 1
 
     -- drop learning rate every "epoch_step" epochs
     if epoch % opt.epoch_step == 0 then optimState.leanringRate = optimState.learningRate/2 end
@@ -109,19 +108,9 @@ function train()
     cutorch.synchronize()
 
     print(('Train loss: '..c.cyan'%.3f'..'\t time: %.2f s'):format(current_loss, torch.toc(tic)))
-
-    -- save model
-    collectgarbage()
-
-    -- clear the intermediate states in the moel before saving to disk
-    -- this saves lots of disk space
-    model:clearState()
-    torch.save(paths.concat('.', 'models', 'model_'..epoch..'.t7'), model)
-
-    epoch = epoch + 1
 end
 
-
+min_avg_eror = 1 / 0  -- set min_avg_error to inf
 function test()
     cutorch.synchronize()
     model:evaluate()
@@ -130,13 +119,14 @@ function test()
     local outputs = torch.Tensor(provider.testData.y:size()):cuda()
     for i = 1, provider.testData.X:size(1), opt.batchSize do
         outputs:narrow(1, i, opt.batchSize):copy(model:forward(provider.testData.X:narrow(1, i, opt.batchSize)))
+        cutorch.synchronize()
     end
     cutorch.synchronize()
 
-    local error = provider.testData.y - outputs
+    local errors = provider.testData.y - outputs
 
-    local avg_error = error:abs():max(2):mean()
-    local max_error, index = error:abs():max(2):max(1)
+    local avg_error = errors:abs():max(2):mean()
+    local max_error, index = errors:abs():max(2):max(1)
     max_error = max_error[1][1]
     index = index[1][1]
 
@@ -158,9 +148,25 @@ function test()
         testLogger:style{'-', '-'}
         testLogger:plot()
     end
+
+    collectgarbage()
+
+    if avg_error < min_avg_error then
+        print('Save current model')
+        -- save model
+        torch.save(paths.concat('.', 'models', 'model.t7'), model)
+        min_avg_error = avg_error
+    end
 end
 
-for i = 1, opt.max_epoch do
+epoch = 1
+while epoch <= opt.max_epoch do
     train()
     test()
+    epoch = epoch + 1
 end
+
+print(c.blue '==>' ..' compressing best model')
+best_model = torch.load(paths.concat('.', 'models', 'model.t7'))
+best_model:clearState()
+torch.save(paths.concat('.', 'models', 'model.t7'), best_model)
