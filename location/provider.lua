@@ -63,12 +63,14 @@ function Provider:__init()
             end
         end
         io.close(labelfile)
+
+        self:normalize()
         torch.save('dataset.t7', {trainData=self.trainData, testData=self.testData})
     end
 end
 
 function Provider:normalize()
-    file = io.open(paths.concat('.', 'meanstd.txt'), 'w')
+    meanstdfile = io.open(paths.concat('.', 'meanstd.txt'), 'w')
     for i = 1, 3 do
         local mean = self.trainData.X:select(2,i):mean()
         local std = self.trainData.X:select(2,i):std()
@@ -79,7 +81,7 @@ function Provider:normalize()
         self.testData.X:select(2,i):add(-mean)
         self.testData.X:select(2,i):div(std)
 
-        file:write(mean, ' ', std, '\n')
+        meanstdfile:write(mean, ' ', std, '\n')
     end
-    io.close(file)
+    io.close(meanstdfile)
 end

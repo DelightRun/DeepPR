@@ -38,7 +38,6 @@ end
 
 print(c.blue '==>' ..' loading data')
 provider = Provider()
-provider:normalize()
 provider.trainData.X = provider.trainData.X:cuda()
 provider.trainData.y = provider.trainData.y:cuda()
 provider.testData.X = provider.testData.X:cuda()
@@ -117,7 +116,7 @@ function train()
     -- clear the intermediate states in the moel before saving to disk
     -- this saves lots of disk space
     model:clearState()
-    torch.save(paths.concate('.', 'models', 'model_'..epoch..'.t7'), model)
+    torch.save(paths.concat('.', 'models', 'model_'..epoch..'.t7'), model)
 
     epoch = epoch + 1
 end
@@ -130,8 +129,6 @@ function test()
 
     local outputs = torch.Tensor(provider.testData.y:size()):cuda()
     for i = 1, provider.testData.X:size(1), opt.batchSize do
-        cutorch.synchronize()
-
         outputs:narrow(1, i, opt.batchSize):copy(model:forward(provider.testData.X:narrow(1, i, opt.batchSize)))
     end
     cutorch.synchronize()
