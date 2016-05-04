@@ -1,4 +1,6 @@
 require 'nn'
+require 'cunn'
+require 'cudnn'
 local nninit = require 'nninit'
 
 local cfg = {32, 'M', 64, 'M', 128, 128, 'M', 256, 256, 'M', 512, 512, 'M'}
@@ -51,4 +53,7 @@ regressor:add(nn.PReLU())
 local model = nn.Sequential()
 model:add(features):add(regressor)
 
-return model
+model:cuda()
+cudnn.convert(model, cudnn)
+
+torch.save('vgg.t7', model)
