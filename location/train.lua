@@ -110,7 +110,7 @@ function train()
     print(('Train loss: '..c.cyan'%.3f'..'\t time: %.2f s'):format(current_loss, torch.toc(tic)))
 end
 
-min_avg_eror = 1 / 0  -- set min_avg_error to inf
+min_avg_error = 1 / 0  -- set min_avg_error to inf
 function test()
     cutorch.synchronize()
     model:evaluate()
