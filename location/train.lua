@@ -62,6 +62,8 @@ optimState = {
 
 
 function train()
+    cutorch.synchronize()
+
     model:training()
     epoch = epoch or 1
 
@@ -100,7 +102,17 @@ function train()
         current_loss = current_loss + fs[1]
     end
 
+    cutorch.synchronize()
+
     print(('Train loss: '..c.cyan'%.3f'..'\t time: %.2f s'):format(current_loss, torch.toc(tic)))
+
+    -- save model
+    collectgarbage()
+
+    -- clear the intermediate states in the moel before saving to disk
+    -- this saves lots of disk space
+    model:clearState()
+    torch.save(paths.concate('.', 'models', 'model_'..epoch..'.t7'), model)
 
     epoch = epoch + 1
 end
