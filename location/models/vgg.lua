@@ -26,34 +26,23 @@ do
             nInputPlanes = nOutputPlanes
         end
     end
+    features:add(nn.SpatialAveragePooling(7,14,1,1))
 end
-
-print(nInputPlanes)
-print(width)
-print(height)
 
 local regressor = nn.Sequential()
-regressor:add(nn.View(nInputPlanes*width*height))
-while nInputPlanes ~= 1 do
-    local nOutputPlanes
-    print(nInputPlanes)
-    if nInputPlanes % 4 == 0 then
-        nOutputPlanes = nInputPlanes / 4
-    else
-        nOutputPlanes = nInputPlanes / 2
-    end
-    regressor:add(nn.Linear(nInputPlanes*width*height, nOutputPlanes*width*height))
-    regressor:add(nn.BatchNormalization(nOutputPlanes*width*height))
-    regressor:add(nn.ReLU())
-    nInputPlanes = nOutputPlanes
-end
-regressor:add(nn.Linear(nInputPlanes*width*height, 8))
+regressor:add(nn.View(nInputPlanes))
+regressor:add(nn.Linear(nInputPlanes, nInputPlanes/2))
+regressor:add(nn.BatchNormalization(nInputPlanes/2))
+regressor:add(nn.ReLU())
+regressor:add(nn.Linear(nInputPlanes/2, 8))
 
 local model = nn.Sequential()
 model:add(features):add(regressor)
 
 model:cuda()
 cudnn.convert(model, cudnn)
+
+print(model)
 
 model:clearState()
 torch.save('vgg.t7', model)
