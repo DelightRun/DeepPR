@@ -22,7 +22,7 @@ do
             local nOutputPlanes = v
             features:add(nn.SpatialConvolution(nInputPlanes, nOutputPlanes, 3, 3, 1, 1, 1, 1):init('weight', nninit.kaiming))
             features:add(nn.SpatialBatchNormalization(nOutputPlanes))
-            features:add(nn.PReLU())
+            features:add(nn.ReLU())
             nInputPlanes = nOutputPlanes
         end
     end
@@ -44,11 +44,10 @@ while nInputPlanes ~= 1 do
     end
     regressor:add(nn.Linear(nInputPlanes*width*height, nOutputPlanes*width*height))
     regressor:add(nn.BatchNormalization(nOutputPlanes*width*height))
-    regressor:add(nn.PReLU())
+    regressor:add(nn.ReLU())
     nInputPlanes = nOutputPlanes
 end
 regressor:add(nn.Linear(nInputPlanes*width*height, 8))
-regressor:add(nn.PReLU())
 
 local model = nn.Sequential()
 model:add(features):add(regressor)
@@ -56,4 +55,5 @@ model:add(features):add(regressor)
 model:cuda()
 cudnn.convert(model, cudnn)
 
+model:clearState()
 torch.save('vgg.t7', model)
