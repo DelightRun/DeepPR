@@ -113,3 +113,6 @@ crashlytics-build.properties
 images/
 labels.txt
 *.t7
+logs/
+logs/*
+
