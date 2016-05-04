@@ -166,6 +166,15 @@ while epoch <= opt.max_epoch do
     epoch = epoch + 1
 end
 
+-- release memory
+provider = nil
+inputs = nil
+targets = nil
+indices = nil
+model = nil
+criterion = nil
+collectgarbage()
+
 print(c.blue '==>' ..' compressing best model')
 best_model = torch.load(paths.concat('.', 'models', 'model.t7'))
 best_model:clearState()
