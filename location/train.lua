@@ -10,11 +10,12 @@ local c = require 'trepl.colorize'
 opt = lapp[[
     -s,--save               (default "logs")            subdirectory to save logs
     -b,--batchSize          (default 25)                batch size
-    -r,--learningRate       (default 0.001)             learning rate
+    -r,--learningRate       (default 0.1)               learning rate
     -n,--nGPU               (default 1)                 number of GPUs
     --epoch_step            (default 10)                epoch step
-    --model                 (default "resnet-152.t7")   model file
+    --model                 (default "resnet-18.t7")    model file
     --max_epoch             (default 30)                maximum number of iterations
+    --savename              (default "")               model save name, nil for don't save
 ]]
 
 print(opt)
@@ -35,6 +36,8 @@ if opt.nGPU > 1 then
     dpt.gradInput = nil
     model = dpt:cuda()
 end
+
+print(model)
 
 print(c.blue '==>' ..' loading data')
 provider = Provider()
@@ -152,10 +155,12 @@ function test()
     collectgarbage()
 
     if avg_error < min_avg_error then
-        print('Save current model')
-        -- save model
-        torch.save(paths.concat('.', 'models', 'model.t7'), model)
         min_avg_error = avg_error
+        if opt.savename ~= "" then
+            -- save model
+            print('Save current model')
+            torch.save(paths.concat('.', 'models', opt.savename), model)
+        end
     end
 end
 
@@ -175,7 +180,9 @@ model = nil
 criterion = nil
 collectgarbage()
 
-print(c.blue '==>' ..' compressing best model')
-best_model = torch.load(paths.concat('.', 'models', 'model.t7'))
-best_model:clearState()
-torch.save(paths.concat('.', 'models', 'model.t7'), best_model)
+if opt.savename ~= "" then
+    print(c.blue '==>' ..' compressing best model')
+    best_model = torch.load(paths.concat('.', 'models', opt.savename))
+    best_model:clearState()
+    torch.save(paths.concat('.', 'models', opt.savename), best_model)
+end
