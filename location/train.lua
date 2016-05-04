@@ -13,14 +13,14 @@ opt = lapp[[
     -r,--learningRate       (default 0.001)             learning rate
     -n,--nGPU               (default 1)                 number of GPUs
     --epoch_step            (default 10)                epoch step
-    --depth                 (default 152)               model depth
+    --model                 (default "resnet-152.t7")   model file
     --max_epoch             (default 30)                maximum number of iterations
 ]]
 
 print(opt)
 
 print(c.blue '==>' ..' configuring model')
-model = torch.load(paths.concat('.', 'models', 'resnet-'..opt.depth..'.t7'))
+model = torch.load(paths.concat('.', 'models', opt.model))
 if opt.nGPU > 1 then
     assert(opt.nGPU <= cutorch.getDeviceCount(), 'number of GPUs less than nGPU specified')
     local model_single = model
