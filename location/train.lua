@@ -21,18 +21,20 @@ print(opt)
 
 print(c.blue '==>' ..' configuring model')
 model = torch.load(paths.concat('.', 'models', opt.model))
+cudnn.convert(model, cudnn)
 if opt.nGPU > 1 then
     assert(opt.nGPU <= cutorch.getDeviceCount(), 'number of GPUs less than nGPU specified')
-    local model_single = model
-    model = nn.DataParallelTable(1)
-    for i=1, opt.nGPU do
-        cutorch.setDevice(i)
-        model:add(model_single:clone():cuda(), i)
-    end
+    local gpus = torch.range(1, opt.nGPU):totable()
+    local fastest, benchmark = cudnn.fastest, cudnn.benchmark
+    local dpt = nn.DataParallelTable(1, true, true)
+        :add(model, gpus)
+        :threads(function()
+            local cudnn = require 'cudnn'
+            cudnn.fastest, cudnn.benchmark = fastest, benchmark
+        end)
+    dpt.gradInput = nil
+    model = dpt:cuda()
 end
-cudnn.convert(model, cudnn)
-
-print(model)
 
 print(c.blue '==>' ..' loading data')
 provider = Provider()
@@ -42,14 +44,11 @@ provider.trainData.y = provider.trainData.y:cuda()
 provider.testData.X = provider.testData.X:cuda()
 provider.testData.y = provider.testData.y:cuda()
 
-print('Will save at ' ..opt.save)
-paths.mkdir(opt.save)
-testLogger = optim.Logger(paths.concat(opt.save, 'test.log'))
-testLogger:setNames{'test average error: %', 'test maximum error: %' }
-testLogger.showPlot = false
-
 parameters, gradParameters = model:getParameters()
 
+inputs = torch.CudaTensor(opt.batchSize, 3, 448, 224)
+targets = torch.CudaTensor(opt.batchSize, 8)
+indices = torch.randperm(provider.trainData.X:size(1)):long():split(opt.batchSize)
 
 print(c.blue '==>' ..' setting criterion')
 criterion = nn.MSECriterion():cuda()
@@ -60,6 +59,11 @@ optimState = {
     learningRate = opt.learningRate
 }
 
+print('Will save logs at ' ..opt.save)
+paths.mkdir(opt.save)
+testLogger = optim.Logger(paths.concat(opt.save, 'test.log'))
+testLogger:setNames{'test average error: %', 'test maximum error: %' }
+testLogger.showPlot = false
 
 function train()
     cutorch.synchronize()
@@ -72,32 +76,33 @@ function train()
 
     print(c.blue '==>'.." online epoch # " .. epoch .. " [batchSize = " .. opt.batchSize .. ']')
 
-    local targets = torch.CudaTensor(opt.batchSize, 8)
-    local indices = torch.randperm(provider.trainData.X:size(1)):long():split(opt.batchSize)
-    -- Don't need to remove last element because all the batches have equal size
-    -- indices[#indices] = nil
-
     local current_loss = 0
     local tic = torch.tic()
     for t, v in ipairs(indices) do
         xlua.progress(t, #indices)
 
-        local inputs = provider.trainData.X:index(1, v)
+        inputs:copy(provider.trainData.X:index(1, v))
         targets:copy(provider.trainData.y:index(1, v))
+
+        cutorch.synchronize()
+        collectgarbage()
 
         local feval = function(x)
             if x ~= parameters then parameters:copy(x) end
-            gradParameters:zero()
-
+            model:zeroGradParameters()
             local outputs = model:forward(inputs)
-            local f= criterion:forward(outputs, targets)    -- loss
-            local df_do = criterion:backward(outputs, targets)
-            model:backward(inputs, df_do)
+            local err = criterion:forward(outputs, targets)    -- loss
+            local gradOutputs = criterion:backward(outputs, targets)
+            model:backward(inputs, gradOutputs)
 
-            return f, gradParameters
+            return err, gradParameters
         end
 
         _, fs = optim.adam(feval, parameters, optimState)
+
+        if model.needsSync then
+            model:syncParameters()
+        end
 
         current_loss = current_loss + fs[1]
     end
@@ -119,13 +124,18 @@ end
 
 
 function test()
+    cutorch.synchronize()
     model:evaluate()
     print(c.blue '==>'.." testing")
 
     local outputs = torch.Tensor(provider.testData.y:size()):cuda()
     for i = 1, provider.testData.X:size(1), opt.batchSize do
+        cutorch.synchronize()
+
         outputs:narrow(1, i, opt.batchSize):copy(model:forward(provider.testData.X:narrow(1, i, opt.batchSize)))
     end
+    cutorch.synchronize()
+
     local error = provider.testData.y - outputs
 
     local avg_error = error:abs():max(2):mean()
