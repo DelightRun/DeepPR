@@ -159,6 +159,7 @@ function test()
 
     if avg_error < min_avg_error then
         min_avg_error = avg_error
+        best_epoch = epoch
         if opt.savename ~= "" and epoch >= 5 then
             -- save model
             print('Save current model')
