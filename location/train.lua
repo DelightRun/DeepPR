@@ -159,7 +159,7 @@ function test()
 
     if avg_error < min_avg_error then
         min_avg_error = avg_error
-        if opt.savename ~= "" and epoch >= opt.max_epoch/2 then
+        if opt.savename ~= "" and epoch >= 5 then
             -- save model
             print('Save current model')
             torch.save(paths.concat('.', 'models', opt.savename), model)
