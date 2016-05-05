@@ -3,7 +3,7 @@ require 'cunn'
 require 'cudnn'
 local nninit = require 'nninit'
 
-local cfg = {32, 'M', 64, 'M', 128, 128, 'M', 256, 256, 'M', 512, 512, 'M'}
+local cfg = {32, 'M', 64, 'M', 128, 'M', 128, 'M', 256, 256, 'M'}
 
 local features = nn.Sequential()
 
@@ -26,15 +26,18 @@ do
             nInputPlanes = nOutputPlanes
         end
     end
-    features:add(nn.SpatialAveragePooling(7,14,1,1))
 end
 
 local regressor = nn.Sequential()
-regressor:add(nn.View(nInputPlanes))
-regressor:add(nn.Linear(nInputPlanes, nInputPlanes/2))
-regressor:add(nn.BatchNormalization(nInputPlanes/2))
-regressor:add(nn.ReLU())
-regressor:add(nn.Linear(nInputPlanes/2, 8))
+regressor:add(nn.View(nInputPlanes*width*height))
+while nInputPlanes ~= 1 do
+    local nOutputPlanes = nInputPlanes / 4
+    regressor:add(nn.Linear(nInputPlanes*width*height, nOutputPlanes*width*height))
+    regressor:add(nn.BatchNormalization(nOutputPlanes*width*height))
+    regressor:add(nn.ReLU())
+    nInputPlanes = nOutputPlanes
+end
+regressor:add(nn.Linear(width*height, 8))
 
 local model = nn.Sequential()
 model:add(features):add(regressor)
