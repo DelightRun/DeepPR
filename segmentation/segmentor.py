@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 import sys
 import os
 
@@ -9,7 +8,7 @@ from matplotlib import pyplot as plt
 
 models_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'erfilter_train', 'trained_classifiers')
 
-def detect_chars(image, minProb1=0.5, minProb2=0.75):
+def get_chars(image, minProb1=0.5, minProb2=0.75):
     height, width = image.shape[:2]
     print("Image size: %d x %d" % (width, height))
 
@@ -93,7 +92,24 @@ def detect_chars(image, minProb1=0.5, minProb2=0.75):
 
     rects.insert(0, char_rect)
 
-    return rects
+    # make rects into image of chars
+    def make_img(rect):
+        img = image[rect[0]:rect[0]+rect[2],rect[1]:rect[1]+rect[4]]
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        height, width = img.shape[:2]
+        if height >= width:
+            border_left = int((height - width) / 2)
+            border_right = height - width - border_left
+            img = cv2.copyMakeBorder(img, 0, 0, border_left, border_right, cv2.BORDER_CONSTANT, 0)
+        else:
+            border_top = int((width - height) / 2)
+            border_bottom = width - height - border_top
+            img = cv2.copyMakeBorder(img, border_top, border_bottom, 0, 0, cv2.BORDER_CONSTANT, 0)
+        return cv2.resize(img, (20, 20))
+
+    char_imgs = [make_img(rect) for rect in rects]
+
+    return (rects, char_imgs)
 
 def draw_regions(image, rects):
     vis = image.copy()    # for visualization
@@ -109,6 +125,6 @@ if __name__ == '__main__':
     minProb1 = float(sys.argv[3]) if len(sys.argv) >= 4 else 0.75
 
     image = cv2.imread(sys.argv[1])
-    vis = draw_regions(image, detect_chars(image))
+    vis = draw_regions(image, get_chars(image)[1])
     plt.imshow(cv2.cvtColor(vis, cv2.COLOR_BGR2RGB))
     plt.show()
