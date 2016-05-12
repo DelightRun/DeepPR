@@ -32,7 +32,7 @@ def get_chars(image, minProb1=0.5, minProb2=0.75):
             rect = cv2.boundingRect(region.reshape(-1,1,2))
 
             # filte by height ratio and width-height ratio and x position
-            if rect[0] > 0.05*width and rect[3] >= 0.4*height and rect[2]*0.3 <= rect[3] < rect[2]*10:
+            if rect[0] > 0.05*width and rect[3] >= 0.5*height and rect[2]*0.3 <= rect[3] < rect[2]*10:
                 rects.append(rect)
 
     height_mean = np.mean([rect[3] for rect in rects]).tolist()
@@ -49,7 +49,6 @@ def get_chars(image, minProb1=0.5, minProb2=0.75):
 
     bins = [[rects[0]]]
     for i in range(1, len(rects)):
-        # TODO: judge by overlap
         if abs(center_delta(rects[i], rects[i-1])[0]) > 0.4*rects[i-1][2]:
             bins.append([rects[i]])
         else:
@@ -61,8 +60,18 @@ def get_chars(image, minProb1=0.5, minProb2=0.75):
     bins = bins[:min(len(bins),6)]
 
     def rects_max(rects):
-        rects.sort(key=lambda rect : rect[2]*rect[3])
-        return rects[-1]
+        # TODO better method to get boundary
+        x_mins = sorted([rect[0] for rect in rects])
+        x_min = x_mins[min(1, len(x_mins))]
+        y_mins = sorted([rect[1] for rect in rects])
+        y_min = y_mins[min(1, len(y_mins))]
+
+        x_maxs = sorted([rect[0]+rect[2] for rect in rects],reverse=True)
+        x_max = x_maxs[min(1, len(x_maxs))]
+        y_maxs = sorted([rect[1]+rect[3] for rect in rects],reverse=True)
+        y_max = y_maxs[min(1, len(y_maxs))]
+
+        return (x_min, y_min, x_max-x_min, y_max-y_min)
 
     # get avarage size and position of each bin
     rects = [rects_max(bin) for bin in bins]
@@ -70,42 +79,40 @@ def get_chars(image, minProb1=0.5, minProb2=0.75):
     # sort by x coordinate
     rects.sort(key=lambda r : r[0])
 
-    char_centers = [center(rect) for rect in rects]
-    char_center_deltas = [center_delta(rects[i], rects[i-1]) for i in range(1,len(rects))]
-
-    width_mean = round(np.mean([rect[2] for rect in rects]).tolist())
-    height_mean = round(np.mean([rect[3] for rect in rects]).tolist())
+    width_max = np.max([rect[2] for rect in rects])
+    height_max = np.max([rect[3] for rect in rects])
 
     if len(rects) < 6:
         # TODO: infer characters by position
-        return rects
+        return None
 
     # get mean center delta in two directions
     center_delta_mean = np.mean([center_delta(rects[i], rects[i-1]) for i in range(2,6)], axis=0)
     center_delta_mean[0] *= 1.0   # scale in horizon
 
-    char_width = round(1.25*width_mean)
-    char_height = height_mean
+    char_width = width_max
+    char_height = height_max
 
     char_center = tuple((np.array(center(rects[0])) - center_delta_mean).tolist())
-    char_rect = (round(char_center[0]-char_width/2), round(char_center[1]-char_height/2), char_width, char_height)
+    char_rect = (max(int(round(char_center[0]-char_width/2)),0), max(int(round(char_center[1]-char_height/2)),0), char_width, char_height)
 
     rects.insert(0, char_rect)
 
     # make rects into image of chars
     def make_img(rect):
-        img = image[rect[0]:rect[0]+rect[2],rect[1]:rect[1]+rect[4]]
+        img = image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]]
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         height, width = img.shape[:2]
+        border_color = int(round(img.mean()))
         if height >= width:
             border_left = int((height - width) / 2)
             border_right = height - width - border_left
-            img = cv2.copyMakeBorder(img, 0, 0, border_left, border_right, cv2.BORDER_CONSTANT, 0)
+            img = cv2.copyMakeBorder(img, 0, 0, border_left, border_right, cv2.BORDER_CONSTANT, value=border_color)
         else:
             border_top = int((width - height) / 2)
             border_bottom = width - height - border_top
-            img = cv2.copyMakeBorder(img, border_top, border_bottom, 0, 0, cv2.BORDER_CONSTANT, 0)
-        return cv2.resize(img, (20, 20))
+            img = cv2.copyMakeBorder(img, border_top, border_bottom, 0, 0, cv2.BORDER_CONSTANT, value=border_color)
+        return cv2.resize(img, (50, 50))
 
     char_imgs = [make_img(rect) for rect in rects]
 
@@ -125,6 +132,9 @@ if __name__ == '__main__':
     minProb1 = float(sys.argv[3]) if len(sys.argv) >= 4 else 0.75
 
     image = cv2.imread(sys.argv[1])
-    vis = draw_regions(image, get_chars(image)[1])
-    plt.imshow(cv2.cvtColor(vis, cv2.COLOR_BGR2RGB))
+    rects, char_imgs = get_chars(image)
+    vis = draw_regions(image, rects)
+    f, (ax1, ax2) = plt.subplots(nrows=2, ncols=1)
+    ax1.imshow(cv2.cvtColor(vis, cv2.COLOR_BGR2RGB))
+    ax2.imshow(np.hstack(char_imgs), cmap=plt.cm.gray)
     plt.show()
