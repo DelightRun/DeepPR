@@ -5,8 +5,8 @@ require 'xlua'
 local Provider = torch.class('Provider')
 
 function Provider:__init()
-    local train_size = 800
-    local test_size = 200
+    local train_size = 900
+    local test_size = 100
 
     local img_width = 448
     local img_height = 224
@@ -19,16 +19,16 @@ function Provider:__init()
         self.trainData = {
             filenames = {},
             keypoints = {},
-            X = torch.Tensor(800, 3, img_width, img_height),
-            y = torch.Tensor(800, 8),
+            X = torch.Tensor(train_size, 3, img_width, img_height),
+            y = torch.Tensor(train_size, 8),
             size = function() return train_size end
         }
 
         self.testData = {
             filenames = {},
             keypoints = {},
-            X = torch.Tensor(200, 3, img_width, img_height),
-            y = torch.Tensor(200, 8),
+            X = torch.Tensor(test_size, 3, img_width, img_height),
+            y = torch.Tensor(test_size, 8),
             size = function() return test_size end
         }
 
@@ -43,10 +43,10 @@ function Provider:__init()
 
             local img = image.load(paths.concat(".", "images", filename..".jpg"))
             for i = 1, 7, 2 do
-                keypoints[i] = tonumber(keypoints[i]) / img:size(3)
+                keypoints[i] = tonumber(keypoints[i]) / img:size(3) * img_width
             end
             for i = 2, 8, 2 do
-                keypoints[i] = tonumber(keypoints[i]) / img:size(2)
+                keypoints[i] = tonumber(keypoints[i]) / img:size(2) * img_height
             end
             img = image.rgb2yuv(image.scale(img, img_width, img_height))
 

@@ -114,6 +114,7 @@ function train()
 end
 
 min_avg_error = 1 / 0  -- set min_avg_error to inf
+best_epoch = 0
 function test()
     cutorch.synchronize()
     model:evaluate()
@@ -133,6 +134,8 @@ function test()
     max_error = max_error[1][1]
     index = index[1][1]
 
+    print(('Best epoch: '..c.cyan'%d'):format(best_epoch))
+    print(('Minimum average error: '..c.cyan'%.3f'):format(min_avg_error))
     print(('Test average error: '..c.cyan'%.3f'):format(avg_error))
     print(('Test maximum error: '..c.cyan'%.3f'):format(max_error))
 
@@ -156,7 +159,7 @@ function test()
 
     if avg_error < min_avg_error then
         min_avg_error = avg_error
-        if opt.savename ~= "" then
+        if opt.savename ~= "" and epoch >= 5 then
             -- save model
             print('Save current model')
             torch.save(paths.concat('.', 'models', opt.savename), model)
@@ -186,3 +189,7 @@ if opt.savename ~= "" then
     best_model:clearState()
     torch.save(paths.concat('.', 'models', opt.savename), best_model)
 end
+
+print(c.blue '==>' ..' result')
+print(('Best epoch: '..c.cyan'%d'):format(best_epoch))
+print(('Minimum average error: '..c.cyan'%.3f'):format(min_avg_error))
