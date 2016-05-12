@@ -61,13 +61,12 @@ def detect_chars(image, minProb1=0.5, minProb2=0.75):
     # get most posible bins, at most 6 bins
     bins = bins[:min(len(bins),6)]
 
-    def rects_mean(rects):
-        mean_rect = np.round(np.mean(rects, axis=0)) # round
-        mean_rect = mean_rect.astype('int')
-        return tuple(mean_rect.tolist())
+    def rects_max(rects):
+        rects.sort(key=lambda rect : rect[2]*rect[3])
+        return rects[-1]
 
     # get avarage size and position of each bin
-    rects = [rects_mean(bin) for bin in bins]
+    rects = [rects_max(bin) for bin in bins]
 
     # sort by x coordinate
     rects.sort(key=lambda r : r[0])
@@ -78,8 +77,8 @@ def detect_chars(image, minProb1=0.5, minProb2=0.75):
     width_mean = round(np.mean([rect[2] for rect in rects]).tolist())
     height_mean = round(np.mean([rect[3] for rect in rects]).tolist())
 
-    # TODO: infer characters by position
     if len(rects) < 6:
+        # TODO: infer characters by position
         return rects
 
     # get mean center delta in two directions
