@@ -1,433 +1,213 @@
 \chapter{引言}
-不用看了，本文内容其实和章名没多大关系，只是没得名起了，迎合《本科生毕业设计（论
-文）工作手册》要求而已。
+\section{研究背景和研究意义}
+\subsection{研究背景}
+自从十九世纪八十年代人类世界的第一辆汽车诞生以来，人类的生活就再也离不开汽车这种
+方便的交通工具。尤其是进入21世纪以来，中国大陆地区汽车保有量快速上升，几乎到了家
+家都有车的地步，一些富裕一些的家庭甚至一人一辆车。据不完全统计，在2002年左右我国
+的汽车保有量在2000万辆左右，而到了2015年则增加到1.72亿辆之多，并且以每年百分之十
+的速度持续增长。如此大量的汽车，在给我们带来诸多便利的同事，也增加了城市道路的
+复旦和交通事故的发生率。如今，道路拥堵、违规停车、交通事故已成为每个城市管理者的
+心头病。因此，各国政府也在一直不停的研究如何对车辆有效监管，提高道路利用率，避免
+交通事故。在此前提下，诞生了两大热门研究方向：智能交通系统(Intelligent
+Transportation System, ITS)和自动驾驶系统。这两项技术都旨在通过计算机技术来解决
+交通管理等问题。而这两项技术中必不可少的一环便是进行车牌识别，即通过计算机视觉技
+术，对图像（或视频）中的车牌进行准确的定位、分割和识别。
 
-\section{文字处理}
+\subsection{研究意义}
+从研究背景中我们可以知道，VLPR技术在实际生活中有着十分重要且广泛的应用。下面我们
+举出几个实际生活中自动车牌识别系统的典型应用：
 
-\subsection{字体设置}
-\textbf{\kaishu {西安电子科技大学}}（Xidian University）简称“\textbf{西电}”或“\textbf{西军电}”，坐落于古都西安。学校是中央部属高校，教育部直属、工信部共建，国家首批“{\heiti 211工程}”，是“{\fangsong 985工程优势学科创新平台}”、“111计划”、“2011计划”重点建设高校{\youyuan （中国电子信息领域、邮电领域唯一的“2011计划”牵头高校）}，35所示范性软件学院的高校之一、集成电路人才培养基地的高校之一，56所获批设立研究生院的重点大学之一，也是{\zihao{-3}\lishu 北京高科大学联盟}的重要成员。 
-
-1931年1月28日，红一方面军{\yahei 总司令朱德、总政委毛泽东}于小布总部签发“调学生学无线电的命令”，随后，第一期无线电训练班在\CJKunderline{小布镇陈家土楼}正式开课。后迁移至\CJKunderdblline{瑞金}，成立\CJKunderwave{中央军委无线电学校}，是毛泽东等老一辈革命家亲手创建的第一所工程技术学校。1958年学校迁址西安，1966年转为地方建制，1988年定为西安电子科技大学。该校是中国最早建立\CJKunderdot{信息论、信息系统工程、雷达、微波天线、电子机械、电子对抗}等专业的高校之一，开辟了中国IT学科的先河，形成了鲜明的电子与信息学科特色与优势。毛泽东曾先后两次为该校题词：“\textbf{\large 全心全意为人民服务}”、“\textbf{\large 艰苦朴素}”。\footnote{从百度百科粘下来的，就不放进参考文献了。}
-
-\CJKsout{来点没用的}
-
-\subsection{数字转中文}
- 测试数字：1234.233. 转为中文数字：\zhnumber{1234.233}；转为中文字符串：\zhdigits{1234.233}。
-
-\section{表格}
-
-\subsection{普通表格}
-先来看一个无标题的普通表格：
-
-\begin{tabular}{|c|c|c|}
-\hline
-标题 & 标题 & 标题\\
-\hline
-1 & 2 & 3\\
-\hline
-\end{tabular}
-
-如果想要居中可以使用 \verb=center= 环境。
-
-带标题表格。
-\begin{table}[ht]
-\centering
-\caption{普通表格1}\label{Tab:table1}
-\begin{tabular}{L{2cm}C{2cm}R{2cm}}
-\hline
-标题 & 标题 & 标题\\
-\hline
-1 & 2 & 3\\
-\hline
-\end{tabular}
-\end{table}
-
-来一个表格并排，每个表格一个标题：
-\begin{table}[ht]
-\centering
-\begin{minipage}{.45\textwidth}
-\centering
-\caption{并排表格1}\label{Tab:table1-1}
-\begin{tabular}{lcr}
-\hline
-标题 & 标题 & 标题\\
-\hline
-1 & 2 & 3\\
-\hline
-\end{tabular}
-\end{minipage}
-\begin{minipage}{.45\textwidth}
-\centering
-\caption{并排表格2}\label{Tab:table1-2}
-\begin{tabular}{lcr}
-\hline
-标题 & 标题 & 标题\\
-\hline
-1 & 2 & 3\\
-\hline
-\end{tabular}
-\end{minipage}
-\end{table}
-
-再来一个表格并排
-\begin{table}[ht]
-\centering
-\caption{并排表格}
-\subcaptionbox{并排表格1}
-{
-\begin{tabular}{lcr}
-\hline
-标题 & 标题 & 标题\\
-\hline
-1 & 2 & 3\\
-\hline
-\end{tabular}
-}
-\subcaptionbox{并排表格2}
-{
-\begin{tabular}{lcr}
-\hline
-标题 & 标题 & 标题\\
-\hline
-1 & 2 & 3\\
-\hline
-\end{tabular}
-}
-\end{table}
-
-
-\subsection{复杂点的表格}
-表 \ref{Tab:table2} 主要用到的是列合并单元格、跨行合并单元格、混合合并单元格、表格横线的自定义粗细以及控制表格横线的自定义连接等。\footnote{表格虽然难看，主要是为了让大家看效果，里面技巧选用。}
-\begin{table}[ht]
-\centering
-\caption{复杂表格}\label{Tab:table2}
-\begin{tabular}{|c|c|c|c|}
-\toprule[1pt]
-\multicolumn{2}{|c|}{1} & 3 & 4\\
-\midrule[0.5pt]
-5 & 6 & 7 & \multirow{2}*{8}\\
-\cline{1-3}
-9 & 10 & 11 & \\
-\midrule[0.5pt]
-\multicolumn{2}{|c|}{\multirow{2}*{13}} & 15 & 16\\
-\cline{3-4}
-\multicolumn{2}{|c|}{} & 19 & 20\\
-\bottomrule[1pt]
-\end{tabular}
-\end{table}
-
-表格填充颜色，如表 \ref{Tab:table3} 所示。此次，主要用到的出上述介绍外，有单个单元格填充颜色、整列填充颜色、整行填充颜色；此外，还添加了单元格划分的功能。
-
-\begin{table}[ht]
-\centering
-\caption{填色表格}\label{Tab:table3}
-\begin{tabular}{c | c| >{\columncolor{yellow}}c}
-\toprule[1pt]
-\diagbox{No.}{Title} & \textbf{L-Title} & \textbf{R-Title}\\
-\hline
-\rowcolor{red} 1 & One & First\\
-\cellcolor[rgb]{.9,.9,.9} 2 & Two & Second\\
-\cellcolor[rgb]{.2,.9,.9} 3 & Three & Third\\
-\bottomrule[1pt]
-\end{tabular}
-\end{table}
-
-以上，就是普通表格的常用例子了，其他的应用技巧以及功能大家自学吧，毕竟这只是个模板的使用样例，不是\LaTeX{} 教案。
-\subsection{长表格}
-
-呐，在开始长表格之前，我们应该怎么样呢？对，先说点废话。为什么呢？你想啊，既然是长表格，肯定是能够跨页存在的，不说点废话把它顶下去，顶到换页，咋能对得起它的NB功能呢，是吧。
-
-咳咳，严肃点，主角登场了。表 \ref{Tab:longtable} 就是这一小节的主角——长表格了。首先说明一下，这种表格如果放的数据太多的话，就不要在正文里面用了，放到附录里就可以了。
-
-\begin{longtable}[c]{cC{2cm}C{2cm}C{2cm}C{2cm}}
-\caption{这是一个长表格}\label{Tab:longtable}\\
-\hline
-行号 & 标题1 & 标题2 & 标题3 & 标题4\\
-\hline
-\endfirsthead %以上是最前的表头
-\multicolumn{5}{c}{\zihao{5}续表 \thetable: 这是一个长表格}\\
-\hline
-行号 & 标题1 & 标题2 & 标题3 & 标题4\\
-\hline
-\endhead %以上是换页后的表头，如未换页，并不会显示
-\hline
-\multicolumn{5}{r}{接下页续表……}\\
-\endfoot %以上是前页的表尾，如未换页，并不会显示。
-\hline
-\endlastfoot%以上选填最后也的表尾。一般不填
-%下面开始长表格的内容
-1 & 1 & 2 & 3 & 4\\
-2 & 5 & 6 & 7 & 8\\
-3 & 9 & 10 & 11 & 12\\
-4 & 13 & 14 & 15 & 16\\
-5 & 17 & 18 & 19 & 20\\
-6 & 21 & 22 & 23 & 24\\
-7 & 25 & 26 & 27 & 28\\
-8 & 29 & 30 & 31 & 32\\
-9 & 33 & 34 & 35 & 36\\
-10 & 37 & 38 & 39 & 40\\
-11 & 41 & 42 & 43 & 44\\
-12 & 45 & 46 & 47 & 48\\
-13 & 49 & 50 & 51 & 52\\
-14 & 52 & 54 & 55 & 56\\
-15 & 57 & 58 & 59 & 60\\
-16 & 61 & 62 & 63 & 64\\
-17 & 65 & 66 & 67 & 68\\
-18 & 69 & 70 & 71 & 72\\
-19 & 73 & 74 & 75 & 76\\
-20 & 77 & 78 & 79 & 80\\
-21 & 81 & 82 & 83 & 84\\
-22 & 85 & 86 & 87 & 88\\
-23 & 89 & 90 & 91 & 92\\
-24 & 93 & 94 & 95 & 96\\
-25 & 97 & 98 & 99 & 100\\
-\end{longtable}
-
-\section{图片}
-\subsection{普通图片的插入}
-如同表格一样，插图一般都用浮动体来控制，这样排出来的文章美观。\footnote{本文涉及到的所有图片，除我校校徽等标记外，均为个人拍摄。}比如，图 \ref{Fig:xd1} 所示，是一个图片的样例。
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/IMG_XD1.jpg}
-  \caption{西电1}\label{Fig:xd1}
-\end{figure}
-
-\subsection{图片并排插入}
-
-先来看第一个，两个图片分别一个标题，如图 \ref{Fig:xd2} 和 图 \ref{Fig:xd3}.
-\begin{figure}[ht]
-\centering
-\begin{minipage}{.45\textwidth}
-\centering
-\includegraphics[width=1\linewidth]{./Figure/IMG_XD2.jpg}
-  \caption{西电2}\label{Fig:xd2}
-\end{minipage}~
-\begin{minipage}{.45\textwidth}
-\centering
-\includegraphics[width=1\linewidth]{./Figure/IMG_XD3.jpg}
-  \caption{西电3}\label{Fig:xd3}
-\end{minipage}
-\end{figure}
-
-再来看一个统一大标题带子标题的，如图 \ref{Fig:bingpai} 所示。
-\begin{figure}[ht]
-\centering
-\subcaptionbox{西电4}
-{\includegraphics[width=.45\linewidth]{./Figure/IMG_XD4.jpg}}
-\subcaptionbox{西电5}
-{\includegraphics[width=.45\linewidth]{./Figure/IMG_XD5.jpg}}
-\caption{并排插图}\label{Fig:bingpai}
-\end{figure}
-
-插图就介绍到这，其他知识自学。
-
-\section{公式}
-\subsection{普通公式}
-先来看一个行内公式：$y=x+1$.
-
-下面是一个居中的公式：
-\[
-f(X)=\sum_{i=1}^{n}\sin{\frac{\pi}{2}x_i}
-\]
-
-看一个编号的公式，如式\eqref{Eq:eq1}：
-\begin{equation}\label{Eq:eq1}
-f(X)=\sum_{i=1}^{n}\sin{\frac{\pi}{2}x_i}
-\end{equation}
-
-\subsection{复杂公式}
+(1) 停车场的智能管理
+一般而言，在住宅小区、大型商场、车站等地方都会建设配套的停车场。而如何对进出停车
+场的车辆进行管理，则是一个十分重要的问题。目前常见的有三种方式：
 \begin{itemize}
-\item \textbf{多行公式}
-
-\begin{equation}\label{Eq:eq2}
-\begin{aligned}
-f(x) &= \sin(a+b)\\
-&= \sin(a)\cos(b)+\cos(a)\sin(b).
-\end{aligned}
-\end{equation}
-
-\begin{equation}\label{Eq:eq3}
-f(x) = \left\{
-\begin{aligned}
- -&x+1,\quad \text{if}~x<0;\\
- &x+1,\quad \text{if}~x \geq 0;
- \end{aligned}
- \right.
-\end{equation}
-
-\item \textbf{矩阵}
-
-\[
-  A = \left(\begin{array}{ccc}
-        a_{11} & a_{12} & a_{13} \\
-        a_{21} & a_{22} & a_{23} \\
-        a_{31} & a_{32} & a_{33}
-      \end{array}\right),\quad
-  B = \left[\begin{array}{ccc}
-        b_{11} & b_{12} & b_{13} \\
-        b_{21} & b_{22} & b_{23} \\
-        b_{31} & b_{32} & b_{33}
-      \end{array}\right],\quad
-   C = \left[\begin{array}{ccc}
-     c_{11} & c_{12} & c_{13} \\
-     \vdots & \ddots & \vdots \\
-     c_{31} & c_{32} & c_{33}
-   \end{array}\right].
-\]
-行列式也类似
-\[
-A = \left|\begin{array}{ccc}
-    a_{11} & a_{12} & a_{13} \\
-    a_{21} & a_{22} & a_{23} \\
-    a_{31} & a_{32} & a_{33}
-  \end{array}\right|.
-\]
-
-\item \textbf{其他公式}
-
-\[
-\mathbb{L} = \int_{x_1}^{x_2}\sqrt{1+(y')^2}dx 
-= \frac{1}{\alpha}\int_{x_1}^{x_2}y''(x)dx
-\]
-
+\item 纯人力管理
+\item 发放出入门禁卡
+\item 智能的电子化管理
 \end{itemize}
+其中前两种方式都有着管理成本高、需要人力维护等缺点，而通过使用智能化电子管理系统，
+不仅有效降低了管理、维护成本，而且可以实现无人值守式停车场。因此可以看到目前使用
+智能化电子管理的停车场数量在不断增加。一般的智能化电子管理系统是在停车场的出入口
+架设摄像头，自动对进出的车辆进行拍照，并对车辆的车牌号进行识别，从而对车辆进行登
+记管理。
 
-\section{休息一下}
 
-\subsection{山水之间}
-\begin{center}
-\textbf{山水之间}
+(2) 停车场自动找车系统
+随着停车场越建越大，相信在若大的停车场里找寻自己的车辆是每个车主都头疼过得问题。
+目前市面上出现了一项新的自动找车系统，即通过在停车场内部署的大量摄像头，对停在不
+同车位的车辆进行车牌识别。车主在找车的时候，只需在终端机上输入自己车辆的车牌号，
+系统就会自动找到车辆位置，并为车主提供导航。这项技术也大大方便了人们的生活、提高
+了停车场的用户体验。
 
-{\kaishu 许嵩}
+(3) 电子警察系统
+目前的电子警察系统，通过大量安装道路路口、路段上的摄像头，对车道内的机动车驾驶行
+为进行不间断自动检测和记录，并检测车辆的违法驾驶行为。而这项系统也必然少不了车牌
+识别系统的帮助。可以看到，目前通过对城市道路电子警察的大量部署，可以有效对城市道
+路上的车辆进行24小时的监控，很大程度上降低了交通事故的发生率。
 
-\vspace*{1em}
-昨夜同门云集\quad 推杯又换盏\\
-今朝茶凉酒寒\quad 豪言成笑谈\\
-半生累\quad 尽徒然\\
-碑文完美有谁看\\
-隐居山水之间\quad 誓与浮名散\\
+(4) 行车记录系统
+随车道路上车辆的不断增加，交通事故总是不可避免。为了方便在发生事故时进行责任认定，
+许多车主都在汽车上加装了行车记录仪以记录行车情况。而如果一个行车记录仪能够自动进
+行车牌识别并记录行车过程中周围的车辆信息，则无疑会大大方便车主和交警进行事故责任
+认定等。
 
-\vspace*{.6em}
-湖畔青石板上\quad 一把油纸伞\\
-旅人停步折花\quad 淋湿了绸缎\\
-满树玉瓣多傲然\\
-江南烟雨却痴缠\\
-花飞雨追\quad 一如尘缘理还乱\\
+(5) 自动驾驶系统
+基于人工智能技术的自动驾驶系统被认为是未来交通系统的希望之星。众所周知，人类驾驶
+员在驾驶过程中难免存在疲劳、注意力分散、视角盲区等问题，从而造成了大量的交通事故。
+而自动驾驶系统则无这些缺陷，因此可以在很多情况下降低交通事故的发生概率。因此许多
+科技公司和研究机构都投入了大量的人力物力以进行自动驾驶技术的研究。事实上德国已经
+开始尝试使用自动驾驶的卡车进行高速公路货运，以减少人力成本和交通事故。因此，车牌
+识别系统作为自动驾驶系统里必不可少的一个子环节，有着十分重要的研究意义。
 
-\vspace*{.6em}
-落花雨\quad 你飘摇的美丽\\
-花香氤\quad 把往日情勾起\\
-我愿意\quad 化浮萍躺湖心\\
-只陪你\quad 泛岁月的涟漪
-\end{center}
+综上所述，基于计算机视觉技术的车牌识别方法在诸多领域都有着极为广泛的应用前景和市
+场价值，能够对社会和人类带来极为深远的影响。
 
-\subsection{念奴娇·赤壁怀古}
+\section{深度学习与计算机视觉}
+\subsection{传统方法}
+本文中提到的传统方法，是指在机器学习技术引入计算机视觉之前，人们为了解决常见的视
+觉问题发明的大量基于手工特征和手工规则的方法。比较经典的，比如用于直线、曲线检测的
+广义Hough变换\cite{Duda:1972eu}，用于边缘检测的Sobel算子以及
+SIFT\cite{Lowe:2004kd}、SURF\cite{Baya:2008ud}等图像特征。这些方法在早期的计
+算机视觉任务中被大量的使用，并取得了一定的效果。比如，许多车牌检测系统使用Hough变
+换对车牌的边缘进行检测从而实现车牌边缘的定位；使用二值化方法结合直方图投影进行车
+牌字符分割。
+由于传统的计算机视觉方法严重依赖于图像特征的选择，因此这些方法不仅需要花费大量的
+精力进行特征工程，而且难以胜任一些复杂的计算机视觉任务，比如自然场景中的物体检测、
+字符识别等任务。同时，即使是在一些已取得成功应用的领域，这些方法的效果也与人类视
+觉系统的能力相距甚远。于是很自然的，人们就想如果手工设定的规则和特征不能很好的适
+用于各种复杂计算机视觉任务，那为什么不让计算机自己从数据中学习特征和规则呢？于是
+机器学习技术开始被应用于计算机视觉任务中，其中在近几年的研究中又以深度学习技术效
+果最好、应用最广。
 
-\begin{center}
-\textbf{念奴娇·赤壁怀古}
 
-{\kaishu 苏轼}
+\subsection{深度学习}
+所谓深度学习技术，实际上就是神经网络技术，只不过相较于传统的多层感知机等浅层神经
+网络模型，深度学习中使用的网络模型层数更多（即更深）、规模更大。目前主流的深度神
+经网络模型可以分为卷积神经网络CNN和递归神经网路RNN 两类。其中CNN 被广泛应用于各类
+图像相关的计算机视觉任务中，而RNN 更多的应用在自然语言处理、时间序列预测等时序相
+关的任务中。本文所采用的方法都是基于CNN 的，因此在此着重介绍CNN 的发展和应用。
+1998年前后，Yann LeCun教授第一次成功将CNN 技术应用于手写数字识别任务
+\cite{LeCun:1990vp}，并取得了与人类水平相当的准确率。这一成果被直接应用于许多支票识
+别系统系统中。但随后由于人工智能的第二次低潮，CNN 技术的研究一直进展缓慢。不过随
+着摩尔定律导致的计算能力提升和互联网带来的海量数据，在2012年前后，Hinton 等人
+使用深度神经网络技术在ImageNet 比赛中以准确率高出第二名百分之二十的惊艳成绩夺得第
+一名\cite{Krizhevsky:2012wl}。值得注意的是，2012年ImageNet 比赛中第二名所使用的方
+法正是基于复杂特征工程和统计机器学习的“传统方法”，因此这次事件揭示出在面对计算机
+视觉任务时相较于传统方法的巨大潜力与优势。值得一提的是，自2012年以后，ImageNet 每
+年的第一名都是深度学习方法，比如2015年的第一名是由Kaiming He等人发明的Residual
+Network\cite{He:2015tt}。
+相较于传统方法，CNN 最大的特点在于，它可以自动从数据集中学习图像特征，而不需要依
+赖复杂的特征工程。实践证明，通过CNN 学习出来的特征，在许多计算机复杂视觉任务中要优于
+通过特征工程设计的手工特征。同时，许多研究也表明，人类的视觉系统有着与CNN 相似的
+结构，这似乎也解释了为何在复杂计算机视觉任务中CNN 可以取得和人类视觉系统相当的水
+平。目前，除了字符识别、图像识别等任务外，深度学习技术也被成功应用于物体检测、图像语
+义分割、图像标注等任务中。
+但另一方面，由于关于神经网络人们还未能建立一个精确地数学模型来描述其特性和行为，
+神经网络作为一个难以解释的“黑箱”一直饱受统计学派机器学习研究者的诟病。不过相信随
+着研究的深入，这些问题在未来都可以得到解决。
 
-\vspace*{1em}
-大江东去，浪淘尽，千古风流人物。\\
-故垒西边，人道是：三国周郎赤壁。\\
-乱石穿空，惊涛拍岸，卷起千堆雪。\\
-江山如画，一时多少豪杰。\\
+\section{本文的内容安排}
 
-\vspace*{.8em}
-遥想公瑾当年，小乔初嫁了，雄姿英发。\\
-羽扇纶巾，谈笑间樯橹灰飞烟灭。\\
-故国神游，多情应笑我，早生华发。\\
-人生如梦，一尊还酹江月。
+一般的车牌识别系统主要分为如下几步进行：
 
-\end{center}
+\begin{enumerate}
+\item 图像采集
+\item 图像预处理
+\item 车牌检测
+\item 车牌精确定位
+\item 车牌字符分割
+\item 车牌字符识别
+\end{enumerate}
 
-这一章就写到这里吧，下一章重点介绍两个内容
+其中，车牌检测、车牌精确定位、车牌字符分割和车牌字符识别则是整个系统的核心和难点，
+本文也着重对这四个子问题进行分析研究。
 
-\chapter{两个重点}
-这一章，会涉及到环境以及参考文献两个重点东西。
+本文的内容安排如下：
 
-\section{环境}
-\subsection{定理类环境}
+第一章，为引言内容。介绍了课题研究的背景和意义。
+第二章，为车牌精确定位方法研究。这一章首先介绍了CNN 的基本概念和原理，然后阐述如
+何使用CNN 进行关键点回归以进行车牌的精确定位
+第三章，为车牌的检测方法研究。这一章首先介绍了Region CNN（RCNN）系列技术，包括
+RCNN、Fast RCNN和Faster RCNN。然后通过Faster RCNN 技术实现了自然场景中车牌的检测。
+第四章，为车牌字符分割方法方法研究。本章首先介绍了几种传统的车牌分割方法，并分析
+了他们的优缺点。然后本章提出一种新的基于Extremal Region的方法进行车牌字符分割。
+第五章，为车牌识别方法的研究。本章阐述如何通过卷积神经网络（CNN）技术进行车牌字
+符识别，并进行相关实验。
+第六章，为总结和展望。总结了本文的主要工作，并对未来的研究做了简单的介绍。
 
-\begin{proposition}\label{prop:p1}
-这是一个命题。
-\end{proposition}
+\section{本章小结}
+本章从车牌识别的研究背景和研究意义展开讨论，说明了本研究的意义和价值；然后简要介
+绍了两种研究思路——即传统方法和深度学习技术；最后简要说明了本文的内容安排。
 
-它还可以这么写，所有定理类环境，都可这么写。
+\chapter{车牌精确定位}
 
-\begin{proposition}[命题名]
-由命题 \ref{prop:p1}, 这也是一个命题。
-\end{proposition}
+在许多未使用深度学习技术的车牌识别系统中，倾向于使用边缘检测、Hough变换等寻找车
+牌的边缘与顶点，直接实现车牌的检测与精确定位，但这些传统方法有着对图像质量、背景
+颜色敏感，抗噪声能力差，难以处理特殊情况等诸多缺点，在很大程度上限制了其应用。因
+此在本文中我们将车牌的定位分为车牌检测与车牌精确定位两步进行。其中车牌检测用于找
+到图像中包含整个车牌的小区域，然后车牌精确定位则从这个小区域中找寻车牌的四个顶点
+以进行精确定位。关于车牌检测技术将在本文第三章进行介绍，本章将介绍如何使用CNN 技
+术进行车牌精确定位。在本章内容中，我们将车牌精确定位问题视为一个回归问题，然后讨
+论如何使用CNN 对关键点进行回归的以实现精确定位，并进行实验验证。
 
-\begin{assumption}
-距离水平面$100\,m$以内，重力加速度$g$是不变的。
-\end{assumption}
+\section{神经网络概述}
 
-\begin{lemma}[法图引理]
-设$(S,\Sigma,\mu)$为一个测度空间，$(f_n)_{n\geq 0}$是一个实值的可\textbf{正值}函数列。那么：
-\[
-\int_S \liminf_{n\rightarrow \infty} f_n d\mu \leqslant \liminf_{n\rightarrow \infty} \int_S f_n d\mu.
-\]
-其中函数极限是在逐点收敛的意义上的极限，函数取值和积分可以是无限大的。
-\end{lemma}
+\subsection{神经元模型}
 
-\begin{theorem}
-若$\lim_{n\rightarrow \infty} x_n = a$，则$\{x_n\}$的任何子列$\{x_{n_k}\}$都收敛于$a$.
-\end{theorem}
-\begin{proof}
-因$\lim_{n\rightarrow \infty} x_n = a$，对任意给定的$\varepsilon > 0$，必定存在正整数$N$，当$n>N$时，有
-\[
-|x_n-a|<\varepsilon.
-\]
-今取$K=N$，则对一切$k>K$，有$n_k>n_K=n_N\geq N$，这时就有
-\[
-|x_{n_k} - a|<\varepsilon.
-\]
-\end{proof}
+\subsection{从感知机到多层感知机}
 
-\subsection{代码环境}
+\subsection{卷积神经网络}
 
-\begin{lstlisting}[language=C]
-#include<stdio.h>
+\section{使用卷积神经网络进行车牌精确定位}
 
-int main()
-{
-	printf("Hello World!");
-	return 0;
-}
-\end{lstlisting}
+\section{模型实现与结果}
 
-\begin{lstlisting}[language=C,caption={Java代码},label=Code:java]
-package com.stick.test;
+\section{本章小结}
 
-/**
- * 公共主类；
- * 类名必须与文件名相同
- */
-public class Test{
-	public static void main(String[] args) {
-		System.out.println("Hello World!");
-	}
-}
-\end{lstlisting}
+\chapter{车牌检测}
 
-\begin{lstlisting}[language=R,style = nonumbers]
-x<-c(1,2,3,4,5,6)
-y<-sin(x)
-lines(x,y)
-\end{lstlisting}
-\section{参考文献的引用}
-以下为常用的参考文献。
+所谓车牌检测，即是从一幅图像中找寻包含车牌的子图像，显然这属于目标检测（Object
+Detection）问题。目标检测技术作为一个十分热门的研究领域，经历了从十年前HoG 方法大
+行其道到如今RCNN 技术一统天下的发展过程。RCNN 技术于20xx年由xxx提出，随后又出现
+了Fast RCNN和Faster RCNN 两代的改进。如今, Faster RCNN 技术不仅在Pascal VOC和
+COCO 两个数据集上的目标检测任务中取得了最佳的效果，而且在借助GPU 加速的情况下做
+到实时检测（0.2s/帧）。因此本章将首先简要介绍RCNN 系列技术，然后在我们的数据集上
+对其效果进行试验验证。
 
-期刊\cite{Art,ArtE}，专著（无页码）\cite{Boo,BooE,Boo1}，专著（含页码）\cite{InBoo,InBoo1,InBooE}，论文集\cite{Incol,IncolE}。
+\section{Region CNN 概述}
 
-硕士\cite{MT}/博士论文\cite{Phd}，科技报告\cite{TechR}。
+\subsection{RCNN}
 
-以下参考文献，原有plain风格中并无，为Stick本人自己写的。
+\subsection{Fast RCNN}
 
-网络内容引用\cite{Net}，译著\cite{Trans}
+\subsection{Faster RCNN}
 
-此外，多说一句，本文模板加载的 \verb=natbib= 宏包使得 \verb=\cite= 命令还支持排序等功能。
+\section{Faster RCNN 的实现与训练}
 
-比如下列文献\cite{ArtE,BooE,InBooE,Trans,Net}
+\section{实验结果}
+
+\section{本章小结}
+
+\chapter{车牌字符分割}
+
+\section{Extremal Region}
+
+\section{使用Class-specific Extremal Region进行车牌字符分割}
+
+\section{算法实现与结果}
+
+\section{本章小结}
+
+\chapter{车牌字符识别}
+
+\section{使用CNN进行车牌字符识别}
+
+\section{模型实现与结果}
+
+\section{本章小结}
+
+\chapter{总结与展望}
+
+\section{总结}
+
+\section{展望}
