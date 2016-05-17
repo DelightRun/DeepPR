@@ -1,6 +1,7 @@
 \chapter{引言}
 \section{研究背景和研究意义}
 \subsection{研究背景}
+
 自从十九世纪八十年代人类世界的第一辆汽车诞生以来，人类的生活就再也离不开汽车这种
 方便的交通工具。尤其是进入21世纪以来，中国大陆地区汽车保有量快速上升，几乎到了家
 家都有车的地步，一些富裕一些的家庭甚至一人一辆车。据不完全统计，在2002年左右我国
@@ -14,43 +15,51 @@ Transportation System, ITS)和自动驾驶系统。这两项技术都旨在通�
 术，对图像（或视频）中的车牌进行准确的定位、分割和识别。
 
 \subsection{研究意义}
-从研究背景中我们可以知道，VLPR技术在实际生活中有着十分重要且广泛的应用。下面我们
+
+从研究背景中我们可以知道，VLPR 技术在实际生活中有着十分重要且广泛的应用。下面我们
 举出几个实际生活中自动车牌识别系统的典型应用：
 
-(1) 停车场的智能管理
+\subsubsection{停车场的智能管理}
+
 一般而言，在住宅小区、大型商场、车站等地方都会建设配套的停车场。而如何对进出停车
 场的车辆进行管理，则是一个十分重要的问题。目前常见的有三种方式：
+
 \begin{itemize}
 \item 纯人力管理
 \item 发放出入门禁卡
 \item 智能的电子化管理
 \end{itemize}
+
 其中前两种方式都有着管理成本高、需要人力维护等缺点，而通过使用智能化电子管理系统，
 不仅有效降低了管理、维护成本，而且可以实现无人值守式停车场。因此可以看到目前使用
 智能化电子管理的停车场数量在不断增加。一般的智能化电子管理系统是在停车场的出入口
 架设摄像头，自动对进出的车辆进行拍照，并对车辆的车牌号进行识别，从而对车辆进行登
 记管理。
 
-(2) 停车场自动找车系统
+\subsubsection{停车场自动找车系统}
+
 随着停车场越建越大，相信在若大的停车场里找寻自己的车辆是每个车主都头疼过得问题。
 目前市面上出现了一项新的自动找车系统，即通过在停车场内部署的大量摄像头，对停在不
 同车位的车辆进行车牌识别。车主在找车的时候，只需在终端机上输入自己车辆的车牌号，
 系统就会自动找到车辆位置，并为车主提供导航。这项技术也大大方便了人们的生活、提高
 了停车场的用户体验。
 
-(3) 电子警察系统
+\subsubsection{电子警察系统}
+
 目前的电子警察系统，通过大量安装道路路口、路段上的摄像头，对车道内的机动车驾驶行
 为进行不间断自动检测和记录，并检测车辆的违法驾驶行为。而这项系统也必然少不了车牌
 识别系统的帮助。可以看到，目前通过对城市道路电子警察的大量部署，可以有效对城市道
 路上的车辆进行24小时的监控，很大程度上降低了交通事故的发生率。
 
-(4) 行车记录系统
+\subsubsection{行车记录系统}
+
 随车道路上车辆的不断增加，交通事故总是不可避免。为了方便在发生事故时进行责任认定，
 许多车主都在汽车上加装了行车记录仪以记录行车情况。而如果一个行车记录仪能够自动进
 行车牌识别并记录行车过程中周围的车辆信息，则无疑会大大方便车主和交警进行事故责任
 认定等。
 
-(5) 自动驾驶系统
+\subsubsection{自动驾驶系统}
+
 基于人工智能技术的自动驾驶系统被认为是未来交通系统的希望之星。众所周知，人类驾驶
 员在驾驶过程中难免存在疲劳、注意力分散、视角盲区等问题，从而造成了大量的交通事故。
 而自动驾驶系统则无这些缺陷，因此可以在很多情况下降低交通事故的发生概率。因此许多
@@ -60,7 +69,7 @@ Transportation System, ITS)和自动驾驶系统。这两项技术都旨在通�
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/GoogleSelfDrivingCar.jpp}
+  \includegraphics[width=0.8\linewidth]{./Figure/GoogleSelfDrivingCar.jpg}
   \caption{Google公司研制的无人驾驶汽车}
 \end{figure}
 
@@ -69,6 +78,7 @@ Transportation System, ITS)和自动驾驶系统。这两项技术都旨在通�
 
 \section{深度学习与计算机视觉}
 \subsection{传统方法}
+
 本文中提到的传统方法，是指在机器学习技术引入计算机视觉之前，人们为了解决常见的视
 觉问题发明的大量基于手工特征和手工规则的方法。比较经典的，比如用于直线、曲线检测的
 广义Hough变换\cite{Duda:1972eu}，用于边缘检测的Sobel算子以及
@@ -76,6 +86,7 @@ SIFT\cite{Lowe:2004kd}、SURF\cite{Baya:2008ud}等图像特征。这些方法在
 算机视觉任务中被大量的使用，并取得了一定的效果。比如，许多车牌检测系统使用Hough变
 换对车牌的边缘进行检测从而实现车牌边缘的定位；使用二值化方法结合直方图投影进行车
 牌字符分割。
+
 由于传统的计算机视觉方法严重依赖于图像特征的选择，因此这些方法不仅需要花费大量的
 精力进行特征工程，而且难以胜任一些复杂的计算机视觉任务，比如自然场景中的物体检测、
 字符识别等任务。同时，即使是在一些已取得成功应用的领域，这些方法的效果也与人类视
@@ -84,8 +95,8 @@ SIFT\cite{Lowe:2004kd}、SURF\cite{Baya:2008ud}等图像特征。这些方法在
 机器学习技术开始被应用于计算机视觉任务中，其中在近几年的研究中又以深度学习技术效
 果最好、应用最广。
 
-
 \subsection{深度学习}
+
 所谓深度学习技术，实际上就是神经网络技术，只不过相较于传统的多层感知机等浅层神经
 网络模型，深度学习中使用的网络模型层数更多（即更深）、规模更大。目前主流的深度神
 经网络模型可以分为卷积神经网络CNN和递归神经网路RNN 两类。其中CNN 被广泛应用于各类
@@ -101,12 +112,14 @@ SIFT\cite{Lowe:2004kd}、SURF\cite{Baya:2008ud}等图像特征。这些方法在
 视觉任务时相较于传统方法的巨大潜力与优势。值得一提的是，自2012年以后，ImageNet 每
 年的第一名都是深度学习方法，比如2015年的第一名是由Kaiming He等人发明的Residual
 Network\cite{He:2015tt}。
+
 相较于传统方法，CNN 最大的特点在于，它可以自动从数据集中学习图像特征，而不需要依
 赖复杂的特征工程。实践证明，通过CNN 学习出来的特征，在许多计算机复杂视觉任务中要优于
 通过特征工程设计的手工特征。同时，许多研究也表明，人类的视觉系统有着与CNN 相似的
 结构，这似乎也解释了为何在复杂计算机视觉任务中CNN 可以取得和人类视觉系统相当的水
 平。目前，除了字符识别、图像识别等任务外，深度学习技术也被成功应用于物体检测、图像语
 义分割、图像标注等任务中。
+
 但另一方面，由于关于神经网络人们还未能建立一个精确地数学模型来描述其特性和行为，
 神经网络作为一个难以解释的“黑箱”一直饱受统计学派机器学习研究者的诟病。不过相信随
 着研究的深入，这些问题在未来都可以得到解决。
@@ -130,17 +143,23 @@ Network\cite{He:2015tt}。
 本文的内容安排如下：
 
 第一章，为引言内容。介绍了课题研究的背景和意义。
+
 第二章，为车牌精确定位方法研究。这一章首先介绍了CNN 的基本概念和原理，然后阐述如
 何使用CNN 进行关键点回归以进行车牌的精确定位
-第三章，为车牌的检测方法研究。这一章首先介绍了Region CNN（RCNN）系列技术，包括
-RCNN、Fast RCNN和Faster RCNN。然后通过Faster RCNN 技术实现了自然场景中车牌的检测。
+
+第三章，为车牌的检测方法研究。这一章首先介绍了Region CNN（R-CNN）系列技术，包括
+R-CNN、Fast R-CNN和Faster R-CNN。然后通过Faster R-CNN 技术实现了自然场景中车牌的检测。
+
 第四章，为车牌字符分割方法方法研究。本章首先介绍了几种传统的车牌分割方法，并分析
 了他们的优缺点。然后本章提出一种新的基于Extremal Region的方法进行车牌字符分割。
+
 第五章，为车牌识别方法的研究。本章阐述如何通过卷积神经网络（CNN）技术进行车牌字
 符识别，并进行相关实验。
+
 第六章，为总结和展望。总结了本文的主要工作，并对未来的研究做了简单的介绍。
 
 \section{本章小结}
+
 本章从车牌识别的研究背景和研究意义展开讨论，说明了本研究的意义和价值；然后简要介
 绍了两种研究思路——即传统方法和深度学习技术；最后简要说明了本文的内容安排。
 
@@ -157,7 +176,8 @@ RCNN、Fast RCNN和Faster RCNN。然后通过Faster RCNN 技术实现了自然�
 
 \section{卷积神经网络概述}
 
-卷积神经网络是一种前馈神经网络，一般有许多个卷积层和顶端的全连接层（对应经典的多
+卷积神经网络是一种前馈神经网络，有生物学家们在早期对猫视觉皮层的研究发展而来。
+一个卷积神经网络一般由许多个卷积层和顶端的全连接层（对应经典的多
 层感知机）组成，同时也包括相应的权重和池化层（Pooling Layer）。这一结构是的卷积
 神经网络能够有效利用输入数据的二维结构，同时还极大程度减少了网络参数，降低了训练
 难度和过拟合的风险。因此卷积神经网络在图像检测、识别方面取得了非常有优异的结构。
@@ -166,7 +186,7 @@ RCNN、Fast RCNN和Faster RCNN。然后通过Faster RCNN 技术实现了自然�
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8/linewidth]{./Figure/ResNetTrainError.jpg}
+  \includegraphics[width=0.8\linewidth]{./Figure/ResNetTrainError.jpg}
   \caption{Residual Network训练误差曲线\cite{He:2015tt}}
 \end{figure}
 
@@ -174,23 +194,103 @@ RCNN、Fast RCNN和Faster RCNN。然后通过Faster RCNN 技术实现了自然�
 
 所谓卷积层，是指使用一个相对较小的卷积核（Kernel）在整幅图像上滑动并进行卷积操作
 并通过非线性激活函数从而得到输出的一种特殊的神经网络结构。常见的卷积核大小有 $1
-\times 1, 3 \times 3, 5 \times 5, 7 \times 7$ 等。可以看到，卷积层的参数要远远少
-于输入输出大小的全连接层，参数的减少不仅极大程度降低了网络的训练难度，而且有效避
-免了过拟合的出现。一般一个卷积层会有多个卷积核，每一个卷积核可以提取图像的不同特
-征，从而得到不同的特征映射。图 \ref{Fig: LeNet} 是LeNet\cite{LeCun:1990vp}的网络
-结构。
+\times 1, 3 \times 3, 5 \times 5, 7 \times 7$ 等。可以看到，卷积层通过权值共享和
+稀疏连接两大特性，使之参数要远远少于具有相同输入输出大小的全连接层，参数的减少不
+仅极大程度降低了网络的训练难度，而且有效避免了过拟合的出现。一般一个卷积层会有多
+个卷积核，每一个卷积核可以提取图像的不同特征，从而得到不同的特征映射。图
+\ref{Fig: LeNet} 是LeNet\cite{LeCun:1990vp}的网络结构，该网络由深度学习四巨头之
+一的Yann LeCun 教授提出，并成功应用于手写数字识别问题\cite{LeCun:1990vp}。
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8/linewidth]{./Figure/LeNet.png}
+  \includegraphics[width=0.8\linewidth]{./Figure/LeNet.png}
   \caption{用于手写数字识别的LeNet5\cite{LeCun:1990vp}} \label{Fig:LeNet}
 \end{figure}
 
 \subsection{池化层}
 
-很多情况下，使用卷积得到的特征映射尺寸仍旧很大，为了进一步减少网络参数，从而降低
-训练难度和过拟合的风险，经常在网络中加入一些池化层。池化层没有内在参数，仅仅是对
-卷记得到的特征映射在不同位置进行聚合统计（如取平均值、取极大值等）。
+另一个关于卷积神经神经网络的重要概念是最大池化层，它是一种非线性降采样方法。
+
+在实际应用中，经过卷积层所提取的特征映射仍可能维数较大，例如：对于一个 $32 \times
+32$ 像素的图像，假设我们的卷积层包含512个卷积核，同时使用边缘填充技术（Padding）
+使卷积输出与输入尺寸一样，则我们将一共得到 $512 \times 32 \times 32 = 524288$ 个
+特征输出，这无论对于网络的储存、计算还是对训练数据集的需求都是十分巨大的，而且增
+加了过拟合的风险。
+
+因此我们在通过卷积层获取特征映射后，经常使用池化层对卷及特征进行将为。具体来讲，
+我们卷积后得到的特征映射划分为 $n \times n$ 个子区域（子区域间可能重叠也可能不重
+叠，取决于对池化层参数的定义），然后我们对每个子区域取其最大值（或平均值）所输出，
+最后得到一个尺寸为 $n \times n$ 的特征映射，从而完成了对卷积特征映射的降维操作。
+
+池化技术在计算机视觉中的应用价值有两个方面：
+
+\begin{itemize}
+\item 它减少了网络特征个数，从而降低了网络复杂度，使训练更容易进行而且不易出现过
+  拟合
+\item 这些池化单元使得CNN 具有了一定的平移不变性，即图像有小的位移时仍能保证提取
+  的特征保持不变
+\end{itemize}
+
+\subsection{损失函数}
+
+\subsubsection{分类问题——Softmax回归与交叉熵损失函数}
+
+Softmax 回归将针对二分类问题的对数几率回归（也译作逻辑斯蒂回归）的多位情况，它的
+它的目的是为了计算多分类问题的概率分布，其数学基础为广义线性模型，其定义式为：
+
+\[
+p(y=j|\mathbf{x};\theta) = \frac{e^{\mathbf{x}^T\mathbf{\theta}_j}}{\sum_{i}^{K}{e^{\mathbf{x}^T\mathbf{\theta}_k}}}
+\]
+
+其中$\theta$为参数。
+
+此外，对于使用Softmax函数为最后一层激活函数而进行分类任务的CNN，一般使用交叉熵损
+失函数：
+
+\[
+Loss(\mathbf{x}) = \sum_{j=1}^{K}[y = j]\log{p(y=j|\mathbf{x};\theta)}
+\]
+
+其中$[y = j]$为指示函数，当$y = j$时为1，否则为0。
+
+\subsubsection{回归问题——$Smooth L_1$损失函数}
+
+一般回归问题经常使用最小均方误差作为损失函数，但在许多回归问题上，人们倾向使
+用$Smooth L_1$损失函数：
+
+\[
+smooth_{L_1}(x) = 
+\begin{cases}
+0.5x^2 & if |x| < 1 \\
+|x| - 0.5 & otherwise \\
+\end{cases}
+\]
+
+\subsection{基于梯度的训练方法}
+
+\section{Residual Network}
+
+按照我们一般的经验，在不出现梯度耗散/梯度爆炸以及过拟合的情况下，CNN 应该是越深
+效果越好。可是在实验中我们发现，当网络加深后，整个神经网络的错误率反而上升了，我
+们称这种情况为Degradation。目前梯度耗散/梯度爆炸问题已经通过引入ReLU 激活函数而
+被很好的解决\cite{Nair:2010vq}，而随着大数据的出现过拟合问题也变得不是那么明显。
+这时候限制神经网络走向更深的问题就只剩Degradation了。而微软亚洲研究院的Kaiming
+He等人于2015年提出的Residual Network模型则很好的解决了Degradation问题，将网络层
+数加深到了152层之多（最新的Residual Network已经达到1200层）。
+
+Residual Network的思想是，既然我们使用梯度下降法使一个多层神经网络去逼近一个复杂
+的非线性函数 $H(x)$ 会遇到Degradation问题而难以训练，那我们何不让这个多层网络去
+逼近该映射测残差函数 $F(x) = H(x) - x$，我们猜想拟合残差函数会比拟合原函数容易一
+些。虽然我们无法从数学上证明该结论，但是实验表明这种方法确实可行、有效。
+
+图\ref{Fig:ResBlock} 所示的结构为构成被称之为Residual Block，其中的weight layer
+一般是多个卷积层及配套的池化层。一个Residual Network则有多个Residual Block堆叠而成。
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\linewidth]{./Figure/ResBlock.png}
+  \caption{Residual Block\cite{He:2015tt}}\label{Fig:ResBlock}
+\end{figure}
 
 \section{使用卷积神经网络进行车牌精确定位}
 
@@ -208,27 +308,38 @@ Augmentation），具体来讲就是对图片进行随机的旋转和放缩，�
 很容易的通过卷积神经网络搭建这样一个回归模型，其输入是经过缩放的车牌区域图片，输
 出则是车牌四个顶点的坐标。本文并未从头训练一个全新的模型完成此任务，而是使用一个
 训练好的模型，保留其卷积部分并将以Softmax 为激活函数的分类层更换为无激活函数的回
-归层。具体来讲本文中使用的是训练好的34层Residual Network模型。
+归层。具体来讲本文中使用的是训练好的34层Residual Network\cite{He:2015tt}模型，模
+型结构如图 \ref{Fig:ResNet34Reg}，其中前34个Residual Block为卷积特征提取，最后的
+全连接层实现顶点坐标的回归。
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{./Figure/ResNet34Reg.jpg}
+  \caption{用于回归的34层Residual Network}\label{Fig:ResNet34Reg}
+\end{figure}
 
 \subsection{实现环境}
 
-本章的神经网络使用Torch 7框架进行实现，实验机器配置如下：
+本章的神经网络模型使用Torch框架进行实现，实验机器配置见附录中表
+\ref{Fig:WorksationInfo} 。
+
+训练数据集大小为900张，测试数据集为100张，训练使用参数见表 \ref{Tab:LocationArgs}。
 
 \begin{tabular}{|c|c|}
+\caption{车牌精确定位网络参数}\label{Tab:LocationArgs}
+\centering
 \hline
-项目 & 规格说明 \\
-操作系统 & Ubuntu Server 14.04
+batch尺寸 & 25 \\
 \hline
-CPU & Intel \\
+learning rate & 0.1 \\
 \hline
-内存 & 32GB DDR3 \\
+GPU数量 & 2 \\
 \hline
-显卡 & NVIDIA Quardo M5000 x2 \\
+迭代次数 & 1000 \\
+\hline
+损失函数 & $Smooth L_1$损失函数 \\
 \hline
 \end{tabular}
-
-训练数据集大小为900张，测试数据集为100张，训练使用参数如下：
-
 
 \subsection{实验结果与分析}
 
@@ -252,67 +363,267 @@ CPU & Intel \\
 
 所谓车牌检测，即是从一幅图像中找寻包含车牌的子图像，显然这属于目标检测（Object
 Detection）问题。目标检测技术作为一个十分热门的研究领域，经历了从十年前HoG 方法大
-行其道到如今RCNN 技术一统天下的发展过程。RCNN 技术于20xx年由xxx提出，随后又出现
-了Fast RCNN和Faster RCNN 两代的改进。如今, Faster RCNN 技术不仅在Pascal VOC和
+行其道到如今R-CNN 技术一统天下的发展过程。R-CNN 技术于20xx年由xxx提出，随后又出现
+了Fast R-CNN和Faster R-CNN 两代的改进。如今, Faster R-CNN 技术不仅在Pascal VOC和
 COCO 两个数据集上的目标检测任务中取得了最佳的效果，而且在借助GPU 加速的情况下做
-到实时检测（0.2s/帧）。因此本章将首先简要介绍RCNN 系列技术，然后在我们的数据集上
+到实时检测（0.2s/帧）。因此本章将首先简要介绍R-CNN 系列技术，然后在我们的数据集上
 对其效果进行试验验证。
- '
-\section{Region CNN 概述}
 
-\subsection{RCNN}
+\section{R-CNN 概述}
 
-\subsection{Fast RCNN}
+\subsection{R-CNN}
 
-\subsection{Faster RCNN}
+传统的目标检测算法中，要对各种目标实现检测、定位和识别，一般分为三步：
 
-\section{使用Faster RCNN进行车牌检测}
+\begin{itemize}
+  \item 扫描图像产生可能的候选区域
+  \item 对每个候选区域提取其特征
+  \item 使用提取的特征对物体进行识别（背景也算为一类）
+\end{itemize}
+
+在R-CNN 技术（图 \ref{Fig:RCNN}）中同样分为这三步，不同的是对每个proposal使用训练好的CNN 进行特征提取以
+取代HoG 等传统手工特征。下面我们将分别对这三个步骤咋R-CNN 模型中的实现进行阐述。
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\linewidth]{./Figure/RCNN.jpg}
+  \caption{R-CNN}\label{Fig:RCNN}
+\end{figure}
+
+\subsubsection{区域选择}
+
+常用的候选区域选择算法有滑动窗口法、objectness、类别无关目标选择、Selective
+Search等方法。出于对性能和效果的考虑，R-CNN 模型中选择使用 Selective Search进行目
+标区域的选择。
+
+\subsubsection{特征提取}
+
+在R-CNN 模型中，我们使用一个在ImageNet 数据集上训练好的VGG 模型用作特征提取。我们摘
+掉VGG模型最顶层的Softmax 分类层，将倒数第二层的4096维向量作为图像特征用于下一步的
+目标识别。为了使每个候选区域符合VGG 网络的输入尺寸 （ $227 \times 227$像素RGB 图
+像），我们将不同尺寸的目标候选区域统一缩放至$227 \times 227$像素进行处理。
+
+\subsubsection{物体识别}
+
+在模型的最后一步，我们使用SVM 对上一步得到的特征向量进行分类，以得到物体的类别。
+注意到我们的类别包含 $N$ 个物体类和1个背景类一共 $N+1$ 类。
+
+R-CNN模型使用CNN 提取特征的特性，使得它在Pascal VOC 数据集上的测试效果要好于所有传
+统方法，成功将mAP (mean Average Precise) 提高到了53.7\%\cite{Girshick:2014jx}，但
+同时我们也注意到，模型中有两个重大缺陷：
+
+\begin{itemize}
+  \item 将不同尺寸的候选区域强制缩放至 $227 \times 227$ 会损失物体长宽比等许多信
+    息
+  \item 对每个候选区域分别使用VGG 网络提取特征使得整个识别过程速度十分缓慢，平
+     均每幅图像需要40s之久\cite{Girshick:2014jx}。
+\end{itemize}
+
+\subsection{Fast R-CNN}
+
+上一节末我们提到了原始的 R-CNN 模型有两大缺陷严重限制了其应用场景与范围。为了解决
+这两大不足，Girshick在R-CNN 的基础上进行了改进，提出了 Fast R-CNN 模型
+\cite{Girshick:2015ib}，如图 \ref{Fig:FastRCNN.jpg}。相对于R-CNN，Fast R-CNN的改
+进有两点：
+
+\begin{itemize}
+  \item 引入RoI 池化层
+  \item 使用神经网络代替SVM 进行目标的检测与定位
+\end{itemize}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\linewidth]{./Figure/FastRCNN.png}
+  \caption{Fast R-CNN\cite{Girshick:2015ib}}\label{Fig:FastRCNN}
+\end{figure}
+
+在原始的R-CNN 模型中，我们需要对每个候选区域进行尺寸缩放，并使用一个训练好的CNN 进
+行特征提取，这一步使得 R-CNN 模型变得十分缓慢。因此我们自然的会考虑，我们是否可以
+只对整幅图进行一次卷积，然后在提取到的卷积特征上直接提取每个候选区域的特征，避免
+冗余的卷积计算和对候选区域尺寸的缩放。当然，答案是肯定的。
+
+在Fast R-CNN 模型中，我们首先对整幅图像经过一系列卷积层和池化层产生一个卷积特征
+映射。然后我们使用RoI 池化层从得到的特征映射图上提取每个候选区域的特征。
+
+由于不同候选区域的尺寸是不同的，但是为了目标检测和识别，我们需要从特征映射上提取
+出一个固定长度的向量作为区域特征，因此我们必须实现一种可以根据候选区域尺寸改变窗
+口大小的特殊池化层，这种池化层被称为RoI 池化层。和普通池化层固定池化窗口的行为不
+同，RoI 池化层的池化窗口大小随候选区域的大小而改变，而池化后的特征映射尺寸则固定。
+
+
+具体来讲，我们定义一个 RoI 为一个四元组 $(r,c,h,w)$，其中 $(r,c)$ 为RoI 区域左上
+角坐标，$(h, w)$ 为其长和宽。RoI 池化层将一个尺寸为 $h \times w$ 的RoI 区域分割成
+$H \times W$ 个子窗口网格，每个窗口尺寸大约为 $\frac{h}{H} \times \frac{w}{W}$ ，
+然后分别对每个网格窗口中的特征进行池化操作，最后得到的尺寸为 $H \times W$ 的特征
+映射为RoI 池化层的输出。同时注意到RoI 池化层在反向传播时，梯度公式与普通池化层是
+不同的，RoI 池化层的反向传播公式如下：
+
+\[
+\frac{\partial L}{\partial x_i} = \sum_{i}\sum_{j}[i = i^*(r,j)]\frac{\partial
+  L}{\partial y_{rj}}
+\]
+
+其中$y_{rj} = x_{i^*(r,j)}$，$i^*(r,j) = \arg\max_{i'\inR(r,j)}x_{i'}$，$R(r,j)$
+为产生输出单元$y_{rj}$的池化窗口中包含的元素坐标集合。
+
+在通过RoI 层为每个候选区域提取了 $H \times W$ 维特征后，这些特征被送入一个多层感知
+机中，与R-CNN 中使用SVM 进行物体识别不同，这个多层感知机有两个输出：
+
+\begin{itemize}
+  \item 目标的类别
+  \item 目标的边界矩形bbox(bounding box)
+\end{itemize}
+
+由于使用了神经神经网路代替了SVM进行分类和bbox 回归，使得整个Fast R-CNN可以作为一
+个完整的神经网络在GPU 中执行，从而避免了显存和主存间的数据复制，极大程度提高了计
+算性能。
+
+由于整个网络有两个输出：目标的类别和bbox，因此整个网络的损失函数不能再是简单的交
+叉熵损失或者最小二乘损失。在此，作者针对Fast R-CNN 提出了一种特殊的多任务损失函
+数。我们定义第一个输出为目标在$K+1$个类别（背景也算一类）上的概率分布 $p = (p_0,
+\cdots, p_K)$ ，第二层的输出为目标的bbox 坐标尺寸 —— $t_k = (t_x^k, t_y^k, t_w^k, t_h^k)$，其
+中$k$代表该bbox 为第$k$个物体类别。此外，对每个用于训练的RoI，我们定义真实类别为
+$u$，真实bbox 坐标为$v$。我们定义每个RoI 的多任务损失函数$L$如下：
+
+\[
+L(p, u, t^u, v) = L_{cls}(p, u) + \lambda[u \geq 1]L_{loc}(t^u, v)
+\]
+
+其中，$[u \geq 1]$为指示函数——当$u$大于等于1时为1，否则为0。目标分类的损失函数
+$L_{cls}(p,u) = -\log{p_u}$为对真实类别$u$的对数损失函数。bbox 回归任务的损失函数
+$L_{loc}(t^u,v)$定义如下：
+
+\[
+L_{loc}(t^u, v) = \sum_{i\in \{x,y,w,h\}}{smooth_{L_1}(t_i^u-v_i)}
+\]
+
+在有些时候我们也会用最小二乘损失代替$Smooth_{L_1}$损失函数。
+
+有了如上的结构定义，我们就可以通过梯度下降法对整个Fast R-CNN进行训练。文献
+\cite{Girshick:2015ib}中的实验结果表明，Fast R-CNN在Pascal VOC数据集上mAP可以达
+到70.0\%，一举超越R-CNN和SPPnet 而夺得头筹。但是另一方面，虽然Fast R-CNN的速度较
+R-CNN有了很大的提升，但仍旧未能达到实时级别，还需进一步改进。
+
+\subsection{Faster R-CNN}
+
+虽然Fast R-CNN 算法在目标识别问题上已能达到准实时的速度，然而这阻挡不了科学家追求
+更快、更好的脚步。因此微软亚洲研究院的Shaoqing Ren等人在Fast R-CNN 的基础上提出了
+速度更快的Faster R-CNN算法\cite{Ren:2015ug}（值得一提的是，也正是该组于2015年提出了Residual
+Network，笔者对他们的科研实力只能佩服不已）。分析发现，使用Selective Search的方
+法进行目标候选区域选择是制约Fast R-CNN 性能的瓶颈，因此一个很自然的想法便是能否
+使用基于神经网络的方法进行候选区域的选择以替代速度缓慢的Selective Search方法。
+Ren 等人正是基于这一思想，创造性的提出Region Proposal Network (RPN)，将R-CNN 的整个
+流程归纳进神经网络框架内，进一步提高了检测速度，在GPU 加速的帮助下达到了实时级别
+的性能（图 \ref{Fig:FasterRCNN}）。
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{./Figure/FasterRCNN.png}
+  \caption{Faster R-CNN\cite{Ren:2015ug}}\label{Fig:FasterRCNN}
+\end{figure}
+
+RPN网络以Fast R-CNN 网络中经由卷积层提取的卷积特征映射作为输入，并以此产生一系列
+矩形候选区域，并对每个区域为一个目标的可能性打分。为了生成候选区域，RPN 使用一个
+小型卷积神经网路在特征映射图上滑动，这个小型网络输入为特征映射图上一个尺寸为$n
+\times n$窗口，然后该窗口内的特征将通过RoI 池化的方式被映射为一个256维的向量（有
+时也用512维，取决于计算特征映射所用卷积网络的复杂度）。最后，这256维特征将被送入两个独
+立的全连接层中——一个全连接层用于目标分类（记为\textit{分类层}），另一个用于目标
+位置回归（记为\textit{回归层}）。整个RPN 结构如图 \ref{Fig:RPN} 所示。
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{./Figure/RPN.png}
+  \caption{Region Proposal Network\cite{Ren:2015ug}}\label{Fig:RPN}
+\end{figure}
+
+但是光有上述固定的网络无法处理不同尺寸、不同长宽比的目标物体，为了使RPN 能够处理
+不同尺寸、长宽比的物体，作者提出了Anchor的概念。我们在滑动窗口每次滑到的位置，
+我们一共提出$k$个尺寸、长宽比不同的候选区域，每一个这样的区域成为一个Anchor。所
+以我们网络的\textit{分类层}有$2k$个输出，为每个Anchor是目标物体/背景的概率，网络
+的\textit{回归层}有$4k$个出书，为每个Anchor的坐标。一般在一个位置，我们使用3个不
+同尺寸放缩比和3个不同长宽比共生成9个Anchor。对一个尺寸为$W \times H$的特征映射图，
+我们共产生$WHk$个Anchor。
+
+为了训练RPN，我们需要为每一个Anchor提供一个二元标签（代表是物体还是是背景）。我
+们将两类Anchor标记为正例（是物体）：(1) 该Anchor和真实的边框有最高的
+Intersection-over-Union(IoU) 重叠，或者(2) 该Anchor和任一个真实的边框的IoU重叠都
+高于0.7。值得注意的是，根据这种标记方法，一个真实的边框可能会产生多个标记为正例
+的Anchor。有了如上对标记的定义，我们的损失函数定义如下：
+
+\[
+L(\{p_i\}, \{t_i\}) = \frac{1}{N_{cls}}\sum_i{L_{cls}(p_i, p_i^*)} + \lambda\frac{1}{N_{reg}}\sum_i{p_i^*L_{reg}(t_i,t_i^*)}
+\]
+
+在此，$i$为Anchor的下标，$p_i$代表第$i$个Anchor是一个目标物体的概率，$p_i^*$为真
+实值，当Anchor为正例是$p_i^* = 1$，否则是0 。$t_i$是一个四元组，包含表示Anchor坐
+边框坐标的四个值，$t_i^*$则是相应的真实值。此外，$L_{cls}$是常用语二分类问题的对
+数损失函数，$L_{reg}$则同Fast R-CNN 一样使用$Smooth L_1/$损失函数。此外，
+$N_{cls}$和$N_{reg}$为两个归一化参数，在实现中常取$N_{cls}$为mini-batch的大小，
+而$N_{reg}$取不同位置Anchor的数量。此外，由于RPN 在很多时候生成的候选区域彼此有
+很大的重叠，因此我们基于RPN 网络对区域为目标物体可能性的打分，使用非极大抑制
+(NMS)对候选区域进行筛选，从而减少计算量。
+
+综上所述，可以看出来Faster R-CNN实际上是由RPN和Fast R-CNN 组合而成，因此我们在训
+练Faster RCNN 时需要分别训练这两个网络。但是这两个网络并非完全独立，而是有着共享
+的卷积部分，因此如何才能正确的训练整个网络也是一个需要解决的问题。在Faster R-CNN
+的文献\cite{Ren:2015ug}中，作者提出了一种4步训练法：第一步，我们使用预训练好的模型
+初始化RPN 的卷积部分，并单独训练RPN 网络，包括共用的卷积部分。第二步，我们使用预
+训练好的模型初始化Fast R-CNN 的卷积部分，并使用上一步训练好的RPN 网络产生候选区
+域来训练Fast R-CNN 的识别网络。到这一步为止，RPN和Fast R-CNN 并不共享彼此的卷积部
+分。第三步，我们使用Fast R-CNN的卷积部分初始化RPN 的卷积部分，这时候两个网络共享
+同样的卷积层，此时我们固定卷积层，对RPN 独有的分类层和回归层进行训练。最后一步，
+我们仍旧固定卷卷积部分，对Fast R-CNN 的分类、回归层进行训练。最后我们得到的两个
+网络共享同样的卷积层，但是却是不同的网络。
+
+Faster R-CNN技术不仅在Pascal VOC数据集和COCO数据集上取得了和Fast R-CNN 比肩的出色
+效果，而且在GPU 加速的帮助下可以达到17fps 的处理速度，基本满足对实时性的需求。
+Faster R-CNN 无疑已成为时下最主流的物体识别技术之一。
+
+\section{使用Faster R-CNN 进行车牌检测}
+
+由于Faster R-CNN 在物体识别领域有着速度快、准确率高、鲁棒性好、人工干预少等优点，
+我们自然可以联想到将此技术用于车牌检测工作。下面我们将介绍如何使用Faster R-CNN实
+现车牌检测。
 
 \subsection{数据集准备}
 
-(1) 车牌图片
+\subsubsection{车牌图片}
 本文选择了1000张在道路上拍摄的含有车牌的照片，注意这些照片为步行或行车过程中使用
-手机拍摄而来。
+手机拍摄而来，存在大量倾斜、变形的情况。
 
-(2) 数据标注
+\subsubsection{数据标注}
 本文中首先对这些车牌的四个顶点进行手工标注，然后取包含车牌区域的最小外接矩形作为
-ground truth用于Faster RCNN 的训练。
+bbox用于Faster R-CNN 的训练。 
 
 \subsection{实现环境}
 
-本文的Faster RCNN 实现基于开源项目 py-faster-rcnn
+本文的Faster R-CNN 实现基于开源项目 py-faster-rcnn
 \footnote{https://github.com/rbgirshick/py-faster-rcnn.git}修改而来，增加了对上
 一步构造出的车牌数据的支持。
 
-训练网络使用的工作站配置如下：
+训练网络使用的工作站配置见附录中表 \ref{Tab:WorkstationInfo}。
+
+训练数据集图片为900张，测试数据集图片为100张，模型参数见表 \ref{Tab:FasterRCNNArgs}。
 
 \begin{tabular}{|c|c|}
+\caption{Faster R-CNN参数}\label{Tab:FasterRCNNArgs}
+\centering
 \hline
-项目 & 规格说明 \\
-操作系统 & Ubuntu Server 14.04
-\hline
-CPU & Intel \\
-\hline
-内存 & 32GB DDR3 \\
-\hline
-显卡 & NVIDIA Quardo M5000 x2 \\
 \hline
 \end{tabular}
 
-训练数据集图片为900张，测试数据集图片为100张，模型参数为如下：
-
 \subsection{实验结果与分析}
 
-经过训练，Faster RCNN在100张测试数据集上精度达到84.54\%，相信如果换用更大的训练
+经过训练，Faster R-CNN在100张测试数据集上精度达到84.54\%，相信如果换用更大的训练
 数据集后效果还可进一步提升。
 
 识别举例图
 
 \section{本章小结}
 
-本章首先介绍了使用RCNN 系列算法进行物体检测的基本原理，然后通过修改开源项目
-py-faster-rcnn，在我们的车牌数据集上进行训练，最后验证其识别准确率可以达到85\%左
-右，验证了使用Faster RCNN 进行车牌检测的有效性。
+本章首先介绍了使用R-CNN 系列算法进行物体检测的基本原理，然后通过修改开源项目
+py-faster-rcnn，在我们的车牌数据集上进行训练，最后验证其mAP 可以达到85\%左
+右，验证了使用Faster R-CNN 进行车牌检测的有效性。
 
 \chapter{车牌字符分割}
 
@@ -321,6 +632,14 @@ py-faster-rcnn，在我们的车牌数据集上进行训练，最后验证其识
 \section{使用Class-specific Extremal Region进行车牌字符分割}
 
 \subsection{算法实现}
+
+\subsection{实验效果}
+
+\begin{figure}[th]
+  \centering
+  \includegraphics[width=0.8\linewidth]{./Figure/TextSegmentation.png}
+  \caption{车牌字符分割}\label{Fig:TextSeg}
+\end{figure}
 
 \subsection{本章小结}
 
@@ -351,7 +670,7 @@ py-faster-rcnn，在我们的车牌数据集上进行训练，最后验证其识
 造福人类社会。
 本文试图将最新、最好的深度学习技术引入车牌识别这一任务中，从而实现更鲁棒、更智能
 的车牌识别系统。具体来讲，有以下几点：
-首先，本文试图使用Faster RCNN 这一目标检测神器来实现车牌的检测。基于Faster RCNN的
+首先，本文试图使用Faster R-CNN 这一目标检测神器来实现车牌的检测。基于Faster R-CNN的
 方法能有效克服传统方法不够鲁棒、依赖先验知识、特殊情况多等缺点，实现更加智能、更
 加鲁棒的车牌定位系统。
 再次，本文提出使用CNN 回归的方式对车牌坐标进行精确定位，从而抛弃传统的基于边缘检
@@ -368,10 +687,10 @@ py-faster-rcnn，在我们的车牌数据集上进行训练，最后验证其识
 学习方法也不是完美的，甚至在很多应用场景下性价比不如传统方法高。展望未来工作，我
 希望从以下几个方面对整个系统进行改进：
 
-第一，Faster RCNN 技术虽然在目标检测问题上表现优异，但其速度仍旧偏慢，不能很好地
+第一，Faster R-CNN 技术虽然在目标检测问题上表现优异，但其速度仍旧偏慢，不能很好地
 适用于高速公路等对检测速度要求高的场合。而近年流行的另一种基于CNN 的目标检测技
-术——You Only Look Once——简称YOLO，虽然准确率不如Faster RCNN，却有着非常快的速度，
-因此可以考虑使用YOLO代替Faster RCNN 技术进行车牌目标检测。
+术——You Only Look Once——简称YOLO，虽然准确率不如Faster R-CNN，却有着非常快的速度，
+因此可以考虑使用YOLO代替Faster R-CNN 技术进行车牌目标检测。
 第二，在车牌字符分割过程中，我们需要去除大量假阳性的Extremal Region，目前我们采
 用的方法是基于车牌字符的相对位置和尺寸进行筛选，但这种方法严重依赖先验知识和对筛
 选规则的制定，造成了大量无法处理的特殊情况。因此我们希望通过机器学习技术完成ER的
