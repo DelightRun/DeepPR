@@ -121,7 +121,7 @@ def get_chars(image, minProb1=0.5, minProb2=0.75):
 def draw_regions(image, rects):
     vis = image.copy()    # for visualization
     for rect in rects:
-        cv2.rectangle(vis, (rect[0],rect[1]), (rect[0]+rect[2],rect[1]+rect[3]), (0, 0, 255), 2)
+        cv2.rectangle(vis, (rect[0],rect[1]), (rect[0]+rect[2],rect[1]+rect[3]), (0, 0, 255), 1)
     return vis
 
 if __name__ == '__main__':
