@@ -116,3 +116,22 @@ labels.txt
 logs/
 logs/*
 thesis/ThesisFiles/auto
+
+# LaTeX
+*.toc
+*.bbl
+*.blg
+*.out
+*.aux
+*.log
+*.bak
+*.thm
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.glo
+*.gls
+*.ids
+*.ilg
+*.ind
+auto/
