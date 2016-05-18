@@ -2,7 +2,6 @@ from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 
-nb_epoch = 20
 nb_filters = 32
 nb_pool = 2
 nb_conv = 3
