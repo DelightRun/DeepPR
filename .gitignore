@@ -113,9 +113,11 @@ crashlytics-build.properties
 images/
 labels.txt
 *.t7
+*.dat
+*.h5
+*.pkl
 logs/
 logs/*
-thesis/ThesisFiles/auto
 
 # LaTeX
 *.toc
