@@ -81,8 +81,7 @@ Transportation System, ITS)和自动驾驶系统。这两项技术都旨在通�
 
 本文中提到的传统方法，是指在机器学习技术引入计算机视觉之前，人们为了解决常见的视
 觉问题发明的大量基于手工特征和手工规则的方法。比较经典的，比如用于直线、曲线检测的
-广义Hough变换\cite{Duda:1972eu}，用于边缘检测的Sobel算子以及
-SIFT\cite{Lowe:2004kd}、SURF\cite{Baya:2008ud}等图像特征。这些方法在早期的计
+广义Hough变换，用于边缘检测的Sobel算子以及SIFT、SURF、HoG等图像特征。这些方法在早期的计
 算机视觉任务中被大量的使用，并取得了一定的效果。比如，许多车牌检测系统使用Hough变
 换对车牌的边缘进行检测从而实现车牌边缘的定位；使用二值化方法结合直方图投影进行车
 牌字符分割。
@@ -195,7 +194,7 @@ R-CNN、Fast R-CNN和Faster R-CNN。然后通过Faster R-CNN 技术实现了自�
 稀疏连接两大特性，使之参数要远远少于具有相同输入输出大小的全连接层，参数的减少不
 仅极大程度降低了网络的训练难度，而且有效避免了过拟合的出现。一般一个卷积层会有多
 个卷积核，每一个卷积核可以提取图像的不同特征，从而得到不同的特征映射。图
-\ref{Fig: LeNet} 是LeNet\cite{LeCun:1990vp}的网络结构，该网络由深度学习四巨头之
+\ref{Fig:LeNet} 是LeNet\cite{LeCun:1990vp}的网络结构，该网络由深度学习四巨头之
 一的Yann LeCun 教授提出，并成功应用于手写数字识别问题\cite{LeCun:1990vp}。
 
 \begin{figure}[ht]
@@ -228,29 +227,7 @@ R-CNN、Fast R-CNN和Faster R-CNN。然后通过Faster R-CNN 技术实现了自�
   的特征保持不变
 \end{itemize}
 
-\subsection{损失函数}
-
-\subsubsection{分类问题——Softmax回归与交叉熵损失函数}
-
-Softmax 回归将针对二分类问题的对数几率回归（也译作逻辑斯蒂回归）的多位情况，它的
-它的目的是为了计算多分类问题的概率分布，其数学基础为广义线性模型，其定义式为：
-
-\[
-p(y=j|\mathbf{x};\theta) = \frac{e^{\mathbf{x}^T\mathbf{\theta}_j}}{\sum_{i}^{K}{e^{\mathbf{x}^T\mathbf{\theta}_k}}}
-\]
-
-其中$\theta$为参数。
-
-此外，对于使用Softmax函数为最后一层激活函数而进行分类任务的CNN，一般使用交叉熵损
-失函数：
-
-\[
-Loss(\mathbf{x}) = \sum_{j=1}^{K}[y = j]\log{p(y=j|\mathbf{x};\theta)}
-\]
-
-其中$[y = j]$为指示函数，当$y = j$时为1，否则为0。
-
-\subsubsection{回归问题——$Smooth L_1$损失函数}
+\subsection{回归问题与$Smooth L_1$损失函数}
 
 一般回归问题经常使用最小均方误差作为损失函数，但在许多回归问题上，人们倾向使
 用$Smooth L_1$损失函数：
@@ -263,7 +240,46 @@ smooth_{L_1}(x) =
 \end{cases}
 \]
 
-\subsection{基于梯度的训练方法}
+\subsection{反向传播算法}
+
+和其他机器学习算法一样，我们需要找到一种算法能够对神经网络进行训练。事实上，神经
+网络的训练可以看作是一个最优化问题：
+
+\[
+\min_{\mathbf{w}}{Loss}
+\]
+
+其中，$\mathbf{w}$神经网络模型参数，即每层神经元的权重，$Loss$代表损失值，用于度
+量神经网络输出与真实值之间的误差大小。显然，这个优化问题是一个高维空间中的非凸优
+化问题，不存在显式的解析解。一种常见做法是基于梯度的优化方法，即求取损失函数对参
+数的梯度，并根据梯度对网络参数进行优化：
+
+\[
+\mathbf{w} = \mathbf{w} - \alpha\Delta_{\mathbf{w}}{Loss}
+\]
+
+其中$\alpha$控制参数更新的程度，被称为学习率。于是现在我们的问题转换成了如何求取
+损失关于网络参数的梯度$\Delta_{\mathbf{w}}{Loss}$。事实上，在多层感知机模型出现
+之初，当时的神经网络研究者被这个问题困扰了10年之久，直到1986年前后Hinton 等人重新
+发明反向传播算法，从而解决了这个问题。下面我们将简要介绍反向传播算法的原理。
+
+为了叙述方便，我们定义如下记号：$\mathbf{a}^{l}$代表第l层网络的输出，
+$\mathbf{w}^{l}$代表第l层网络的权重参数，$\sigma$代表激活函数，
+$\mathbf{z}^{l}$满足$\mathbf{a}^{l} = \sigma(\mathbf{z}^{l})$，
+$\mathbf{\delta}^{l} = \Delta_{\mathbf{z}^l}{Loss}$损失函数关于$\mathbf{z}^l$的
+梯度。注意，上述粗体记号均为向量。根据上述定义和链式求导法则，我们可以得到以下方
+程组：
+
+\[
+  \mathbf{\delta}^L = \Delta_{\mathbf{a}^L}{Loss} \odot \sigma'(\mathbf{z}^L) \\
+  \mathbf{delta}^l = ((\mathbf{w}^{l+1}\mathbf{\delta}^{l+1})) \odot \sigma'(\mathbf{z}^l) \\
+  \Delta_{\mathbf{w}^l}{Loss} = \mathbf{\delta}^l \times \mathbf{a}^{l-1} \\
+\]
+
+其中，$\odot$表示向量汉密尔顿积，$\times$表示向量叉积（内积）。注意到在此方程组
+中，损失函数关于$\mathbf{z}^l$的导数$\mathbf{\delta}$沿着网络反向传播，逐层向前
+传递，即网络输出的误差在网络中逐层向前传递并据此修正网络参数$\mathbf{w}$，因此本
+算法被称作\textit{反向传播}算法。
 
 \section{Residual Network}
 
@@ -281,17 +297,18 @@ Residual Network的思想是，既然我们使用梯度下降法使一个多层�
 些。虽然我们无法从数学上证明该结论，但是实验表明这种方法确实可行、有效。
 
 图\ref{Fig:ResBlock} 所示的结构为构成被称之为Residual Block，其中的weight layer
-一般是多个卷积层及配套的池化层（图 \ref{Fig:ResBlockActual}。一个Residual Network则有多个Residual Block堆叠而成。
+一般是多个卷积层及配套的池化层（图 \ref{Fig:ResBlockActual}。一个Residual
+Network由多个Residual Block堆叠而成。
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/ResBlock.png}
+  \includegraphics{./Figure/ResBlock.png}
   \caption{Residual Block\cite{He:2015tt}}\label{Fig:ResBlock}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/ResBlockActual.png}
+  \includegraphics{./Figure/ResBlockActual.png}
   \caption{用于ImageNet识别的Residual Network所使用的Residual
     Block}\label{Fig:ResBlockActual}
 \end{figure}
@@ -322,10 +339,9 @@ Augmentation），具体来讲就是对图片进行随机的旋转和放缩，�
   \caption{用于回归的34层Residual Network}\label{Fig:ResNet34Reg}
 \end{figure}
 
-\subsection{实现环境}
+\subsection{算法实现}
 
-本章的神经网络模型使用Torch框架进行实现，实验机器配置见附录中表
-\ref{Fig:WorksationInfo} 。
+本章的神经网络模型使用Torch框架进行实现，实验机器配置见附录。
 
 训练数据集大小为900张，测试数据集为100张，训练使用参数见表 \ref{Tab:LocationArgs}。
 
@@ -336,13 +352,15 @@ Augmentation），具体来讲就是对图片进行随机的旋转和放缩，�
 \hline
 batch尺寸 & 25 \\
 \hline
-learning rate & 0.1 \\
+学习率 & 0.1 \\
 \hline
 GPU数量 & 2 \\
 \hline
 迭代次数 & 1000 \\
 \hline
 损失函数 & $Smooth L_1$损失函数 \\
+\hline
+优化算法 & Adam\cite{Kingma:2014us} \\
 \hline
 \end{tabular}
 \end{table}
@@ -616,6 +634,13 @@ bbox用于Faster R-CNN 的训练。
 \caption{Faster R-CNN参数}\label{Tab:FasterRCNNArgs}
 \begin{tabular}{|c|c|}
 \hline
+训练第一步迭代次数 & 80000 \\
+\hline
+训练第二步迭代次数 & 40000 \\
+\hline 
+训练第三步迭代次数 & 80000 \\
+\hline 
+训练第四步迭代次数 & 40000 \\
 \hline
 \end{tabular}
 \end{table}
@@ -629,7 +654,7 @@ bbox用于Faster R-CNN 的训练。
 \centering
 \subcaptionbox{分类损失曲线}
 {\includegraphics[width=.45\linewidth]{./Figure/RPNClsLoss.eps}}
-\subcaptionbox{BBox 回归任务损失曲线}
+\subcaptionbox{BBox 回归损失曲线}
 {\includegraphics[width=.45\linewidth]{./Figure/RPNBBoxLoss.eps}}
 \caption{RPN训练损失曲线}
 \end{figure}
@@ -638,12 +663,10 @@ bbox用于Faster R-CNN 的训练。
 \centering
 \subcaptionbox{分类损失曲线}
 {\includegraphics[width=.45\linewidth]{./Figure/RCNNClsLoss.eps}}
-\subcaptionbox{BBox 回归任务损失曲线}
+\subcaptionbox{BBox 回归损失曲线}
 {\includegraphics[width=.45\linewidth]{./Figure/RCNNBBoxLoss.eps}}
 \caption{Fast R-CNN训练损失曲线}
 \end{figure}
-
-识别举例图
 
 \section{本章小结}
 
@@ -776,6 +799,7 @@ AdaBoost 分类器。
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\linewidth]{./Figure/AllERs.png}
+  \caption{使用CSER提取出的所有候选区}\label{Fig:AllERs}
 \end{figure}
 
 在我们的算法中我们从如下方面对候选字符区域进行筛选：
@@ -804,7 +828,7 @@ AdaBoost 分类器。
 \subsection{算法实现}
 
 CSER的相关算法已经在最新版的OpenCV
-Contrib\footnote{https://github.com/Itseez/opencv_contrib}中得以实现；CSER所使用
+Contrib\footnote{https://github.com/Itseez/opencv\_contrib}中得以实现；CSER所使用
 的两个分类器的训练则由作者基于OpenCV使用C++开发完成；最后整个字符分割模块使用
 Python语言和最新版的OpenCV（需手工编译最新版）开发完成。
 
@@ -835,9 +859,77 @@ Python语言和最新版的OpenCV（需手工编译最新版）开发完成。
 
 \chapter{车牌字符识别}
 
-\section{使用CNN进行车牌字符识别}
+车牌识别是车牌识别系统最后也是最关键的一步，幸运的是，字符识别问题已经被人们充分
+的研究了几十年，并且提出了一系列十分有效的方法。早期的字符识别系统中经常使用SVM 
+作为分类器对字符进行识别，但是随着深度学习的发展，人们发现CNN 能在字符识别任务上
+取得非常优秀的效果，因此越来越的字符识别系统选择使用CNN 作为其字符识别算法。本文
+也采用了CNN 对车牌字符进行识别，下面对此进行描述。
+
+\section{使用CNN 进行多类别分类}
+
+在前几章中我们已多次使用CNN 来完成回归任务，并使用$Smooth L_1$损失函数进行梯度下
+降优化。虽然，分类任务可以看做是一种特殊的回归任务，但显然是$Smooth L_1$损失函数
+并不适合于分类问题。下面我们将介绍用于回归问题的Softmax 激活函数和交叉熵损失函数。
+
+\subsection{Softmax激活函数}
+
+对于分类任务，首先我们考虑如何表示类别信息，目前最常用的表示方法当属One-Hot表示
+法——即对于一个$N$类别分类问题，我们使用一个N元组 $(p_1, \cdots, p_N)$ 表示其类别信
+息，其中$p_i$为目标属于第$i$类的概率。例如，对于真实类别为$j$的目标，可令$p_j$等
+于1而其他项等于0。
+
+于是，对于一个用于N类别分类问题的神经网络，我们很自然的选择One-Hot形式的表示作为
+网络的最后一层输出，即最后一层的第$i$个神经元输出目标属于第$i$类的概率，由于输出
+的是概率值，因此我们要选择特殊的激活函数以将输出幅度限制在0到1之间。一种选择是使
+用Sigmoid函数，不过后来人们根据广义线性模型提出了更加适合该问题的Softmax函数：
+
+\[
+p(y=j|\mathbf{x};\mathbf{w}) = \frac{e^{\mathbf{x}^T\mathbf{w}_j}}{\sum_{i}^{K}{e^{\mathbf{x}^T\mathbf{w}_k}}}
+\]
+
+其中$w$为网络权重参数。
+
+\subsection{交叉熵损失函数}
+
+选择了Softmax 激活函数，自然也要选择与之配套的损失函数。最小二乘损失是一个很容易
+想到的损失函数，但是却未必是最适合多分类问题的损失函数。业已证明，最适合与
+Softmax 激活函数配合使用以进行多目标分类的损失函数是交叉熵损失函数：
+
+\[
+Loss(\mathbf{x}) = \sum_{j=1}^{K}[y = j]\log{p(y=j|\mathbf{x};\mathbf{w})}
+\]
+
+其中$[y = j]$为指示函数，当$y = j$时为1，否则为0。
+
+现在我们求交叉熵损失函数对Softmax 层参数$w$的导数，为此我们引入如下记号：$x$代表
+Softmax 层输入；$L$代表损失函数，$o_j = p(y=j|\mathbf{x};\mathbf{w})$，即Softmax层
+第$j$个神经元的输出；$z_j = \mathbf{x}^T\mathbf{w_j}$。于是根据上述定义和链式求
+导法则，我们有：
+
+\[
+\frac{\partial{L}}{\partial{w_{ji}}} & = &
+\frac{\partial{L}}{\partial{o_i}}\frac{\partial{o_i}}{\partial{x_i}}\frac{\partial{x_i}}{\partial{w_{ji}}}
+\\
+& = & (o_i-[y = i])o_j
+\]
+
+我们记$t_i$为样本的实际类别信息，即$t_i = 1$当且仅当$y = i$，否则为0。因此我们可
+以将上述导数公式写为梯度形式：
+
+\[
+\Delta_{\mathbf{w}}{L} & = & (\mathbf{o} - \mathbf{t}) \times \mathbf{o}
+\]
+
+其中$\mathbf{o}, \mathbf{t}$为$o_i, t_i$的向量形式，$\times$表示外积（叉积）。有
+了上述梯度公式，我们就可以通过反向传播算法对CNN 进行训练。
+
+\section{使用CNN 进行车牌字符识别}
 
 \subsection{模型设计}
+
+根据之前的叙说，我们设计一个包含两个卷积层和一个池化层的CNN 进行字符识别，网络的
+最后一层使用Softmax 激活函数，其它层则使用ReLU。此外，为了使识别更有效的进行，我
+们将中文字符和英文、数字字符分开进行识别，并分别对这类字符训练两个不同的CNN。
 
 \begin{figure}[ht]
   \centering
@@ -845,9 +937,40 @@ Python语言和最新版的OpenCV（需手工编译最新版）开发完成。
   \caption{用于字符识别的CNN}\label{Fig:CNNForRecog}
 \end{figure}
 
+\subsection{算法实现}
+
+本章所用CNN基于Google出品的著名开源深度学习引擎
+TensorFlow\footnote{https://www.tensorflow.org}进行实现，开发语言为Python，此外
+还需要开源库Keras 进行配合。本章两个神经网络训练训练参数见表\ref{Tab:RecogCNNArgs}：
+
+\begin{table}[ht]
+\centering
+\caption{CNN训练参数}\label{Tab:RecogCNNArgs}
+\begin{tabular}{|c|c|}
+\hline
+  batch大小 & 128 \\
+\hline
+  迭代次数 & 20 \\
+\hline
+  验证集站训练集比例 & 20\% \\
+\hline
+  优化算法 & AdaDelta\cite{Zeiler:2012uw} \\
+\hline
+\end{tabular}
+\end{table}
+
 \subsection{实验结果}
 
+训练结果表明，网络在中文识别任务上可以达到92\%的准确率，在英文和数字集上的达到
+99\%的准确率，充分说明其在字符识别问题上的有效性。
+
+同时，分析和实验发现，当训练数据集比较小的时候，很容易发生过拟合现象而导致测试识
+别率反而下降，因此为了进一步提升精度，我们需要使用更大的训练集进行训练。
+
 \section{本章小结}
+
+本章提出了使用CNN 进行字符识别的模型，并通过实验验证了其在车牌识别问题上的有效性，
+从而完成了车牌识别系统中最后也是最关键的一步。
 
 \chapter{总结与展望}
 
