@@ -126,18 +126,15 @@ Network\cite{He:2015tt}。
 
 \section{本文的内容安排}
 
-一般的车牌识别系统主要分为如下几步进行：
+一般的车牌识别系统结构如图\ref{Fig:SystemArch}：
 
-\begin{enumerate}
-\item 图像采集
-\item 图像预处理
-\item 车牌检测
-\item 车牌精确定位
-\item 车牌字符分割
-\item 车牌字符识别
-\end{enumerate}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{./Figure/SystemArch.eps}
+  \caption{车牌识别系统结果图}\label{Fig:SystemArch}
+\end{figure}
 
-其中，车牌检测、车牌精确定位、车牌字符分割和车牌字符识别则是整个系统的核心和难点，
+显然，车牌检测、车牌精确定位、车牌字符分割和车牌字符识别则是整个系统的核心和难点，
 本文也着重对这四个子问题进行分析研究。
 
 本文的内容安排如下：
@@ -187,7 +184,7 @@ R-CNN、Fast R-CNN和Faster R-CNN。然后通过Faster R-CNN 技术实现了自�
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\linewidth]{./Figure/ResNetTrainError.jpg}
-  \caption{Residual Network训练误差曲线\cite{He:2015tt}}
+  \caption{文献\cite{He:2015tt}中Residual Network训练损失曲线}
 \end{figure}
 
 \subsection{卷积层}
@@ -284,12 +281,19 @@ Residual Network的思想是，既然我们使用梯度下降法使一个多层�
 些。虽然我们无法从数学上证明该结论，但是实验表明这种方法确实可行、有效。
 
 图\ref{Fig:ResBlock} 所示的结构为构成被称之为Residual Block，其中的weight layer
-一般是多个卷积层及配套的池化层。一个Residual Network则有多个Residual Block堆叠而成。
+一般是多个卷积层及配套的池化层（图 \ref{Fig:ResBlockActual}。一个Residual Network则有多个Residual Block堆叠而成。
 
 \begin{figure}
   \centering
   \includegraphics[width=0.8\linewidth]{./Figure/ResBlock.png}
   \caption{Residual Block\cite{He:2015tt}}\label{Fig:ResBlock}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\linewidth]{./Figure/ResBlockActual.png}
+  \caption{用于ImageNet识别的Residual Network所使用的Residual
+    Block}\label{Fig:ResBlockActual}
 \end{figure}
 
 \section{使用卷积神经网络进行车牌精确定位}
@@ -314,7 +318,7 @@ Augmentation），具体来讲就是对图片进行随机的旋转和放缩，�
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/ResNet34Reg.jpg}
+  \includegraphics[width=0.8\linewidth]{./Figure/ResNet34Reg.eps}
   \caption{用于回归的34层Residual Network}\label{Fig:ResNet34Reg}
 \end{figure}
 
@@ -325,9 +329,10 @@ Augmentation），具体来讲就是对图片进行随机的旋转和放缩，�
 
 训练数据集大小为900张，测试数据集为100张，训练使用参数见表 \ref{Tab:LocationArgs}。
 
-\begin{tabular}{|c|c|}
-\caption{车牌精确定位网络参数}\label{Tab:LocationArgs}
+\begin{table}[ht]
 \centering
+\caption{车牌精确定位网络参数}\label{Tab:LocationArgs}
+\begin{tabular}{|c|c|}
 \hline
 batch尺寸 & 25 \\
 \hline
@@ -340,6 +345,7 @@ GPU数量 & 2 \\
 损失函数 & $Smooth L_1$损失函数 \\
 \hline
 \end{tabular}
+\end{table}
 
 \subsection{实验结果与分析}
 
@@ -605,17 +611,37 @@ bbox用于Faster R-CNN 的训练。
 
 训练数据集图片为900张，测试数据集图片为100张，模型参数见表 \ref{Tab:FasterRCNNArgs}。
 
-\begin{tabular}{|c|c|}
-\caption{Faster R-CNN参数}\label{Tab:FasterRCNNArgs}
+\begin{table}[ht]
 \centering
+\caption{Faster R-CNN参数}\label{Tab:FasterRCNNArgs}
+\begin{tabular}{|c|c|}
 \hline
 \hline
 \end{tabular}
+\end{table}
 
 \subsection{实验结果与分析}
 
 经过训练，Faster R-CNN在100张测试数据集上精度达到84.54\%，相信如果换用更大的训练
 数据集后效果还可进一步提升。
+
+\begin{figure}[ht]
+\centering
+\subcaptionbox{分类损失曲线}
+{\includegraphics[width=.45\linewidth]{./Figure/RPNClsLoss.eps}}
+\subcaptionbox{BBox 回归任务损失曲线}
+{\includegraphics[width=.45\linewidth]{./Figure/RPNBBoxLoss.eps}}
+\caption{RPN训练损失曲线}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\subcaptionbox{分类损失曲线}
+{\includegraphics[width=.45\linewidth]{./Figure/RCNNClsLoss.eps}}
+\subcaptionbox{BBox 回归任务损失曲线}
+{\includegraphics[width=.45\linewidth]{./Figure/RCNNBBoxLoss.eps}}
+\caption{Fast R-CNN训练损失曲线}
+\end{figure}
 
 识别举例图
 
@@ -627,27 +653,197 @@ py-faster-rcnn，在我们的车牌数据集上进行训练，最后验证其mAP
 
 \chapter{车牌字符分割}
 
-\section{Extremal Region}
+传统的车牌字符分割有两种方法——基于连通域的分割方法和基于直方图垂直投影的分割方法。
+但这两种方法非常显著的缺点：一方面，基于连通域的方法取决于对车牌进行二值化操作的效
+果，而由于车牌受光照、拍摄角度、天气、污损等因素的影响，很难找到一种完美的二值化
+操作方法对图像进行二值化，这大大影响了连通域方法的效果；另一方面，基于直方图垂直
+投影的方法只能处理绝对水平的车牌，对存在倾斜、错切变形的车牌则无能为力，甚至相机
+抖动所产生的图像模糊也会影响该方法的效果，使之无法准确分割。因此本文放弃传统上述
+两种思路，尝试从字符检测与提取的角度来处理车牌字符分割问题。
+
+\section{Extremal Region综述}
+
+\subsection{Extremal Region}
+
+我们首先定义一幅图像$\mathbf{I}$为一个映射$\mathbf{I} : \mathcal{D} \subset
+\mathbb{N}^2 \rightarrow \mathcal{V}$，其中$\mathcal{V}$一般为
+$\{0,\cdots,255\}^3$（即一个色彩空间）。然后，我们定义图像的一个通道为
+$\mathbf{C} : \mathcal{D} \rightarrow \mathcal{S}$，其中$\mathcal{S}$为一个全序
+集并且存在一个映射$f_c : \mathcal{V} \rightarrow \mathbf{S}$将像素值映射到该全序
+集。我们定义$A$为邻接关系$A \subset \mathcal{D} \times \mathcal{D}$，常见的邻接
+关系有4-邻接和8-邻接，在本章的实现中我们使用4-邻接关系。
+
+我们定义图像$I$（或通道$C$）的一个Region为$\mathcal{D}$的一个连续子集（所为连续，
+是指$\forall{p_i, p_j \in \mathcal{R}}, \exists{p_i, q_1, q_2, \cdots, q_n,
+  p_j} : p_iAq_1, q_1Aq_2,\cdots,q_nAp_j$。我们定义Region边界
+$\partial{\mathcal{R}}$w为那些与Region$\mathcal{R}$邻接却不属于$\mathcal{R}$的像
+素的集合，即$\partial{\mathcal{R}} = \{p \in \mathcal{D} \\ \mathcal{R} :
+\exists{q \in \mathcal{R}} : pAq \}$。现在，我们定义\textit{Extremal Region}(ER)
+为那些边界像素值比内部像素高许多的Region，写成数学语言即$\forall{p \in
+  \mathcal{R}}, q \in \partial{\mathcal{R}} : \mathbf{C}(q) > \theta > \mathbf{C}(p)$，其中
+$\theta$为ER 的阈值。由上式的定义，我们注意到一个阈值为$\theta$的ER $r$可以由多个或
+另个阈值为$\theta - 1$的ER 和值为$\theta$的像素和并集：$r = \left( \bigcup{u \in
+    R_{\theta-1}} \right) \cup \left( \bigcup{p \ in \mathcal{D} : \mathbf{C}(p)
+  = \theta} \right)$，这一性质将用于下一节计算CSER 的过程中。
+
+\subsection{Class-specific Extremal Region}
+
+由上一节可知，对于一幅图像，字符区域一定是ER，但反之不然。因此，对于字符提取任务，
+我们只需要将一幅图像的ER 中非字符的那些去掉，只保留字符区域的ER 即可，这样，我们
+的问题就转换为如何识别一个ER 是否包含有效的字符这一判定问题。而Class-specific
+Extremal Region(CSER)\cite{Neumann:2012ik}的核心思想正是通过机器学习的方法，使用一个分类器对ER进行筛
+选，从而快速准确地提取图像中的字符区域。因此整个CSER 算法可以归结为两部分：ER区域
+的产生和ER 区域的判别。
+
+\subsubsection{ER的搜索}
+
+由于阈值为$\theta$的ER 可以由阈值为$\theta-1$的ER 区域所产生，因此我们可以从0开
+始逐步增加阈值$\theta$从而逐步产生ER，这些ER 根据其产生关系可以组成一个树状结构
+（如图\ref{Fig:ERTree}，我们对ER 的搜索过程便是自顶向下遍历这棵树的过程。但是，
+这棵树往往包含数量巨大的ER 区域，若不对搜索过程进行剪枝，则无论是在时间上还是内
+存上都将难以承受。因此，我们在搜索过程中对每个ER 使用识别器进行判别，若其为字符
+区域的概率小于给定阈值，我们则放弃在该节点上的进一步搜索（即剪枝），从而减少大量
+不必要的计算。下一节，我们将描述如何设计这种分类器，以实现对ER 的判别。
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{./Figure/ERTree.png}
+  \caption{ER搜索过程中产生的搜索树}\label{Fig:ERTree}
+\end{figure}
+
+\subsubsection{ER的判别}
+
+若要实现对ER 区域的判别，最简单也是最理想的情况是使用一个复杂分类器（如SVM、CNN）
+直接对ER 区域的图像进行判别。但是此种分类器往往相对较慢，无法达到对实时性的要求。
+因此Neumann等人在发明CSER 时提出使用一些能够快速计算且效果良好的简单特征作为分类
+器的输入进行分类。注意到，我们使用CSER进行字符ER 提取的时候一共使用了两次分类器——第
+一次是使用分类器对ER 搜索树进行剪枝，第二次则为最终输出时对ER 区域进行判别和筛选。
+显然，这两次对分类器的使用有着不同的要求：用于搜索的分类器对精度要求低但要求计算
+速度快；而用于最终输出的分类器对性能要求不高但要求精度更高。因此，我们在此分别设
+计这两个分类器，对于搜索过程中使用的分类器（下文中将称之为分类器1）我们使用少但
+容易计算的特征进行分类，而对于最终输出时使用的分类器（下文中将称之为分类器2）我们使用计
+算量更大但更有效的特征进行分类。
+
+对于分类器1，为了性能需要，我们希望对于阈值为$\theta$的ER 的特征可以从
+$\theta-1$的ER 是的特征快速计算得出，即假设我们已知特征 $\phi(u), \forall{u \in
+  R_{\theta-1}}$，我们希望对每个阈值为$\theta$的ER $r = \left(
+  \bigcup{u \in R_{\theta-1}} \right) \cup \left( \bigcup{p \in \mathcal{D}} :
+  \mathbf{C}(p) = \theta \right)$，其特征$\phi(r) = \left( \oplus{\phi(u)}
+\right) \oplus \left( \oplus{\psi(p)} \right)$，其中$\psi(p)$被称为初始化函数，
+$\oplus$代表将特征进行合并的算子。作者称这类特征Incrementally Computable Descriptors。在文献
+\cite{Neumann:2012ik}中，作者使用了如下Incrementally Computable Descriptors：
+
+\begin{itemize}
+\item \textbf{面积$a$}：ER 区域的面积（即像素数量）。
+\item \textbf{边框（$x_{min}, y_{min}, x_{max}, y_{max}$}：ER区域的右上角和左下角坐标。
+\item \textbf{周长$p$}：ER 区域边界的长度（即像素数量）。
+\item \textbf{欧拉数$\eta$}：欧拉数是二值图像的一种拓扑特征，为连通域数目和孔洞
+  数目之差
+\item \textbf{水平交叉点数$c_i$}：用一个长度为图像高度的向量来
+保存对应行像素在属于ER与不属于ER 之间转变的次数。
+\end{itemize}
+
+对于以上特征，我们可以很容易的找到其对应的初始化函数$\psi(p)$和合并算子$\oplus$，
+因其称这些特征是Incrementally Computable的。
+
+对于分类器2，由于我们需要其精度更高，因此我们除了使用上述的几种Incrementally
+Computable Descriptors外，还使用如下特征：
+
+\begin{itemize}
+\item \text{孔洞面积比$a_h/a$}：其中$a_h$代表ER 区域内孔洞的面积（像素数）。
+\item \text{凸包面积比$a_c/a$}：其中$a_c$为ER 区域凸包的面积。
+\item \text{外轮廓拐点数$\kappa$}：代表ER 区域边界凹角与凸角的变化数目。
+\end{itemize}
+
+最后，有了这些特征我们还需要选择一个合适的分类器，在此我们选择速度快、性能好的
+AdaBoost 分类器。
 
 \section{使用Class-specific Extremal Region进行车牌字符分割}
 
+\subsection{算法设计}
+
+\subsubsection{候选区域的提取}
+
+我们首先将一幅图像划分为$R,G,B,-R,-G,-B,\Delta$七个通道，其中$R,G,B$为红、绿、蓝
+三色通道，$-R,-G,-B$为对相应颜色通道进行反转所得到的通道，$\Delta$为梯度。然后我
+们分别对这些通道提取CSER作为候选区域。
+
+\subsubsection{候选区域的进一步筛选}
+
+得到所有CSER 后，仍不免有很多误判和包含不完整字符的区域（如图\ref{Fig:AllERs}），
+在此我们就需要使用一些车牌字符的性质对这些候选区域进行进一步筛选。
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{./Figure/AllERs.png}
+\end{figure}
+
+在我们的算法中我们从如下方面对候选字符区域进行筛选：
+
+\begin{itemize}
+\item \textbf{长宽比} 根据中华人民共和国公共安全行业标准GA36— 2007中关于车牌的相关
+  规定，我们限定候选字符的长宽比在区间0.3到10之间
+\item \textbf{尺寸} 我们根据候选区域相对于图像的尺寸，去除那些过大或过小的区域
+\item \textbf{区域中心位置} 根据区域的中心位置，合并那些IoU 较大的候选区域，去除
+  不可行的区域
+\end{itemize} 
+
+此外，有时候可能会出现缺失部分字符的情况，在这种时候我们将根据已取得的字符位置和
+尺寸，对缺失的字符区域进行推算。
+
+通过上述步骤，最终我们得到车牌中后六个字符的位置（即英文和数字部分），接下来，我
+们将通过这六个字符的位置推算中文字符位置
+
+\subsubsection{中文字符的处理}
+
+由于CSER 是基于连通域进行字符提取的，因此它无法直接处理中文这种由多个连通域组成
+的字符（如“穿”、“京”）。为了解决这一问题，在本文中我们使用的方法是，仅使用CSER
+提取车牌中的英文和数字，然后根据车牌的结构特点和字符间的相对位置关系对中文字符的
+位置进行推算。
+
 \subsection{算法实现}
+
+CSER的相关算法已经在最新版的OpenCV
+Contrib\footnote{https://github.com/Itseez/opencv_contrib}中得以实现；CSER所使用
+的两个分类器的训练则由作者基于OpenCV使用C++开发完成；最后整个字符分割模块使用
+Python语言和最新版的OpenCV（需手工编译最新版）开发完成。
 
 \subsection{实验效果}
 
 \begin{figure}[th]
-  \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/TextSegmentation.png}
-  \caption{车牌字符分割}\label{Fig:TextSeg}
+\centering
+\subcaptionbox{示例1}
+{\includegraphics[width=1\linewidth]{./Figure/TextSegmentation.png}}
+\subcaptionbox{示例1}
+{\includegraphics[width=1\linewidth]{./Figure/TextSegmentation2.png}}
+\caption{车牌字符分割}\label{Fig:TextSeg}
 \end{figure}
 
+可以看出基于CSER 的车牌分割方法即使在车牌有旋转、变形、污损的情况下，仍可以准确
+的从车牌图像中找寻到字符外接轮廓，具有极强的鲁棒性，且检测速度快，非常适用于车牌
+识别系统中并代替传统的字符分割方法。
+
 \subsection{本章小结}
+
+本章受自然场景中字符识别任务的启发，提出使用CSER 技术对车牌图像中的字符进行分割、
+提取，克服了传统方法的诸多缺点，具有准确率高、鲁棒性强、性能好等特点。但是另一方
+面，本方法仍称不上完美，还有许多可以改进的空间：其一，CSER 对字符区域的提取基于连
+通域，而中文字符由于其往往包含多个连通域（如“川”字），因此不能直接使用CSER 技术进
+行提取，一种可行的改进是使用\cite{Neumann:2011dy}中提出的搜索方法对ER 区域进行合
+并操作，以求取中文字符；另一方面，可以在CSER 算法中加入非极大抑制来对ER 进行预筛
+选。此外，由于CSER 算法具有并行的特点，因此可以考虑进行GPU 加速来提升执行性能。
 
 \chapter{车牌字符识别}
 
 \section{使用CNN进行车牌字符识别}
 
 \subsection{模型设计}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=\textheight,keepaspectratio]{./Figure/CNNForRecognition.png}
+  \caption{用于字符识别的CNN}\label{Fig:CNNForRecog}
+\end{figure}
 
 \subsection{实验结果}
 
