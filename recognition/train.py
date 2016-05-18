@@ -6,6 +6,7 @@ import cv2
 
 import models
 
+nb_epoch = 20
 batch_size = 128
 
 with open(os.path.join('data', 'chinese_data.pkl'), 'rb') as f:
