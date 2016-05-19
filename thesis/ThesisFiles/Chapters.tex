@@ -255,25 +255,25 @@ smooth_{L_1}(x) =
 数的梯度，并根据梯度对网络参数进行优化：
 
 \[
-\mathbf{w} = \mathbf{w} - \alpha\Delta_{\mathbf{w}}{Loss}
+\mathbf{w} = \mathbf{w} - \alpha\nabla_{\mathbf{w}}{Loss}
 \]
 
 其中$\alpha$控制参数更新的程度，被称为学习率。于是现在我们的问题转换成了如何求取
-损失关于网络参数的梯度$\Delta_{\mathbf{w}}{Loss}$。事实上，在多层感知机模型出现
+损失关于网络参数的梯度$\nabla_{\mathbf{w}}{Loss}$。事实上，在多层感知机模型出现
 之初，当时的神经网络研究者被这个问题困扰了10年之久，直到1986年前后Hinton 等人重新
 发明反向传播算法，从而解决了这个问题。下面我们将简要介绍反向传播算法的原理。
 
 为了叙述方便，我们定义如下记号：$\mathbf{a}^{l}$代表第l层网络的输出，
 $\mathbf{w}^{l}$代表第l层网络的权重参数，$\sigma$代表激活函数，
 $\mathbf{z}^{l}$满足$\mathbf{a}^{l} = \sigma(\mathbf{z}^{l})$，
-$\mathbf{\delta}^{l} = \Delta_{\mathbf{z}^l}{Loss}$损失函数关于$\mathbf{z}^l$的
+$\mathbf{\delta}^{l} = \nabla_{\mathbf{z}^l}{Loss}$损失函数关于$\mathbf{z}^l$的
 梯度。注意，上述粗体记号均为向量。根据上述定义和链式求导法则，我们可以得到以下方
 程组：
 
 \[
-  \mathbf{\delta}^L = \Delta_{\mathbf{a}^L}{Loss} \odot \sigma'(\mathbf{z}^L) \\
+  \mathbf{\delta}^L = \nabla_{\mathbf{a}^L}{Loss} \odot \sigma'(\mathbf{z}^L) \\
   \mathbf{delta}^l = ((\mathbf{w}^{l+1}\mathbf{\delta}^{l+1})) \odot \sigma'(\mathbf{z}^l) \\
-  \Delta_{\mathbf{w}^l}{Loss} = \mathbf{\delta}^l \times \mathbf{a}^{l-1} \\
+  \nabla_{\mathbf{w}^l}{Loss} = \mathbf{\delta}^l \times \mathbf{a}^{l-1} \\
 \]
 
 其中，$\odot$表示向量汉密尔顿积，$\times$表示向量叉积（内积）。注意到在此方程组
@@ -447,7 +447,7 @@ R-CNN模型使用CNN 提取特征的特性，使得它在Pascal VOC 数据集上
 
 上一节末我们提到了原始的 R-CNN 模型有两大缺陷严重限制了其应用场景与范围。为了解决
 这两大不足，Girshick在R-CNN 的基础上进行了改进，提出了 Fast R-CNN 模型
-\cite{Girshick:2015ib}，如图 \ref{Fig:FastRCNN.jpg}。相对于R-CNN，Fast R-CNN的改
+\cite{Girshick:2015ib}，如图 \ref{Fig:FastRCNN}。相对于R-CNN，Fast R-CNN的改
 进有两点：
 
 \begin{itemize}
@@ -699,15 +699,16 @@ $\mathbf{C} : \mathcal{D} \rightarrow \mathcal{S}$，其中$\mathcal{S}$为一�
 我们定义图像$I$（或通道$C$）的一个Region为$\mathcal{D}$的一个连续子集（所为连续，
 是指$\forall{p_i, p_j \in \mathcal{R}}, \exists{p_i, q_1, q_2, \cdots, q_n,
   p_j} : p_iAq_1, q_1Aq_2,\cdots,q_nAp_j$。我们定义Region边界
-$\partial{\mathcal{R}}$w为那些与Region$\mathcal{R}$邻接却不属于$\mathcal{R}$的像
+$\partial{\mathcal{R}}$为那些与Region$\mathcal{R}$邻接却不属于$\mathcal{R}$的像
 素的集合，即$\partial{\mathcal{R}} = \{p \in \mathcal{D} \\ \mathcal{R} :
 \exists{q \in \mathcal{R}} : pAq \}$。现在，我们定义\textit{Extremal Region}(ER)
 为那些边界像素值比内部像素高许多的Region，写成数学语言即$\forall{p \in
   \mathcal{R}}, q \in \partial{\mathcal{R}} : \mathbf{C}(q) > \theta > \mathbf{C}(p)$，其中
 $\theta$为ER 的阈值。由上式的定义，我们注意到一个阈值为$\theta$的ER $r$可以由多个或
-另个阈值为$\theta - 1$的ER 和值为$\theta$的像素和并集：$r = \left( \bigcup{u \in
+零个阈值为$\theta - 1$的ER 和值为$\theta$的像素和并集：$r = \left( \bigcup{u \in
     R_{\theta-1}} \right) \cup \left( \bigcup{p \ in \mathcal{D} : \mathbf{C}(p)
-  = \theta} \right)$，这一性质将用于下一节计算CSER 的过程中。
+  = \theta} \right)$构成，，其中\(R_{\theta-1}\)表示阈值为\(\theta_1\)的 ER。这
+一性质将用于下一节计算CSER 的过程中。
 
 \subsection{Class-specific Extremal Region}
 
@@ -747,39 +748,45 @@ Extremal Region(CSER)\cite{Neumann:2012ik}的核心思想正是通过机器学�
 容易计算的特征进行分类，而对于最终输出时使用的分类器（下文中将称之为分类器2）我们使用计
 算量更大但更有效的特征进行分类。
 
-对于分类器1，为了性能需要，我们希望对于阈值为$\theta$的ER 的特征可以从
+为了性能需要，我们希望对于阈值为$\theta$的ER 的特征可以从
 $\theta-1$的ER 是的特征快速计算得出，即假设我们已知特征 $\phi(u), \forall{u \in
   R_{\theta-1}}$，我们希望对每个阈值为$\theta$的ER $r = \left(
   \bigcup{u \in R_{\theta-1}} \right) \cup \left( \bigcup{p \in \mathcal{D}} :
   \mathbf{C}(p) = \theta \right)$，其特征$\phi(r) = \left( \oplus{\phi(u)}
 \right) \oplus \left( \oplus{\psi(p)} \right)$，其中$\psi(p)$被称为初始化函数，
-$\oplus$代表将特征进行合并的算子。作者称这类特征Incrementally Computable Descriptors。在文献
-\cite{Neumann:2012ik}中，作者使用了如下Incrementally Computable Descriptors：
+$\oplus$代表将特征进行合并的算子。作者称这类特征可增量计算描述子。在文献
+\cite{Neumann:2012ik}中，作者首先定义了如下可增量计算描述子：
 
 \begin{itemize}
 \item \textbf{面积$a$}：ER 区域的面积（即像素数量）。
 \item \textbf{边框（$x_{min}, y_{min}, x_{max}, y_{max}$}：ER区域的右上角和左下角坐标。
 \item \textbf{周长$p$}：ER 区域边界的长度（即像素数量）。
 \item \textbf{欧拉数$\eta$}：欧拉数是二值图像的一种拓扑特征，为连通域数目和孔洞
-  数目之差
-\item \textbf{水平交叉点数$c_i$}：用一个长度为图像高度的向量来
-保存对应行像素在属于ER与不属于ER 之间转变的次数。
+  数目之差。
+\item \textbf{水平交叉点数$c_i$}：用一个长度为图像高度的向量来保存对应行像素在属于ER与不属于ER 之间转变的次数。
 \end{itemize}
 
-对于以上特征，我们可以很容易的找到其对应的初始化函数$\psi(p)$和合并算子$\oplus$，
-因其称这些特征是Incrementally Computable的。
+对于以上描述子，我们可以很容易的找到其对应的初始化函数$\psi(p)$和合并算子
+$\oplus$。
 
-对于分类器2，由于我们需要其精度更高，因此我们除了使用上述的几种Incrementally
-Computable Descriptors外，还使用如下特征：
+对于分类器1，我们基于基于上面的描述子使用如下特征：
 
 \begin{itemize}
-\item \text{孔洞面积比$a_h/a$}：其中$a_h$代表ER 区域内孔洞的面积（像素数）。
-\item \text{凸包面积比$a_c/a$}：其中$a_c$为ER 区域凸包的面积。
-\item \text{外轮廓拐点数$\kappa$}：代表ER 区域边界凹角与凸角的变化数目。
+\item \textbf{长宽比}($w/h$)
+\item \textbf{compactness}($\sqrt{a}/p$)
+\item \textbf{孔洞数}($1-\eta$)
+\item \textbf{水平交叉点特征}($\hat{c}=median(\mathbf{c}_{\frac{1}{6}w}, \mathbf{c}_{\frac{3}{6}w}, \mathbf{c}_{\frac{5}{6}w})$)
 \end{itemize}
 
-最后，有了这些特征我们还需要选择一个合适的分类器，在此我们选择速度快、性能好的
-AdaBoost 分类器。
+对于分类器2，由于我们需要其精度更高，因此我们额外使用如下特征：
+
+\begin{itemize}
+\item \textbf{孔洞面积比$a_h/a$}：其中$a_h$代表ER 区域内孔洞的面积（像素数）。
+\item \textbf{凸包面积比$a_c/a$}：其中$a_c$为ER 区域凸包的面积。
+\item \textbf{外轮廓拐点数$\kappa$}：代表ER 区域边界凹角与凸角的变化数目。
+\end{itemize}
+
+此外，为了平衡性能与训练难度，两个分类器我们均采用基于决策树的AdaBoost分类器。
 
 \section{使用Class-specific Extremal Region进行车牌字符分割}
 
@@ -787,8 +794,8 @@ AdaBoost 分类器。
 
 \subsubsection{候选区域的提取}
 
-我们首先将一幅图像划分为$R,G,B,-R,-G,-B,\Delta$七个通道，其中$R,G,B$为红、绿、蓝
-三色通道，$-R,-G,-B$为对相应颜色通道进行反转所得到的通道，$\Delta$为梯度。然后我
+我们首先将一幅图像划分为$R,G,B,-R,-G,-B,\nabla$七个通道，其中$R,G,B$为红、绿、蓝
+三色通道，$-R,-G,-B$为对相应颜色通道进行反转所得到的通道，$\nabla$为梯度。然后我
 们分别对这些通道提取CSER作为候选区域。
 
 \subsubsection{候选区域的进一步筛选}
@@ -907,17 +914,16 @@ Softmax 层输入；$L$代表损失函数，$o_j = p(y=j|\mathbf{x};\mathbf{w})$
 导法则，我们有：
 
 \[
-\frac{\partial{L}}{\partial{w_{ji}}} & = &
+\frac{\partial{L}}{\partial{w_{ji}}}  = 
 \frac{\partial{L}}{\partial{o_i}}\frac{\partial{o_i}}{\partial{x_i}}\frac{\partial{x_i}}{\partial{w_{ji}}}
-\\
-& = & (o_i-[y = i])o_j
+=  (o_i-[y = i])o_j
 \]
 
 我们记$t_i$为样本的实际类别信息，即$t_i = 1$当且仅当$y = i$，否则为0。因此我们可
 以将上述导数公式写为梯度形式：
 
 \[
-\Delta_{\mathbf{w}}{L} & = & (\mathbf{o} - \mathbf{t}) \times \mathbf{o}
+\nabla_{\mathbf{w}}{L} = (\mathbf{o} - \mathbf{t}) \times \mathbf{o}
 \]
 
 其中$\mathbf{o}, \mathbf{t}$为$o_i, t_i$的向量形式，$\times$表示外积（叉积）。有
