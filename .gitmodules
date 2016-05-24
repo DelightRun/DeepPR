@@ -4,3 +4,6 @@
 [submodule "segmentation/erfilter_train"]
 	path = segmentation/erfilter_train
 	url = git@github.com:DelightRun/erfilter_train.git
+[submodule "detection"]
+	path = detection
+	url = https://github.com/DelightRun/py-faster-rcnn.git
