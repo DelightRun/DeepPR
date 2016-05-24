@@ -13,16 +13,16 @@
 性；
 
 第二，本文对车牌检测方法展开研究。车牌定位是整个系统的第一步，直接决定了后续步
-骤是否能正确进行。传统的车牌检测方法有：基于边缘检测的方法、基于形态学的方法、基
-于颜色划分的方法和基于纹理特征的方法。然而这些方法由于过度依赖人工设定的特征和规
-则，有着不够鲁棒、缺乏语义信息等缺点。Region CNN（简称RCNN）技术是近几年新出现的
+骤是否能正确进行。Region CNN（简称RCNN）技术是近几年新出现的
 一种新的目标检测算法，并在诸多数据集的测试中取得了目前最优的效果。本文将研究如何通
-过RCNN 技术进行车牌检测；
+过RCNN 技术进行车牌检测。
 
-第三，本文尝试使用CNN 回归车牌顶点坐标的方法以实现车牌定位，来克服传统方法严重
-依赖手工特征和手工规则、鲁棒性差等缺点。
+第三，传统的车牌定位方法有：基于边缘检测的方法、基于形态学的方法、基
+于颜色划分的方法和基于纹理特征的方法。然而这些方法由于过度依赖人工设定的特征和规
+则，有着不够鲁棒、缺乏语义信息等缺点。本文尝试使用CNN 回归车牌顶点坐标的方法以实
+现车牌定位，来克服传统方法严重依赖手工特征和手工规则、鲁棒性差等缺点。
 
-第四，本文对车牌字符分割方法展开研究。车牌字符分割问题可以看做对车牌图片中的文字进行
+第四，车牌字符分割问题可以看做对车牌图片中的文字进行
 提取的问题。关于自然场景中的文字提取，已有大量相关研究，其中基于Extremal Region
 （简称ER）的方法取得了非常理想的效果。基于ER的方法可分为Maximum Stable
 Extremal Region（简称MSER）和Class-specific ER（简称CSER）两种。本文
@@ -41,53 +41,59 @@ Extremal Region（简称MSER）和Class-specific ER（简称CSER）两种。本�
 \begin{enabstract}
 With the continued increase in vehicle ownership in China in recent years,
 intelligent transportation system and autopilot technology has became a very
-popular field of research. As the foundation and key of these two technologies,
-the vehicle license plate recognition technology has great significance in both
+popular research field. As the foundation and key of these two technologies,
+the vehicle license plate recognition technology is of great importance in both
 research and application. Many experts and scholars have started the in-depth
 research on vehicle license plate recognition, and many new technologies and
 methods have be introduced. In addition, with the development of machine
 learning technology, especially deep learning technology which is based on
-neural network, many of the relevant technologies is widely used in computer
-vision tasks and have achieved state-of-art results. This paper focuses on four
-essential subsystem in the vehicle license plate recognition system involved
-detection, location, segmentation and recognition. We implement a simple vehicle
+neural network, many of the relevant technologies are widely used in computer
+vision tasks and have achieved promising results. This paper focuses on four
+essential subsystem in the vehicle license plate recognition system including
+detection, localization, segmentation and recognition. We implement a simple vehicle
 license plate recognition systems based on the up to date deep learning
-technologies. We summarize the whole wore as follows:
+technologies. We summarize the whole work as follows:
+
 First, we illustrates the certain necessity of the research and implementation
 of this vehicle license plate recognition system by describing the background and
 significance of the research.
-Second, this paper researches vehicle license plate detection methods.
-License plate detection is the first step of the entire system, it will
-determine whether the next steps can execute correctly. Traditional methods of
-license plate detection inclueds: Edge-based approach, morphology-based
-approach, color-based approach and projection-based approach. But these methods
-are highly dependent on hand-made features and rules, so they all has some
+
+Second, this paper studies vehicle license plate detection methods.
+License plate detection is the first step of the entire system, it is vital for
+the success of the steps afterwards. Traditional methods of
+license plate detection include: Edge-based approach, morphology-based
+approach, color-based approach and projection-based approach. However, these methods
+are highly dependent on hand-made features and rules, so they all exhibit some
 disadvantages such as poor robustness and lack of context information. In recent
 years, a new approach called Region CNN(RCNN) is proposed for object detection
-task, and get state-of-art results on many test datasets. This paper will
-researches the approach of vehicle license plate detection based on RCNN
+task, and have shown promising results on many test datasets. This paper will
+present an approach of vehicle license plate detection based on RCNN
 technology.
-Third, in this paper, we try to location vehicle license plate by regressing the
+
+Third, in this paper, we try to localize vehicle license plate by regressing the
 vertex positions using CNN, in order to overcome the shortcomings of traditional
-methods such as the dependency of hand-made features and features as well as the
+methods such as the dependency of hand-made features as well as the
 poor robustness.
-Fourth, this paper studies some license plate segmentation methos. The vehicle
-license plate segmentation problem can be view as the problem of detecting
+
+Fourth, this paper studies some license plate segmentation methods. The vehicle
+license plate segmentation problem can be viewed as the problem of detecting
 characters from license plate pictures. There are lots of researches on text
-extraction from natural scence, and a popular approach called Extremal Region(ER)
-get the state-of-art result on this task. The methods based on ER can be mainly
+extraction, among which a popular approach called Extremal Region(ER)
+gets the state-of-the-art result on this task. The methods based on ER can be mainly
 divided into two kind: Maximum Stable Extremal Region(MSER) and Class-specific
-ER(CSER). In this paper, we test on both of these two methods, and found that
+ER(CSER). In this paper, we test both of these two methods, and found that
 the CSER method can overcome many shortcomings of MSER and has a better result.
-So we use the CSER way in our final system.
+So we use CSER in our final system.
+
 Fifth, in the field of image recognition, there is no doubt that CNN is the
 state-of-art approach currently, it has a higher accuracy and a better
-robustness. So we adapt the CNN for license plate recognition in our final
+robustness. So we adopt the CNN for license plate recognition in our final
 system.
+
 Sixth, through the study of the technologies above, this paper implements a
 simple license plate recognition system. In our recognition system, we use RCNN
 for detection, CNN regression for location, CSER for character segmentation and
-CNN for the final recognition.\cite{Ren:2015ug}
+CNN for the final recognition, respectively.
 \end{enabstract}
 \enkeywords{vehicle license plate detection, vehicle license plate location,
   vehicle license character segmentation, vehicle license plate recognition,

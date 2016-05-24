@@ -129,8 +129,8 @@ Network\cite{He:2015tt}。
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/SystemArch.eps}
-  \caption{车牌识别系统结果图}\label{Fig:SystemArch}
+  \includegraphics[height=0.5\textheight, keepaspectratio]{./Figure/SystemArch.eps}
+  \caption{车牌识别系统结构图}\label{Fig:SystemArch}
 \end{figure}
 
 显然，车牌检测、车牌精确定位、车牌字符分割和车牌字符识别则是整个系统的核心和难点，
@@ -232,31 +232,31 @@ R-CNN、Fast R-CNN和Faster R-CNN。然后通过Faster R-CNN 技术实现了自�
 一般回归问题经常使用最小均方误差作为损失函数，但在许多回归问题上，人们倾向使
 用$Smooth L_1$损失函数：
 
-\[
+\begin{align}
 smooth_{L_1}(x) = 
 \begin{cases}
 0.5x^2 & if |x| < 1 \\
 |x| - 0.5 & otherwise \\
 \end{cases}
-\]
+\end{align}
 
 \subsection{反向传播算法}
 
 和其他机器学习算法一样，我们需要找到一种算法能够对神经网络进行训练。事实上，神经
 网络的训练可以看作是一个最优化问题：
 
-\[
+\begin{align}
 \min_{\mathbf{w}}{Loss}
-\]
+\end{align}
 
 其中，$\mathbf{w}$神经网络模型参数，即每层神经元的权重，$Loss$代表损失值，用于度
 量神经网络输出与真实值之间的误差大小。显然，这个优化问题是一个高维空间中的非凸优
 化问题，不存在显式的解析解。一种常见做法是基于梯度的优化方法，即求取损失函数对参
 数的梯度，并根据梯度对网络参数进行优化：
 
-\[
+\begin{align}
 \mathbf{w} = \mathbf{w} - \alpha\nabla_{\mathbf{w}}{Loss}
-\]
+\end{align}
 
 其中$\alpha$控制参数更新的程度，被称为学习率。于是现在我们的问题转换成了如何求取
 损失关于网络参数的梯度$\nabla_{\mathbf{w}}{Loss}$。事实上，在多层感知机模型出现
@@ -270,11 +270,11 @@ $\mathbf{\delta}^{l} = \nabla_{\mathbf{z}^l}{Loss}$损失函数关于$\mathbf{z}
 梯度。注意，上述粗体记号均为向量。根据上述定义和链式求导法则，我们可以得到以下方
 程组：
 
-\[
+\begin{align}
   \mathbf{\delta}^L = \nabla_{\mathbf{a}^L}{Loss} \odot \sigma'(\mathbf{z}^L) \\
   \mathbf{delta}^l = ((\mathbf{w}^{l+1}\mathbf{\delta}^{l+1})) \odot \sigma'(\mathbf{z}^l) \\
   \nabla_{\mathbf{w}^l}{Loss} = \mathbf{\delta}^l \times \mathbf{a}^{l-1} \\
-\]
+\end{align}
 
 其中，$\odot$表示向量汉密尔顿积，$\times$表示向量叉积（内积）。注意到在此方程组
 中，损失函数关于$\mathbf{z}^l$的导数$\mathbf{\delta}$沿着网络反向传播，逐层向前
@@ -296,19 +296,13 @@ Residual Network的思想是，既然我们使用梯度下降法使一个多层�
 逼近该映射测残差函数 $F(x) = H(x) - x$，我们猜想拟合残差函数会比拟合原函数容易一
 些。虽然我们无法从数学上证明该结论，但是实验表明这种方法确实可行、有效。
 
-图\ref{Fig:ResBlock} 所示的结构为构成被称之为Residual Block，其中的weight layer
-一般是多个卷积层及配套的池化层（图 \ref{Fig:ResBlockActual}。一个Residual
-Network由多个Residual Block堆叠而成。
+图\ref{Fig:ResBlockActual} 所示的结构为构成被称之为Residual Block，其中的weight layer
+一般是多个卷积层及配套的池化层。一个Residual Network由多个Residual Block堆叠而成。
 
 \begin{figure}
   \centering
-  \includegraphics{./Figure/ResBlock.png}
-  \caption{Residual Block\cite{He:2015tt}}\label{Fig:ResBlock}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics{./Figure/ResBlockActual.png}
+  \includegraphics[height=0.5\textheight,
+  keepaspectratio]{./Figure/ResBlockActual.png}
   \caption{用于ImageNet识别的Residual Network所使用的Residual
     Block}\label{Fig:ResBlockActual}
 \end{figure}
@@ -387,7 +381,7 @@ GPU数量 & 2 \\
 
 所谓车牌检测，即是从一幅图像中找寻包含车牌的子图像，显然这属于目标检测（Object
 Detection）问题。目标检测技术作为一个十分热门的研究领域，经历了从十年前HoG 方法大
-行其道到如今R-CNN 技术一统天下的发展过程。R-CNN 技术于20xx年由xxx提出，随后又出现
+行其道到如今R-CNN 技术一统天下的发展过程。R-CNN 技术于2014年由Ross Girshick等人提出，随后又出现
 了Fast R-CNN和Faster R-CNN 两代的改进。如今, Faster R-CNN 技术不仅在Pascal VOC和
 COCO 两个数据集上的目标检测任务中取得了最佳的效果，而且在借助GPU 加速的情况下做
 到实时检测（0.2s/帧）。因此本章将首先简要介绍R-CNN 系列技术，然后在我们的数据集上
@@ -482,10 +476,10 @@ $H \times W$ 个子窗口网格，每个窗口尺寸大约为 $\frac{h}{H} \time
 映射为RoI 池化层的输出。同时注意到RoI 池化层在反向传播时，梯度公式与普通池化层是
 不同的，RoI 池化层的反向传播公式如下：
 
-\[
+\begin{align}
 \frac{\partial L}{\partial x_i} = \sum_{i}\sum_{j}[i = i^*(r,j)]\frac{\partial
   L}{\partial y_{rj}}
-\]
+\end{align}
 
 其中$y_{rj} = x_{i^*(r,j)}$，$i^*(r,j) = \arg\max_{i'\inR(r,j)}x_{i'}$，$R(r,j)$
 为产生输出单元$y_{rj}$的池化窗口中包含的元素坐标集合。
@@ -509,17 +503,17 @@ $H \times W$ 个子窗口网格，每个窗口尺寸大约为 $\frac{h}{H} \time
 中$k$代表该bbox 为第$k$个物体类别。此外，对每个用于训练的RoI，我们定义真实类别为
 $u$，真实bbox 坐标为$v$。我们定义每个RoI 的多任务损失函数$L$如下：
 
-\[
+\begin{align}
 L(p, u, t^u, v) = L_{cls}(p, u) + \lambda[u \geq 1]L_{loc}(t^u, v)
-\]
+\end{align}
 
 其中，$[u \geq 1]$为指示函数——当$u$大于等于1时为1，否则为0。目标分类的损失函数
 $L_{cls}(p,u) = -\log{p_u}$为对真实类别$u$的对数损失函数。bbox 回归任务的损失函数
 $L_{loc}(t^u,v)$定义如下：
 
-\[
+\begin{align}
 L_{loc}(t^u, v) = \sum_{i\in \{x,y,w,h\}}{smooth_{L_1}(t_i^u-v_i)}
-\]
+\end{align}
 
 在有些时候我们也会用最小二乘损失代替$Smooth_{L_1}$损失函数。
 
@@ -574,9 +568,9 @@ Intersection-over-Union(IoU) 重叠，或者(2) 该Anchor和任一个真实的�
 高于0.7。值得注意的是，根据这种标记方法，一个真实的边框可能会产生多个标记为正例
 的Anchor。有了如上对标记的定义，我们的损失函数定义如下：
 
-\[
+\begin{align}
 L(\{p_i\}, \{t_i\}) = \frac{1}{N_{cls}}\sum_i{L_{cls}(p_i, p_i^*)} + \lambda\frac{1}{N_{reg}}\sum_i{p_i^*L_{reg}(t_i,t_i^*)}
-\]
+\end{align}
 
 在此，$i$为Anchor的下标，$p_i$代表第$i$个Anchor是一个目标物体的概率，$p_i^*$为真
 实值，当Anchor为正例是$p_i^* = 1$，否则是0 。$t_i$是一个四元组，包含表示Anchor坐
@@ -653,18 +647,18 @@ bbox用于Faster R-CNN 的训练。
 \begin{figure}[ht]
 \centering
 \subcaptionbox{分类损失曲线}
-{\includegraphics[width=.45\linewidth]{./Figure/RPNClsLoss.eps}}
+{\includegraphics[width=0.8\linewidth]{./Figure/RPNClsLoss.eps}}
 \subcaptionbox{BBox 回归损失曲线}
-{\includegraphics[width=.45\linewidth]{./Figure/RPNBBoxLoss.eps}}
+{\includegraphics[width=0.8\linewidth]{./Figure/RPNBBoxLoss.eps}}
 \caption{RPN训练损失曲线}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
 \subcaptionbox{分类损失曲线}
-{\includegraphics[width=.45\linewidth]{./Figure/RCNNClsLoss.eps}}
+{\includegraphics[width=0.8\linewidth]{./Figure/RCNNClsLoss.eps}}
 \subcaptionbox{BBox 回归损失曲线}
-{\includegraphics[width=.45\linewidth]{./Figure/RCNNBBoxLoss.eps}}
+{\includegraphics[width=0.8\linewidth]{./Figure/RCNNBBoxLoss.eps}}
 \caption{Fast R-CNN训练损失曲线}
 \end{figure}
 
@@ -890,9 +884,9 @@ Python语言和最新版的OpenCV（需手工编译最新版）开发完成。
 的是概率值，因此我们要选择特殊的激活函数以将输出幅度限制在0到1之间。一种选择是使
 用Sigmoid函数，不过后来人们根据广义线性模型提出了更加适合该问题的Softmax函数：
 
-\[
+\begin{align}
 p(y=j|\mathbf{x};\mathbf{w}) = \frac{e^{\mathbf{x}^T\mathbf{w}_j}}{\sum_{i}^{K}{e^{\mathbf{x}^T\mathbf{w}_k}}}
-\]
+\end{align}
 
 其中$w$为网络权重参数。
 
@@ -902,9 +896,9 @@ p(y=j|\mathbf{x};\mathbf{w}) = \frac{e^{\mathbf{x}^T\mathbf{w}_j}}{\sum_{i}^{K}{
 想到的损失函数，但是却未必是最适合多分类问题的损失函数。业已证明，最适合与
 Softmax 激活函数配合使用以进行多目标分类的损失函数是交叉熵损失函数：
 
-\[
+\begin{align}
 Loss(\mathbf{x}) = \sum_{j=1}^{K}[y = j]\log{p(y=j|\mathbf{x};\mathbf{w})}
-\]
+\end{align}
 
 其中$[y = j]$为指示函数，当$y = j$时为1，否则为0。
 
@@ -913,18 +907,18 @@ Softmax 层输入；$L$代表损失函数，$o_j = p(y=j|\mathbf{x};\mathbf{w})$
 第$j$个神经元的输出；$z_j = \mathbf{x}^T\mathbf{w_j}$。于是根据上述定义和链式求
 导法则，我们有：
 
-\[
+\begin{align}
 \frac{\partial{L}}{\partial{w_{ji}}}  = 
 \frac{\partial{L}}{\partial{o_i}}\frac{\partial{o_i}}{\partial{x_i}}\frac{\partial{x_i}}{\partial{w_{ji}}}
 =  (o_i-[y = i])o_j
-\]
+\end{align}
 
 我们记$t_i$为样本的实际类别信息，即$t_i = 1$当且仅当$y = i$，否则为0。因此我们可
 以将上述导数公式写为梯度形式：
 
-\[
+\begin{align}
 \nabla_{\mathbf{w}}{L} = (\mathbf{o} - \mathbf{t}) \times \mathbf{o}
-\]
+\end{align}
 
 其中$\mathbf{o}, \mathbf{t}$为$o_i, t_i$的向量形式，$\times$表示外积（叉积）。有
 了上述梯度公式，我们就可以通过反向传播算法对CNN 进行训练。
@@ -936,12 +930,6 @@ Softmax 层输入；$L$代表损失函数，$o_j = p(y=j|\mathbf{x};\mathbf{w})$
 根据之前的叙说，我们设计一个包含两个卷积层和一个池化层的CNN 进行字符识别，网络的
 最后一层使用Softmax 激活函数，其它层则使用ReLU。此外，为了使识别更有效的进行，我
 们将中文字符和英文、数字字符分开进行识别，并分别对这类字符训练两个不同的CNN。
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[height=\textheight,keepaspectratio]{./Figure/CNNForRecognition.png}
-  \caption{用于字符识别的CNN}\label{Fig:CNNForRecog}
-\end{figure}
 
 \subsection{算法实现}
 
