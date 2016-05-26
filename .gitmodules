@@ -7,3 +7,6 @@
 [submodule "detection"]
 	path = detection
 	url = https://github.com/DelightRun/py-faster-rcnn.git
+[submodule "location/pytorch"]
+	path = location/pytorch
+	url = https://github.com/hughperkins/pytorch.git
