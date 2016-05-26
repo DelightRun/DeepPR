@@ -4,6 +4,7 @@ require 'cunn'
 require 'cudnn'
 require 'cutorch'
 require 'provider'
+require 'graph'
 
 local c = require 'trepl.colorize'
 
@@ -11,10 +12,10 @@ opt = lapp[[
     -s,--save               (default "logs")            subdirectory to save logs
     -b,--batchSize          (default 25)                batch size
     -r,--learningRate       (default 0.1)               learning rate
-    -n,--nGPU               (default 1)                 number of GPUs
+    -n,--nGPU               (default 2)                 number of GPUs
     --epoch_step            (default 10)                epoch step
-    --model                 (default "resnet-18.t7")    model file
-    --max_epoch             (default 30)                maximum number of iterations
+    --model                 (default "resnet-34.t7")    model file
+    --max_epoch             (default 100)                maximum number of iterations
     --savename              (default "")               model save name, nil for don't save
 ]]
 
@@ -37,6 +38,7 @@ if opt.nGPU > 1 then
     model = dpt:cuda()
 end
 
+
 print(model)
 
 print(c.blue '==>' ..' loading data')
@@ -53,7 +55,7 @@ targets = torch.CudaTensor(opt.batchSize, 8)
 indices = torch.randperm(provider.trainData.X:size(1)):long():split(opt.batchSize)
 
 print(c.blue '==>' ..' setting criterion')
-criterion = nn.MSECriterion():cuda()
+criterion = nn.SmoothL1Criterion():cuda()
 
 
 print(c.blue '==>' ..' configuring optimizer')
@@ -150,8 +152,8 @@ function test()
 
     if testLogger then
         paths.mkdir(opt.save)
-        testLogger:add{avg_error, max_error}
-        testLogger:style{'-', '-'}
+        testLogger:add{avg_error}
+        testLogger:style{'-'}
         testLogger:plot()
     end
 
@@ -188,6 +190,7 @@ if opt.savename ~= "" then
     print(c.blue '==>' ..' compressing best model')
     best_model = torch.load(paths.concat('.', 'models', opt.savename))
     best_model:clearState()
+    best_model:float()
     torch.save(paths.concat('.', 'models', opt.savename), best_model)
 end
 
