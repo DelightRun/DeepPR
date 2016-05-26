@@ -38,7 +38,6 @@ if opt.nGPU > 1 then
     model = dpt:cuda()
 end
 
-
 print(model)
 
 print(c.blue '==>' ..' loading data')
@@ -55,7 +54,7 @@ targets = torch.CudaTensor(opt.batchSize, 8)
 indices = torch.randperm(provider.trainData.X:size(1)):long():split(opt.batchSize)
 
 print(c.blue '==>' ..' setting criterion')
-criterion = nn.SmoothL1Criterion():cuda()
+criterion = nn.MSECriterion():cuda()
 
 
 print(c.blue '==>' ..' configuring optimizer')
