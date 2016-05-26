@@ -1,23 +1,28 @@
 import os
+import numpy
 from keras.utils import np_utils
 
-import models
+from . import models
 
-chinese_model = models.create_chinese_model()
-chinses_model.load_weights(os.path.join('trained_models', 'chinese_weights.h5'))
-chinese_labels = [line.strip() for line in open(os.path.join('labels', 'chinese_labels.txt'), 'r')]
+basedir = os.path.dirname(os.path.realpath(__file__))
+
+# chinese_model = models.create_chinese_model()
+# chinese_model.load_weights(os.path.join(basedir, 'trained_models', 'chinese_weights.h5'))
+# chinese_labels = [line.strip() for line in open(os.path.join(basedir, 'labels', 'chinese_labels.txt'), 'r')]
 
 alnum_model = models.create_alnum_model()
-alnum_model.load_weights(os.path.join('trained_models', 'alnum_weights.h5'))
-alnum_labels = [line.strip() for line in open(os.path.join('labels', 'alnum_labels.txt'), 'r')]
+alnum_model.load_weights(os.path.join(basedir, 'trained_models', 'alnum_weights.h5'))
+alnum_labels = [line.strip() for line in open(os.path.join(basedir, 'labels', 'alnum_labels.txt'), 'r')]
 
-def recognize(char_imgs):
-    chinese_imgs = numpy.asarray(char_imgs[:1]).astype('float32') / 255.0
-    classes = np_utils.to_categorical(chinese_model.predict(chinese_imgs))
-    chinese = [chinese_labels[cls] for cls in classes]
+def recognize(chars):
+    N = len(chars)
+    width, height = chars[0].shape
 
-    alnum_imgs = numpy.asarray(char_imgs[1:]).astype('float32') / 255.0
-    classes = np_utils.probas_to_classes(alnum_model.predict(alnum_imgs, batch_size=6))
-    alnums = [alnum_labels[cls] for cls in classes]
+    chars = numpy.asarray(chars, dtype=numpy.float32).reshape((N, 1, width, height)) / 255.0
 
-    return chinese + alnums
+    # chinese_classes = np_utils.probas_to_classes(chinese_model.predict(chars[:1], batch_size=1))
+    alnum_classes = np_utils.probas_to_classes(alnum_model.predict(chars[1:], batch_size=6))
+    
+    return ['浙'] + \
+           [alnum_labels[cls] for cls in alnum_classes]
+

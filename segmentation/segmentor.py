@@ -8,9 +8,8 @@ from matplotlib import pyplot as plt
 
 models_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'erfilter_train', 'trained_classifiers')
 
-def get_chars(image, minProb1=0.5, minProb2=0.75):
+def segment(image, minProb1=0.5, minProb2=0.75):
     height, width = image.shape[:2]
-    print("Image size: %d x %d" % (width, height))
 
     # Extract channels to be processed individually
     channels = cv2.text.computeNMChannels(image)
@@ -100,7 +99,7 @@ def get_chars(image, minProb1=0.5, minProb2=0.75):
 
     # make rects into image of chars
     def make_img(rect):
-        img = image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2]]
+        img = image[rect[1]:rect[1]+rect[3],rect[0]:rect[0]+rect[2],:]
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         height, width = img.shape[:2]
         border_color = int(round(img.mean()))
@@ -112,7 +111,7 @@ def get_chars(image, minProb1=0.5, minProb2=0.75):
             border_top = int((width - height) / 2)
             border_bottom = width - height - border_top
             img = cv2.copyMakeBorder(img, border_top, border_bottom, 0, 0, cv2.BORDER_CONSTANT, value=border_color)
-        return cv2.resize(img, (50, 50))
+        return cv2.resize(img, (50, 50)).reshape((50,50))
 
     char_imgs = [make_img(rect) for rect in rects]
 
@@ -132,7 +131,7 @@ if __name__ == '__main__':
     minProb1 = float(sys.argv[3]) if len(sys.argv) >= 4 else 0.75
 
     image = cv2.imread(sys.argv[1])
-    rects, char_imgs = get_chars(image)
+    rects, char_imgs = segment(image)
     vis = draw_regions(image, rects)
     f, (ax1, ax2) = plt.subplots(nrows=2, ncols=1)
     ax1.imshow(cv2.cvtColor(vis, cv2.COLOR_BGR2RGB))
