@@ -48,7 +48,7 @@ function Provider:__init()
             for i = 2, 8, 2 do
                 keypoints[i] = tonumber(keypoints[i]) / img:size(2) * img_height
             end
-            img = image.rgb2yuv(image.scale(img, img_width, img_height))
+            img = image.scale(img, img_width, img_height)
 
             if index <= train_size then
                 self.trainData.filenames[index] = filename..'.jpg'
@@ -75,8 +75,8 @@ function Provider:normalize()
         local mean = self.trainData.X:select(2,i):mean()
         local std = self.trainData.X:select(2,i):std()
 
-        self.trainData.X:select(2,2):add(-mean)
-        self.trainData.X:select(2,2):div(std)
+        self.trainData.X:select(2,i):add(-mean)
+        self.trainData.X:select(2,i):div(std)
 
         self.testData.X:select(2,i):add(-mean)
         self.testData.X:select(2,i):div(std)
