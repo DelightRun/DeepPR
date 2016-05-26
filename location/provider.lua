@@ -43,10 +43,10 @@ function Provider:__init()
 
             local img = image.load(paths.concat(".", "images", filename..".jpg"))
             for i = 1, 7, 2 do
-                keypoints[i] = tonumber(keypoints[i]) / img:size(3) * img_width
+                keypoints[i] = tonumber(keypoints[i]) / img:size(3)
             end
             for i = 2, 8, 2 do
-                keypoints[i] = tonumber(keypoints[i]) / img:size(2) * img_height
+                keypoints[i] = tonumber(keypoints[i]) / img:size(2)
             end
             img = image.scale(img, img_width, img_height)
 
