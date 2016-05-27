@@ -31,8 +31,12 @@ def segment(image, minProb1=0.5, minProb2=0.75):
             rect = cv2.boundingRect(region.reshape(-1,1,2))
 
             # filte by height ratio and width-height ratio and x position
-            if rect[0] > 0.05*width and rect[3] >= 0.5*height and rect[2]*0.3 <= rect[3] < rect[2]*10:
+            if rect[2] > 0.05*width and rect[3] >= 0.2*height and rect[2]*0.3 <= rect[3] < rect[2]*10:
                 rects.append(rect)
+
+    if len(rects) == 0:
+        print('Error: cannot detect extremal regions')
+        return [], []
 
     height_mean = np.mean([rect[3] for rect in rects]).tolist()
     rects = [rect for rect in rects if abs(rect[3]-height_mean)/height < 0.15]
@@ -61,14 +65,14 @@ def segment(image, minProb1=0.5, minProb2=0.75):
     def rects_max(rects):
         # TODO better method to get boundary
         x_mins = sorted([rect[0] for rect in rects])
-        x_min = x_mins[min(1, len(x_mins))]
+        x_min = x_mins[min(1, len(x_mins)-1)]
         y_mins = sorted([rect[1] for rect in rects])
-        y_min = y_mins[min(1, len(y_mins))]
+        y_min = y_mins[min(1, len(y_mins)-1)]
 
         x_maxs = sorted([rect[0]+rect[2] for rect in rects],reverse=True)
-        x_max = x_maxs[min(1, len(x_maxs))]
+        x_max = x_maxs[min(1, len(x_maxs)-1)]
         y_maxs = sorted([rect[1]+rect[3] for rect in rects],reverse=True)
-        y_max = y_maxs[min(1, len(y_maxs))]
+        y_max = y_maxs[min(1, len(y_maxs)-1)]
 
         return (x_min, y_min, x_max-x_min, y_max-y_min)
 
@@ -82,8 +86,10 @@ def segment(image, minProb1=0.5, minProb2=0.75):
     height_max = np.max([rect[3] for rect in rects])
 
     if len(rects) < 6:
-        # TODO: infer characters by position
-        return None
+        plt.imshow(draw_regions(image, rects))
+        plt.show()
+        print('Error: only %d chars detected' % len(rects))
+        return [], []
 
     # get mean center delta in two directions
     center_delta_mean = np.mean([center_delta(rects[i], rects[i-1]) for i in range(2,6)], axis=0)
@@ -111,7 +117,7 @@ def segment(image, minProb1=0.5, minProb2=0.75):
             border_top = int((width - height) / 2)
             border_bottom = width - height - border_top
             img = cv2.copyMakeBorder(img, border_top, border_bottom, 0, 0, cv2.BORDER_CONSTANT, value=border_color)
-        return cv2.resize(img, (50, 50)).reshape((50,50))
+        return cv2.resize(img, (50, 50))
 
     char_imgs = [make_img(rect) for rect in rects]
 
