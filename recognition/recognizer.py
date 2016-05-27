@@ -22,7 +22,7 @@ def recognize(chars):
 
     # chinese_classes = np_utils.probas_to_classes(chinese_model.predict(chars[:1], batch_size=1))
     alnum_classes = np_utils.probas_to_classes(alnum_model.predict(chars[1:], batch_size=6))
-    
+
     return ['浙'] + \
            [alnum_labels[cls] for cls in alnum_classes]
 

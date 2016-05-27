@@ -8,15 +8,16 @@
 
 import PyTorchHelpers
 
+import os
 import sys
 import cv2
 import numpy
 
-CPU_MODE = False
-MODEL_NAME = 'model-34.t7'
+basedir = os.path.dirname(os.path.realpath(__file__))
+model_name = 'model-34.t7'
 
 Model = PyTorchHelpers.load_lua_class('model.lua', 'Model')
-model = Model(MODEL_NAME, CPU_MODE)
+model = Model(model_name)
 
 def locate(images):
     resized_images = [cv2.resize(image, (448, 224)) for image in images]

@@ -8,6 +8,7 @@ import cv2
 import numpy
 
 from detection import detector
+from localization import locator
 from segmentation import segmentor
 from recognition import recognizer
 
@@ -60,6 +61,6 @@ if __name__ == '__main__':
                 axis[1][0].imshow(license_image[:,:,::-1])
                 axis[1][1].imshow(er_image, cmap=plt.cm.gray)
                 plt.show()
-                
+
         end = time.time()
         print('Time elapsed: %fms' % ((end-start)*1000.0))

@@ -86,8 +86,6 @@ def segment(image, minProb1=0.5, minProb2=0.75):
     height_max = np.max([rect[3] for rect in rects])
 
     if len(rects) < 6:
-        plt.imshow(draw_regions(image, rects))
-        plt.show()
         print('Error: only %d chars detected' % len(rects))
         return [], []
 
