@@ -220,7 +220,11 @@ function cudnnNetToCpu(net)
     end)
     replaceModules(net_cpu, 'cudnn.SpatialAveragePooling',
     function(orig_mod)
-        return nn.SpatialConvolutionPooling(orig_mod.kW, orig_mod.kH, orig_mod.dW, orig_mod.dH, orig_mod.padW, orig_mod.padH)
+        return nn.SpatialAveragePooling(orig_mod.kW, orig_mod.kH, orig_mod.dW, orig_mod.dH, orig_mod.padW, orig_mod.padH)
+    end)
+    replaceModules(net_cpu, 'cudnn.SpatialMaxPooling',
+    function(orig_mod)
+        return nn.SpatialMaxPooling(orig_mod.kW, orig_mod.kH, orig_mod.dW, orig_mod.dH, orig_mod.padW, orig_mod.padH)
     end)
     replaceModules(net_cpu, 'cudnn.ReLU', function() return nn.ReLU() end)
 
