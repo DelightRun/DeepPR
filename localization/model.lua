@@ -3,16 +3,9 @@ require 'nn'
 
 local Model = torch.class('Model')
 
-function Model:__init(modelFileName, CPU_MODE)
+function Model:__init(modelFileName)
     self.model = torch.load(paths.concat('.', 'models', modelFileName))
     self.model:float()
-    if not CPU_MODE then
-        require 'cunn'
-        require 'cudnn'
-        self.model:cuda()
-        cudnn.convert(self.model, cudnn)
-        cudnn.fastest = true
-    end
     self.model:evaluate()
 end
 

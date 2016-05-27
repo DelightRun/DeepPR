@@ -21,8 +21,7 @@ model = Model(MODEL_NAME, CPU_MODE)
 def locate(images):
     resized_images = [cv2.resize(image, (448, 224)) for image in images]
     input_images = numpy.array(resized_images, dtype=numpy.float32) / 255.0
-    print(input_images.shape)
-    output = model.forward(input_images)
+    output = model.forward(input_images).asNumpyTensor()
 
     output_images = []
     for i, image in enumerate(images):
