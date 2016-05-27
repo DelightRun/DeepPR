@@ -19,7 +19,7 @@ function Provider:__init()
         self.trainData = {
             filenames = {},
             keypoints = {},
-            X = torch.Tensor(train_size, 3, img_width, img_height),
+            X = torch.Tensor(train_size, 3, img_height, img_width),
             y = torch.Tensor(train_size, 8),
             size = function() return train_size end
         }
@@ -27,7 +27,7 @@ function Provider:__init()
         self.testData = {
             filenames = {},
             keypoints = {},
-            X = torch.Tensor(test_size, 3, img_width, img_height),
+            X = torch.Tensor(test_size, 3, img_height, img_width),
             y = torch.Tensor(test_size, 8),
             size = function() return test_size end
         }

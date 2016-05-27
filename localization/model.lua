@@ -5,6 +5,7 @@ local Model = torch.class('Model')
 
 function Model:__init(modelFileName, CPU_MODE)
     self.model = torch.load(paths.concat('.', 'models', modelFileName))
+    self.model:float()
     if not CPU_MODE then
         require 'cunn'
         require 'cudnn'
@@ -12,6 +13,7 @@ function Model:__init(modelFileName, CPU_MODE)
         cudnn.convert(self.model, cudnn)
         cudnn.fastest = true
     end
+    self.model:evaluate()
 end
 
 function Model:forward(input)

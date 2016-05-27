@@ -234,7 +234,7 @@ if opt.savename ~= "" then
         best_model = best_model:get(1)
     end
     best_model:clearState()
-    best_model = cudnnNet2Cpu(best_model)
+    best_model = cudnnNetToCpu(best_model)
     torch.save(paths.concat('.', 'models', opt.savename), best_model)
 end
 
