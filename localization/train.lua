@@ -64,8 +64,13 @@ optimState = {
 
 print('Will save logs at ' ..opt.save)
 paths.mkdir(opt.save)
+
+trainLogger = optim.Logger(paths.concat(opt.save, 'train.log'))
+trainLogger:setNames{'training loss: %' }
+trainLogger.showPlot = false
+
 testLogger = optim.Logger(paths.concat(opt.save, 'test.log'))
-testLogger:setNames{'test average error: %', 'test maximum error: %' }
+testLogger:setNames{'test average error: %' }
 testLogger.showPlot = false
 
 function train()
@@ -111,6 +116,12 @@ function train()
 
     cutorch.synchronize()
 
+    if trainLogger then
+        trainLogger:add{current_loss}
+        trainLogger:style{'-'}
+        trainLogger:plot()
+    end
+
     print(('Train loss: '..c.cyan'%.3f'..'\t time: %.2f s'):format(current_loss, torch.toc(tic)))
 end
 
@@ -150,7 +161,6 @@ function test()
     print(outputs[index])
 
     if testLogger then
-        paths.mkdir(opt.save)
         testLogger:add{avg_error}
         testLogger:style{'-'}
         testLogger:plot()
@@ -185,11 +195,46 @@ model = nil
 criterion = nil
 collectgarbage()
 
+function replaceModules(net, orig_class_name, replacer)
+    local nodes, container_nodes = net:findModules(orig_class_name)
+    for i = 1, #nodes do
+        for j = 1, #(container_nodes[i].modules) do
+            if container_nodes[i].modules[j] == nodes[i] then
+                local orig_mod = container_nodes[i].modules[j]
+                container_nodes[i].modules[j] = replacer(orig_mod)
+            end
+        end
+    end
+end
+
+function cudnnNetToCpu(net)
+    local net_cpu = net:clone():float()
+
+    replaceModules(net_cpu, 'cudnn.SpatialConvolution', 
+    function(orig_mod)
+        local cpu_mod = nn.SpatialConvolutionMM(orig_mod.nInputPlane, orig_mod.nOutputPlane,
+        orig_mod.kW, orig_mod.kH, orig_mod.dW, orig_mod.dH, orig_mod.padW, orig_mod.padH)
+        cpu_mod.weight:copy(orig_mod.weight)
+        cpu_mod.bias:copy(orig_mod.bias)
+        return cpu_mod
+    end)
+    replaceModules(net_cpu, 'cudnn.SpatialAveragePooling',
+    function(orig_mod)
+        return nn.SpatialConvolutionPooling(orig_mod.kW, orig_mod.kH, orig_mod.dW, orig_mod.dH, orig_mod.padW, orig_mod.padH)
+    end)
+    replaceModules(net_cpu, 'cudnn.ReLU', function() return nn.ReLU() end)
+
+    return net_cpu
+end
+
 if opt.savename ~= "" then
     print(c.blue '==>' ..' compressing best model')
     best_model = torch.load(paths.concat('.', 'models', opt.savename))
+    if torch.type(best_model) == 'nn.DataParallelTable' then
+        best_model = best_model:get(1)
+    end
     best_model:clearState()
-    best_model:float()
+    best_model = cudnnNet2Cpu(best_model)
     torch.save(paths.concat('.', 'models', opt.savename), best_model)
 end
 
