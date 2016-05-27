@@ -359,8 +359,16 @@ GPU数量 & 2 \\
 \end{tabular}
 \end{table}
 
-训练loss曲线
-测试集上Mean Error和Max Error的曲线
+训练及测试过程损失曲线如图\ref{Fig:LocalizationLogs}。
+
+\begin{figure}[ht]
+\centering
+\subcaptionbox{训练过程曲线}
+{\includegraphics[width=0.45\linewidth]{./Figure/LocalizationTrainLog.eps}}
+\subcaptionbox{测试过程曲线}
+{\includegraphics[width=0.45\linewidth]{./Figure/LocalizationTestLog.eps}}
+\caption{定位网络训练及测试损失}\label{Fig:LocalizationLogs}
+\end{figure}
 
 结果图
 
@@ -658,7 +666,7 @@ bbox用于Faster R-CNN 的训练。
 \caption{Fast R-CNN训练损失曲线}\label{Fig:RCNNloss}
 \end{figure}
 
-最后，使用Fast-RCNN对车牌进行检测效果如图\ref{Fig:DetectionDemo}。
+最后，使用Faster R-CNN对车牌进行检测效果如图\ref{Fig:DetectionDemo}。
 
 \begin{figure}[th]
 \centering
