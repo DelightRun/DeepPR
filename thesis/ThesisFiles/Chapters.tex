@@ -359,8 +359,6 @@ GPU数量 & 2 \\
 \end{tabular}
 \end{table}
 
-\subsection{实验结果与分析}
-
 训练loss曲线
 测试集上Mean Error和Max Error的曲线
 
@@ -613,7 +611,7 @@ Faster R-CNN 无疑已成为时下最主流的物体识别技术之一。
 本文中首先对这些车牌的四个顶点进行手工标注，然后取包含车牌区域的最小外接矩形作为
 bbox用于Faster R-CNN 的训练。 
 
-\subsection{实现环境}
+\subsection{算法实现}
 
 本文的Faster R-CNN 实现基于开源项目 py-faster-rcnn
 \footnote{https://github.com/rbgirshick/py-faster-rcnn.git}修改而来，增加了对上
@@ -639,10 +637,8 @@ bbox用于Faster R-CNN 的训练。
 \end{tabular}
 \end{table}
 
-\subsection{实验结果与分析}
-
 经过训练，Faster R-CNN在100张测试数据集上精度达到84.54\%，相信如果换用更大的训练
-数据集后效果还可进一步提升。
+数据集后效果还有极大的提升空间，训练损失曲线如图\ref{Fig:RPNloss}\ref{Fig:RCNNloss}。
 
 \begin{figure}[ht]
 \centering
@@ -650,7 +646,7 @@ bbox用于Faster R-CNN 的训练。
 {\includegraphics[width=0.8\linewidth]{./Figure/RPNClsLoss.eps}}
 \subcaptionbox{BBox 回归损失曲线}
 {\includegraphics[width=0.8\linewidth]{./Figure/RPNBBoxLoss.eps}}
-\caption{RPN训练损失曲线}
+\caption{RPN训练损失曲线}\label{Fig:RPNloss}
 \end{figure}
 
 \begin{figure}[ht]
@@ -659,7 +655,18 @@ bbox用于Faster R-CNN 的训练。
 {\includegraphics[width=0.8\linewidth]{./Figure/RCNNClsLoss.eps}}
 \subcaptionbox{BBox 回归损失曲线}
 {\includegraphics[width=0.8\linewidth]{./Figure/RCNNBBoxLoss.eps}}
-\caption{Fast R-CNN训练损失曲线}
+\caption{Fast R-CNN训练损失曲线}\label{Fig:RCNNloss}
+\end{figure}
+
+最后，使用Fast-RCNN对车牌进行检测效果如图\ref{Fig:DetectionDemo}。
+
+\begin{figure}[th]
+\centering
+\subcaptionbox{示例1}
+{\includegraphics[width=1\linewidth, keepaspectratio]{./Figure/DetectionDemo.png}}
+\subcaptionbox{示例1}
+{\includegraphics[width=1\linewidth, keepaspectratio]{./Figure/DetectionDemo2.png}}
+\caption{使用Faster R-CNN进行车牌检测}\label{Fig:DetectionDemo}
 \end{figure}
 
 \section{本章小结}
@@ -831,17 +838,16 @@ $\oplus$。
 CSER的相关算法已经在最新版的OpenCV
 Contrib\footnote{https://github.com/Itseez/opencv\_contrib}中得以实现；CSER所使用
 的两个分类器的训练则由作者基于OpenCV使用C++开发完成；最后整个字符分割模块使用
-Python语言和最新版的OpenCV（需手工编译最新版）开发完成。
-
-\subsection{实验效果}
+Python语言和最新版的OpenCV（需手工编译最新版）开发完成。字符分割效果如图
+\ref{Fig:SegmentationDemo}。
 
 \begin{figure}[th]
 \centering
 \subcaptionbox{示例1}
-{\includegraphics[width=1\linewidth]{./Figure/TextSegmentation.png}}
+{\includegraphics[width=1\linewidth]{./Figure/SegmentationDemo.png}}
 \subcaptionbox{示例1}
-{\includegraphics[width=1\linewidth]{./Figure/TextSegmentation2.png}}
-\caption{车牌字符分割}\label{Fig:TextSeg}
+{\includegraphics[width=1\linewidth]{./Figure/SegmentationDemo2.png}}
+\caption{车牌字符分割}\label{Fig:SegmentationDemo}
 \end{figure}
 
 可以看出基于CSER 的车牌分割方法即使在车牌有旋转、变形、污损的情况下，仍可以准确
@@ -952,8 +958,6 @@ TensorFlow\footnote{https://www.tensorflow.org}进行实现，开发语言为Pyt
 \hline
 \end{tabular}
 \end{table}
-
-\subsection{实验结果}
 
 训练结果表明，网络在中文识别任务上可以达到92\%的准确率，在英文和数字集上的达到
 99\%的准确率，充分说明其在字符识别问题上的有效性。
