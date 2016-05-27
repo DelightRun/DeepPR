@@ -49,7 +49,7 @@ provider.testData.y = provider.testData.y:cuda()
 
 parameters, gradParameters = model:getParameters()
 
-inputs = torch.CudaTensor(opt.batchSize, 3, 448, 224)
+inputs = torch.CudaTensor(opt.batchSize, 3, 224, 448)
 targets = torch.CudaTensor(opt.batchSize, 8)
 indices = torch.randperm(provider.trainData.X:size(1)):long():split(opt.batchSize)
 
