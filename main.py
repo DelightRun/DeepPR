@@ -31,7 +31,7 @@ if __name__ == '__main__':
             print('Not valid file path')
             continue
 
-        origin_image = cv2.resize(cv2.imread(filepath), (800, 600))
+        origin_image = cv2.imread(filepath)
 
         if origin_image is None:
             print('Cannot read image')
