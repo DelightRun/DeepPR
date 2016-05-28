@@ -27,7 +27,11 @@ if __name__ == '__main__':
             plt.close('all')
             sys.exit()
 
-        origin_image = cv2.imread(filepath)
+        if not os.path.exists(filepath) or not os.path.isfile(filepath):
+            print('Not valid file path')
+            continue
+
+        origin_image = cv2.resize(cv2.imread(filepath), (800, 600))
 
         if origin_image is None:
             print('Cannot read image')
@@ -35,15 +39,20 @@ if __name__ == '__main__':
 
         start = time.time()
         license_images = [image for image, score in detector.detect(origin_image)['license']]
+        print('Detection time epapsed: %fms' % ((time.time() - start)*1000.0))
 
         for license_image in license_images:
+            seg_start = time.time()
             rects, chars = segmentor.segment(license_image)
+            print('Segmentation time epapsed: %fms' % ((time.time() - seg_start)*1000.0))
 
             if len(chars) != 7:
                 print('Illegal Plate License')
                 continue
 
+            reg_start = time.time()
             result = recognizer.recognize(chars)
+            print('Recognition time epapsed: %fms' % ((time.time() - reg_start)*1000.0))
 
             print(result)
 
@@ -58,9 +67,9 @@ if __name__ == '__main__':
                 plt.suptitle(''.join(result), size=32)
                 axis[0][0].imshow(origin_image[:,:,::-1])
                 axis[0][1].imshow(license_image[:,:,::-1])
-                axis[1][0].imshow(license_image[:,:,::-1])
-                axis[1][1].imshow(er_image, cmap=plt.cm.gray)
+                axis[1][0].imshow(er_image[:,:,::-1])
+                axis[1][1].imshow(chars_image, cmap=plt.cm.gray)
                 plt.show()
 
         end = time.time()
-        print('Time elapsed: %fms' % ((end-start)*1000.0))
+        print('total ime elapsed: %fms' % ((end-start)*1000.0))
