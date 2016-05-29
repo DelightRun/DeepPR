@@ -26,7 +26,7 @@ def locate(images):
 
     output_images = []
     for i, image in enumerate(images):
-        width, height = image.shape[:2]
+        height, width = image.shape[:2]
 
         keypoints = output[i].reshape((4,2))
         keypoints[:, 0] *= width
