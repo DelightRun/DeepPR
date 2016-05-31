@@ -19,7 +19,7 @@ Transportation System, ITS)和自动驾驶系统。这两项技术都旨在通�
 从研究背景中我们可以知道，VLPR 技术在实际生活中有着十分重要且广泛的应用。下面我们
 举出几个实际生活中自动车牌识别系统的典型应用：
 
-\subsubsection{停车场的智能管理}
+\subsubsection{停车场的智能管理系统}
 
 一般而言，在住宅小区、大型商场、车站等地方都会建设配套的停车场。而如何对进出停车
 场的车辆进行管理，则是一个十分重要的问题。目前常见的有三种方式：
@@ -36,6 +36,12 @@ Transportation System, ITS)和自动驾驶系统。这两项技术都旨在通�
 架设摄像头，自动对进出的车辆进行拍照，并对车辆的车牌号进行识别，从而对车辆进行登
 记管理。
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=1.0\linewidth]{./Figure/ParkingSystem.jpg}
+  \caption{校门口的停车场门禁系统}
+\end{figure}
+
 \subsubsection{停车场自动找车系统}
 
 随着停车场越建越大，相信在若大的停车场里找寻自己的车辆是每个车主都头疼过得问题。
@@ -44,7 +50,7 @@ Transportation System, ITS)和自动驾驶系统。这两项技术都旨在通�
 系统就会自动找到车辆位置，并为车主提供导航。这项技术也大大方便了人们的生活、提高
 了停车场的用户体验。
 
-\subsubsection{电子警察系统}
+\subsubsection{电子警察}
 
 目前的电子警察系统，通过大量安装道路路口、路段上的摄像头，对车道内的机动车驾驶行
 为进行不间断自动检测和记录，并检测车辆的违法驾驶行为。而这项系统也必然少不了车牌
@@ -69,7 +75,7 @@ Transportation System, ITS)和自动驾驶系统。这两项技术都旨在通�
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/GoogleSelfDrivingCar.jpg}
+  \includegraphics[width=1.0\linewidth]{./Figure/GoogleSelfDrivingCar.jpg}
   \caption{Google公司研制的无人驾驶汽车}
 \end{figure}
 
@@ -152,7 +158,9 @@ R-CNN、Fast R-CNN和Faster R-CNN。然后通过Faster R-CNN 技术实现了自�
 第五章，为车牌识别方法的研究。本章阐述如何通过卷积神经网络（CNN）技术进行车牌字
 符识别，并进行相关实验。
 
-第六章，为总结和展望。总结了本文的主要工作，并对未来的研究做了简单的介绍。
+第六章，为实验效果展示。
+
+第七章，为总结和展望。总结了本文的主要工作，并对未来的研究做了简单的介绍。
 
 \section{本章小结}
 
@@ -182,7 +190,7 @@ R-CNN、Fast R-CNN和Faster R-CNN。然后通过Faster R-CNN 技术实现了自�
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/ResNetTrainError.jpg}
+  \includegraphics[width=1.0\linewidth]{./Figure/ResNetTrainError.jpg}
   \caption{文献\cite{He:2015tt}中Residual Network训练损失曲线}
 \end{figure}
 
@@ -199,7 +207,7 @@ R-CNN、Fast R-CNN和Faster R-CNN。然后通过Faster R-CNN 技术实现了自�
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/LeNet.png}
+  \includegraphics[width=1.0\linewidth]{./Figure/LeNet.png}
   \caption{用于手写数字识别的LeNet5\cite{LeCun:1990vp}} \label{Fig:LeNet}
 \end{figure}
 
@@ -323,15 +331,8 @@ Augmentation），具体来讲就是对图片进行随机的旋转和放缩，�
 很容易的通过卷积神经网络搭建这样一个回归模型，其输入是经过缩放的车牌区域图片，输
 出则是车牌四个顶点的坐标。本文并未从头训练一个全新的模型完成此任务，而是使用一个
 训练好的模型，保留其卷积部分并将以Softmax 为激活函数的分类层更换为无激活函数的回
-归层。具体来讲本文中使用的是训练好的34层Residual Network\cite{He:2015tt}模型，模
-型结构如图 \ref{Fig:ResNet34Reg}，其中前34个Residual Block为卷积特征提取，最后的
-全连接层实现顶点坐标的回归。
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/ResNet34Reg.eps}
-  \caption{用于回归的34层Residual Network}\label{Fig:ResNet34Reg}
-\end{figure}
+归层。具体来讲本文中使用的是训练好的34层Residual Network\cite{He:2015tt}模型，
+其中前34个Residual Block为卷积特征提取，最后的全连接层实现顶点坐标的回归。
 
 \subsection{算法实现}
 
@@ -359,7 +360,7 @@ GPU数量 & 2 \\
 \end{tabular}
 \end{table}
 
-训练及测试过程损失曲线如图\ref{Fig:LocalizationLogs}。
+训练及测试过程损失曲线如图\ref{Fig:LocalizationLogs}，效果如图\ref{Fig:LocalizationDemo}。
 
 \begin{figure}[ht]
 \centering
@@ -370,7 +371,11 @@ GPU数量 & 2 \\
 \caption{定位网络训练及测试损失}\label{Fig:LocalizationLogs}
 \end{figure}
 
-结果图
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1.0\linewidth]{./Figure/LocalizationDemo.png}
+\caption{车牌定位效果图}\label{Fig:LocalizationDemo}
+\end{figure}
 
 可以看出，使用CNN 进行车牌精确定位可以较为有效的进行车牌定位，而且不需要手工选择
 特征，鲁棒性强。但另一方面，由于神经网络的训练由于不需要先验知识，导致其对数据质
@@ -410,7 +415,7 @@ COCO 两个数据集上的目标检测任务中取得了最佳的效果，而且
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/RCNN.jpg}
+  \includegraphics[width=1.0\linewidth]{./Figure/RCNN.jpg}
   \caption{R-CNN}\label{Fig:RCNN}
 \end{figure}
 
@@ -433,7 +438,7 @@ Search等方法。出于对性能和效果的考虑，R-CNN 模型中选择使�
 注意到我们的类别包含 $N$ 个物体类和1个背景类一共 $N+1$ 类。
 
 R-CNN模型使用CNN 提取特征的特性，使得它在Pascal VOC 数据集上的测试效果要好于所有传
-统方法，成功将mAP (mean Average Precise) 提高到了53.7\%\cite{Girshick:2014jx}，但
+统方法，成功将平均精度提高到了53.7\%\cite{Girshick:2014jx}，但
 同时我们也注意到，模型中有两个重大缺陷：
 
 \begin{itemize}
@@ -457,7 +462,7 @@ R-CNN模型使用CNN 提取特征的特性，使得它在Pascal VOC 数据集上
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/FastRCNN.png}
+  \includegraphics[width=1.0\linewidth]{./Figure/FastRCNN.png}
   \caption{Fast R-CNN\cite{Girshick:2015ib}}\label{Fig:FastRCNN}
 \end{figure}
 
@@ -542,8 +547,8 @@ Ren 等人正是基于这一思想，创造性的提出Region Proposal Network (
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/FasterRCNN.png}
-  \caption{Faster R-CNN\cite{Ren:2015ug}}\label{Fig:FasterRCNN}
+  \includegraphics[width=1.0\linewidth]{./Figure/FasterRCNN.png}
+  \caption{Faster R-CNN结构图\cite{Ren:2015ug}}\label{Fig:FasterRCNN}
 \end{figure}
 
 RPN网络以Fast R-CNN 网络中经由卷积层提取的卷积特征映射作为输入，并以此产生一系列
@@ -556,7 +561,7 @@ RPN网络以Fast R-CNN 网络中经由卷积层提取的卷积特征映射作为
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/RPN.png}
+  \includegraphics[width=1.0\linewidth]{./Figure/RPN.png}
   \caption{Region Proposal Network\cite{Ren:2015ug}}\label{Fig:RPN}
 \end{figure}
 
@@ -578,13 +583,13 @@ Intersection-over-Union(IoU) 重叠，或者(2) 该Anchor和任一个真实的�
 L(\{p_i\}, \{t_i\}) = \frac{1}{N_{cls}}\sum_i{L_{cls}(p_i, p_i^*)} + \lambda\frac{1}{N_{reg}}\sum_i{p_i^*L_{reg}(t_i,t_i^*)}
 \end{align}
 
-在此，$i$为Anchor的下标，$p_i$代表第$i$个Anchor是一个目标物体的概率，$p_i^*$为真
-实值，当Anchor为正例是$p_i^* = 1$，否则是0 。$t_i$是一个四元组，包含表示Anchor坐
-边框坐标的四个值，$t_i^*$则是相应的真实值。此外，$L_{cls}$是常用语二分类问题的对
-数损失函数，$L_{reg}$则同Fast R-CNN 一样使用$Smooth L_1/$损失函数。此外，
+其中，$i$为Anchor的下标，$p_i$代表第$i$个Anchor是一个目标物体的概率，$p_i^*$为真
+实值，当Anchor为正例是$p_i^* = 1$，否则是0 ；$t_i$是一个四元组，包含表示Anchor坐
+边框坐标的四个值，$t_i^*$则是相应的真实值；$L_{cls}$是常用于二分类问题的对
+数损失函数，$L_{reg}$则同Fast R-CNN 一样使用$Smooth L_1/$损失函数；
 $N_{cls}$和$N_{reg}$为两个归一化参数，在实现中常取$N_{cls}$为mini-batch的大小，
 而$N_{reg}$取不同位置Anchor的数量。此外，由于RPN 在很多时候生成的候选区域彼此有
-很大的重叠，因此我们基于RPN 网络对区域为目标物体可能性的打分，使用非极大抑制
+很大的重叠，因此我们基于RPN 网络对区域为目标物体可能性的打分以及区域间的IoU，使用非极大抑制
 (NMS)对候选区域进行筛选，从而减少计算量。
 
 综上所述，可以看出来Faster R-CNN实际上是由RPN和Fast R-CNN 组合而成，因此我们在训
@@ -646,41 +651,40 @@ bbox用于Faster R-CNN 的训练。
 \end{table}
 
 经过训练，Faster R-CNN在100张测试数据集上精度达到84.54\%，相信如果换用更大的训练
-数据集后效果还有极大的提升空间，训练损失曲线如图\ref{Fig:RPNloss}\ref{Fig:RCNNloss}。
+数据集后效果还有极大的提升空间，训练损失曲线如图\ref{Fig:RPNloss}和\ref{Fig:RCNNloss}。
 
 \begin{figure}[ht]
 \centering
 \subcaptionbox{分类损失曲线}
-{\includegraphics[width=0.8\linewidth]{./Figure/RPNClsLoss.eps}}
+{\includegraphics[width=1.0\linewidth]{./Figure/RPNClsLoss.eps}}
 \subcaptionbox{BBox 回归损失曲线}
-{\includegraphics[width=0.8\linewidth]{./Figure/RPNBBoxLoss.eps}}
+{\includegraphics[width=1.0\linewidth]{./Figure/RPNBBoxLoss.eps}}
 \caption{RPN训练损失曲线}\label{Fig:RPNloss}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
 \subcaptionbox{分类损失曲线}
-{\includegraphics[width=0.8\linewidth]{./Figure/RCNNClsLoss.eps}}
+{\includegraphics[width=1.0\linewidth]{./Figure/RCNNClsLoss.eps}}
 \subcaptionbox{BBox 回归损失曲线}
-{\includegraphics[width=0.8\linewidth]{./Figure/RCNNBBoxLoss.eps}}
+{\includegraphics[width=1.0\linewidth]{./Figure/RCNNBBoxLoss.eps}}
 \caption{Fast R-CNN训练损失曲线}\label{Fig:RCNNloss}
 \end{figure}
 
 最后，使用Faster R-CNN对车牌进行检测效果如图\ref{Fig:DetectionDemo}。
 
-\begin{figure}[th]
+\begin{figure}[ht]
 \centering
-\subcaptionbox{示例1}
-{\includegraphics[width=1\linewidth, keepaspectratio]{./Figure/DetectionDemo.png}}
-\subcaptionbox{示例1}
-{\includegraphics[width=1\linewidth, keepaspectratio]{./Figure/DetectionDemo2.png}}
+\subcaptionbox{示例一}
+{\includegraphics[width=0.45\linewidth, keepaspectratio]{./Figure/DetectionDemo.png}}
+\subcaptionbox{示例二}
+{\includegraphics[width=0.45\linewidth, keepaspectratio]{./Figure/DetectionDemo2.png}}
 \caption{使用Faster R-CNN进行车牌检测}\label{Fig:DetectionDemo}
 \end{figure}
 
 \section{本章小结}
-
 本章首先介绍了使用R-CNN 系列算法进行物体检测的基本原理，然后通过修改开源项目
-py-faster-rcnn，在我们的车牌数据集上进行训练，最后验证其mAP 可以达到85\%左
+py-faster-rcnn，在我们的车牌数据集上进行训练，最后验证其平均准确度可以达到85\%左
 右，验证了使用Faster R-CNN 进行车牌检测的有效性。
 
 \chapter{车牌字符分割}
@@ -740,7 +744,7 @@ Extremal Region(CSER)\cite{Neumann:2012ik}的核心思想正是通过机器学�
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/ERTree.png}
+  \includegraphics[width=1.0\linewidth]{./Figure/ERTree.png}
   \caption{ER搜索过程中产生的搜索树}\label{Fig:ERTree}
 \end{figure}
 
@@ -814,7 +818,7 @@ $\oplus$。
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\linewidth]{./Figure/AllERs.png}
+  \includegraphics[width=1.0\linewidth]{./Figure/AllERs.png}
   \caption{使用CSER提取出的所有候选区}\label{Fig:AllERs}
 \end{figure}
 
@@ -851,9 +855,9 @@ Python语言和最新版的OpenCV（需手工编译最新版）开发完成。�
 
 \begin{figure}[th]
 \centering
-\subcaptionbox{示例1}
+\subcaptionbox{示例一}
 {\includegraphics[width=1\linewidth]{./Figure/SegmentationDemo.png}}
-\subcaptionbox{示例1}
+\subcaptionbox{示例二}
 {\includegraphics[width=1\linewidth]{./Figure/SegmentationDemo2.png}}
 \caption{车牌字符分割}\label{Fig:SegmentationDemo}
 \end{figure}
@@ -941,9 +945,17 @@ Softmax 层输入；$L$代表损失函数，$o_j = p(y=j|\mathbf{x};\mathbf{w})$
 
 \subsection{模型设计}
 
-根据之前的叙说，我们设计一个包含两个卷积层和一个池化层的CNN 进行字符识别，网络的
-最后一层使用Softmax 激活函数，其它层则使用ReLU。此外，为了使识别更有效的进行，我
-们将中文字符和英文、数字字符分开进行识别，并分别对这类字符训练两个不同的CNN。
+根据之前的叙说，我们设计如图\ref{Fig:RecognitionCNN}的两个CNN 分别进行中文和
+数字、英文的字符识别，网络的最后一层使用Softmax 激活函数，其它层则使用ReLU。
+
+\begin{figure}[ht]
+  \centering
+  \subcaptionbox{中文字符识别}
+  {\includegraphics[width=1.0\linewidth]{./Figure/RecognitionChinese.png}}
+  \subcaptionbox{英文及数字字符识别}
+  {\includegraphics[width=1.0\linewidth]{./Figure/RecognitionAlnum.png}}
+  \caption{字符识别CNN模型} \label{Fig:RecognitionCNN}
+\end{figure}
 
 \subsection{算法实现}
 
@@ -977,6 +989,24 @@ TensorFlow\footnote{https://www.tensorflow.org}进行实现，开发语言为Pyt
 
 本章提出了使用CNN 进行字符识别的模型，并通过实验验证了其在车牌识别问题上的有效性，
 从而完成了车牌识别系统中最后也是最关键的一步。
+
+\chapter{实验结果}
+
+最终我们将上述各个子系统串联起来形成一个完整的车牌检测、识别系统。系统运行效果如
+图\ref{Fig:End2EndDemo}。
+
+\begin{figure}[ht]
+\centering
+\subcaptionbox{示例一}
+{\includegraphics[width=1.0\linewidth]{./Figure/End2EndDemo.png}}
+\subcaptionbox{示例二}
+{\includegraphics[width=1.0\linewidth]{./Figure/End2EndDemo2.png}}
+\caption{系统运行效果}\label{Fig:End2EndDemo}
+\end{figure}
+
+性能方面，在分辨率为$800 \times 600$的图像上，车牌检测使用GPU 加速需要90毫秒，字符
+分割需要约400毫秒，字符识别使用CPU需要约90毫秒。可以看出，字符分割是制约性能的瓶
+颈，不过本文中字符分割使用Python实现，未使用多线程优化，相信在此还有进一步提升性能的可能。
 
 \chapter{总结与展望}
 

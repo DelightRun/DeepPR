@@ -136,4 +136,8 @@ logs/*
 *.ids
 *.ilg
 *.ind
+*.bcf
+*.nav
+*.snm
+*.run.xml
 auto/
