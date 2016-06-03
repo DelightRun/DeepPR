@@ -173,7 +173,15 @@
 \titlecontents{chapter}[0pt]{\bfseries}%
 {\thecontentslabel}%
     {\hspace*{0pt}}%
-{\titlerule*[10bp]{\timesbd{.}}\timesbd{\contentspage}}
+{\titlerule*[3bp]{\timesbd{.}}\timesbd{\contentspage}}
+\titlecontents{section}[2em]{}
+{\contentspush{\thecontentslabel\ }}
+    {\hspace*{0pt}}%
+{\titlerule*[3bp]{.}\contentspage}
+\titlecontents{subsection}[4em]{}
+{\contentspush{\thecontentslabel\ }}
+    {\hspace*{0pt}}%
+{\titlerule*[3bp]{.}\contentspage}
 
 \renewcommand\theequation{\ifnum \c@chapter>\z@
   \thechapter-\fi\@arabic\c@equation}
