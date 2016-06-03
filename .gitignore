@@ -119,6 +119,9 @@ labels.txt
 logs/
 logs/*
 
+# Pages
+.pages
+
 # LaTeX
 *.toc
 *.bbl
